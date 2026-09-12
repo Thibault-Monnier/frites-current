@@ -2,7 +2,7 @@
 
 ## Welcome !
 
-This is the codebase for the FTC team FRITES (20991 from France) during the 2025-26 Decode season.
+This is the codebase for the FTC team FRITES (20991 from France) during the 2026-27 BioBuzz season.
 
 ## Setting up & Compiling
 
@@ -14,7 +14,7 @@ git clone git@gitlab.com:ftc-civ/frites/2026.git
 ```
 
 Make sure you have [Android Studio](https://developer.android.com/studio) installed (this is
-required to compile the code), and Java 21 (may not work with more recent versions!).
+required to compile the code), and any version of Java.
 
 Open this directory in Android Studio and let it sync (required if you want to be able to compile
 the code, even from the terminal).
@@ -25,12 +25,6 @@ To compile, use Android Studio or run the following command (on Linux, you may h
 ```bash
 ./gradlew build
 ```
-
-## Robot manual
-
-Detailed instructions, schematics, and everything you need to know about the robot are available
-at [docs/manual.pdf](docs/manual/manual.pdf). Please note that the information provided there is
-exclusively in French and might be outdated.
 
 ## Coding guidelines
 
