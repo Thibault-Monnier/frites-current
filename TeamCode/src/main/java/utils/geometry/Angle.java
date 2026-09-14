@@ -1,10 +1,8 @@
 package utils.geometry;
 
 import androidx.annotation.NonNull;
-
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-
 import java.util.Locale;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 public class Angle {
     private final double value;
@@ -67,7 +65,8 @@ public class Angle {
         return Angle.fromRadians(productInRadians);
     }
 
-    /// Divides this Angle by another Angle and returns the result as a unitless ratio
+    /// Divides this Angle by another Angle and returns the result as a unitless
+    /// ratio
     public double ratio(Angle other) {
         return toRadians() / other.toRadians();
     }
@@ -100,6 +99,6 @@ public class Angle {
     @NonNull
     public String toString() {
         return String.format(
-                Locale.ENGLISH, "%.2f %s", getValue(AngleUnit.DEGREES), AngleUnit.DEGREES);
+            Locale.ENGLISH, "%.2f %s", getValue(AngleUnit.DEGREES), AngleUnit.DEGREES);
     }
 }

@@ -5,10 +5,8 @@ import static config.CannonConfig.REVERSE_SPEED;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-
-import modules.actuator.RobotActuatorModule;
-
 import java.util.HashMap;
+import modules.actuator.RobotActuatorModule;
 
 public class CannonBuffer implements RobotActuatorModule {
     private final DcMotor motor;

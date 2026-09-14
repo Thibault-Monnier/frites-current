@@ -10,6 +10,19 @@
 
 
 // Custom definitions may go here
+plugins {
+    id "com.diffplug.spotless" version "8.10.2"
+}
+
+spotless {
+    java {
+        target '**/*.java'
+
+        clangFormat('21.1.8').style('file')
+
+        removeUnusedImports()
+    }
+}
 
 // Include common definitions from above.
 apply from: '../build.common.gradle'

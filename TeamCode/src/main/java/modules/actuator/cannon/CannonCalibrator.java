@@ -3,12 +3,10 @@ package modules.actuator.cannon;
 import static config.CannonConfig.CALIBRATION_SPEED_CHANGE_OFFSET;
 
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-
-import utils.TelemetryHandler;
-import utils.geometry.Distance;
-
 import java.util.HashMap;
 import java.util.Map;
+import utils.TelemetryHandler;
+import utils.geometry.Distance;
 
 public class CannonCalibrator extends Cannon {
     private final Map<Distance, Double> savedCalibrationData = new HashMap<>();

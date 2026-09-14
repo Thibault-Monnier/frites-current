@@ -23,8 +23,8 @@ public class GamepadController {
     }
 
     /**
-     * Update the internal state of all buttons. This function MUST be called at EVERY loop cycle,
-     * before any queries are made.
+     * Update the internal state of all buttons. This function MUST be called at
+     * EVERY loop cycle, before any queries are made.
      */
     public void update() {
         for (Button button : Button.values()) {
@@ -55,25 +55,33 @@ public class GamepadController {
         return button.down;
     }
 
-    /** Returns true if the button was pressed since last update. Returns true only once. */
+    /**
+     * Returns true if the button was pressed since last update. Returns true
+     * only once.
+     */
     public boolean isPressed(Button button) {
         return button.pressed;
     }
 
-    /** Returns true if the button was released since last update. Returns true only once. */
+    /**
+     * Returns true if the button was released since last update. Returns true
+     * only once.
+     */
     public boolean isReleased(Button button) {
         return button.released;
     }
 
-    /** Returns true if the button has been held down for LONG_PRESS_TIME seconds. */
+    /**
+     * Returns true if the button has been held down for LONG_PRESS_TIME seconds.
+     */
     public boolean isLongPressed(Button button) {
         double elapsedMs = (runtime.milliseconds() - button.lastTimePressed);
         return isPressing(button) && elapsedMs >= LONG_PRESS_TIME;
     }
 
     /**
-     * Returns true if the button was pressed twice within DOUBLE_PRESS_INTERVAL seconds. Returns
-     * true only once.
+     * Returns true if the button was pressed twice within DOUBLE_PRESS_INTERVAL
+     * seconds. Returns true only once.
      */
     public boolean isDoublePressed(Button button) {
         double intervalMs = (button.lastTimePressed - button.previousTimePressed);
@@ -99,10 +107,12 @@ public class GamepadController {
         RELEASE,
         /// Returns true on every update as long as the button is being held down.
         CONTINUOUS_PRESS,
-        /// Returns true on every update as long as the button has been held down for at least
+        /// Returns true on every update as long as the button has been held down
+        /// for at least
         /// LONG_PRESS_TIME
         LONG_PRESS,
-        /// Returns true only on the first update after the button is pressed, if it has been
+        /// Returns true only on the first update after the button is pressed, if it
+        /// has been
         /// pressed twice within DOUBLE_PRESS_INTERVAL seconds.
         DOUBLE_PRESS,
     }

@@ -6,16 +6,13 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
-
 import opmodes.GroupConstants;
-
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 @Config
-@TeleOp(
-        name = GroupConstants.DEBUGGER_MODES_GROUP + ": Distance Sensor",
-        group = GroupConstants.DEBUGGER_MODES_GROUP)
+@TeleOp(name = GroupConstants.DEBUGGER_MODES_GROUP + ": Distance Sensor",
+    group = GroupConstants.DEBUGGER_MODES_GROUP)
 public class DistanceSensorDebugger extends OpMode {
     private static final String sensorId = "";
     private DistanceSensor distanceSensor;
@@ -24,7 +21,7 @@ public class DistanceSensorDebugger extends OpMode {
     @Override
     public void init() {
         globalTelemetry =
-                new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+            new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         distanceSensor = hardwareMap.get(DistanceSensor.class, sensorId);
         distanceSensor.resetDeviceConfigurationForOpMode();

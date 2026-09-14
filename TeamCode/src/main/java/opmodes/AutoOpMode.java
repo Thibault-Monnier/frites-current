@@ -3,7 +3,6 @@ package opmodes;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
-
 import logic.Team;
 import logic.action.Action;
 import logic.action.ActionSequence;
@@ -14,9 +13,7 @@ public class AutoOpMode extends AutoOpModeBase {
 
     private Paths paths;
 
-    public AutoOpMode(Team team) {
-        super(team, false);
-    }
+    public AutoOpMode(Team team) { super(team, false); }
 
     @Override
     protected void initialize() {
@@ -24,15 +21,14 @@ public class AutoOpMode extends AutoOpModeBase {
 
         paths = new Paths(follower, team.isBlue());
 
-        sequence =
-                new ActionSequence(
-                        startCannon(),
-                        startToShoot(),
-                        middleRowCycle(),
-                        rampCycle(),
-                        rampCycle(),
-                        backRowCycle()
-                );
+        sequence = new ActionSequence(
+            startCannon(),
+            startToShoot(),
+            middleRowCycle(),
+            rampCycle(),
+            rampCycle(),
+            backRowCycle()
+        );
     }
 
     private Action startToShoot() {
@@ -41,46 +37,39 @@ public class AutoOpMode extends AutoOpModeBase {
 
     private Action middleRowCycle() {
         return new ActionSequence(
-                pathAction(paths.alignMiddleRow, false, false, false),
-                pathAction(paths.collectMiddleRow, true, true, false),
-                pathAction(paths.middleRowToShoot, true, false, true),
-                shootAction());
+            pathAction(paths.alignMiddleRow, false, false, false),
+            pathAction(paths.collectMiddleRow, true, true, false),
+            pathAction(paths.middleRowToShoot, true, false, true),
+            shootAction()
+        );
     }
 
     private Action backRowCycle() {
         return new ActionSequence(
-                pathAction(paths.alignBackRow, false, false, false),
-                pathAction(paths.collectBackRow, true, true, false),
-                pathAction(paths.leave, true, false, true),
-                shootAction());
+            pathAction(paths.alignBackRow, false, false, false),
+            pathAction(paths.collectBackRow, true, true, false),
+            pathAction(paths.leave, true, false, true),
+            shootAction()
+        );
     }
 
     private Action rampCycle() {
         return new ActionSequence(
-                pathAction(paths.alignCollectRamp, false, false, false),
-                pathAction(paths.collectRamp, true, true, true),
-                waitAction(0.8, this::intake),
-                pathAction(paths.collectFromRampFinal, true, false, false),
-                pathAction(paths.rampToShoot, true, false, true),
-                shootAction());
+            pathAction(paths.alignCollectRamp, false, false, false),
+            pathAction(paths.collectRamp, true, true, true),
+            waitAction(0.8, this::intake),
+            pathAction(paths.collectFromRampFinal, true, false, false),
+            pathAction(paths.rampToShoot, true, false, true),
+            shootAction()
+        );
     }
 
-    protected void execute() {
-        sequence.run();
-    }
+    protected void execute() { sequence.run(); }
 
     private static class Paths extends PathsBase {
-        PathChain startToShoot,
-                alignBackRow,
-                collectBackRow,
-                rampToShoot,
-                alignMiddleRow,
-                collectMiddleRow,
-                middleRowToShoot,
-                alignCollectRamp,
-                collectRamp,
-                collectFromRampFinal,
-                leave;
+        PathChain startToShoot, alignBackRow, collectBackRow, rampToShoot, alignMiddleRow,
+            collectMiddleRow, middleRowToShoot, alignCollectRamp, collectRamp, collectFromRampFinal,
+            leave;
 
         public Paths(Follower follower, boolean isBlue) {
             super(follower, isBlue);
@@ -118,17 +107,16 @@ public class AutoOpMode extends AutoOpModeBase {
 
             alignMiddleRow = lineToPath(shootingPose, middleRowStartPose);
             collectMiddleRow =
-                    curveToPath(middleRowStartPose, middleRowControlPoint, middleRowEndPose);
+                curveToPath(middleRowStartPose, middleRowControlPoint, middleRowEndPose);
             middleRowToShoot =
-                    curveToPath(middleRowEndPose, middleRowToShootControlPoint, shootingPose);
+                curveToPath(middleRowEndPose, middleRowToShootControlPoint, shootingPose);
 
             alignCollectRamp = curveToPath(shootingPose, alignRampControlPoint, alignRampPose);
             collectRamp = lineToPath(alignRampPose, collectRampPose);
             collectFromRampFinal =
-                    curveToPath(
-                            collectRampPose, collectRampFinalControlPoint, collectRampFinalEndPose);
+                curveToPath(collectRampPose, collectRampFinalControlPoint, collectRampFinalEndPose);
             rampToShoot =
-                    curveToPath(collectRampFinalEndPose, rampToShootControlPoint, shootingPose);
+                curveToPath(collectRampFinalEndPose, rampToShootControlPoint, shootingPose);
         }
     }
 }

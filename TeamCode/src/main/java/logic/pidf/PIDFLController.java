@@ -22,12 +22,12 @@ public class PIDFLController {
         return coefficients;
     }
 
-    /// Returns whether the controller is stable at the target, meaning it will probably stay within
-    /// the given error thresholds.
+    /// Returns whether the controller is stable at the target, meaning it will
+    /// probably stay within the given error thresholds.
     public boolean isStableAtTarget(double errorThreshold, double errorChangeThreshold) {
         return Math.abs(error) < errorThreshold
-        // && Math.abs(getErrorChange()) < errorChangeThreshold
-        ;
+            // && Math.abs(getErrorChange()) < errorChangeThreshold
+            ;
     }
 
     protected double lastTime = TimeHelpers.getRuntime();
@@ -45,7 +45,8 @@ public class PIDFLController {
         return error - previousError;
     }
 
-    /// Calculates the PID output for the saved error. The output is normalized to \[-1, 1\].
+    /// Calculates the PID output for the saved error. The output is normalized to
+    /// \[-1, 1\].
     public double get(boolean debugInfo) {
         double currentTime = TimeHelpers.getRuntime();
         double deltaTime = currentTime - lastTime;
@@ -83,7 +84,8 @@ public class PIDFLController {
         return clamp(sum);
     }
 
-    /// Calculates the PID output for the saved error. The output is normalized to \[-1, 1\].
+    /// Calculates the PID output for the saved error. The output is normalized to
+    /// \[-1, 1\].
     public double get() {
         return get(false);
     }

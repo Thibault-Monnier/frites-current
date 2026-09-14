@@ -2,9 +2,7 @@ package config;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.bylazar.configurables.annotations.Configurable;
-
 import logic.pidf.PIDFLCoefficients;
-
 import utils.geometry.Angle;
 import utils.geometry.Distance;
 import utils.geometry.Vector2D;
@@ -20,7 +18,7 @@ public class CannonConfig {
     public static Angle CANNON_ANGLE = Angle.fromDegrees(61.0);
     public static Distance CANNON_TOP_HEIGHT = Distance.fromCentimeters(40.8);
     public static Vector2D CANNON_RELATIVE_POSITION =
-            new Vector2D(Distance.fromCentimeters(-15.0), Distance.fromCentimeters(0.0));
+        new Vector2D(Distance.fromCentimeters(-15.0), Distance.fromCentimeters(0.0));
 
     public static double SHOOT_DELAY = 0.3;
     public static int SHOOT_BALLS_AMOUNT = 2;

@@ -1,7 +1,6 @@
 package logic.pidf;
 
 import androidx.annotation.NonNull;
-
 import java.util.Locale;
 
 public class PIDFLCoefficients {
@@ -22,12 +21,6 @@ public class PIDFLCoefficients {
     @NonNull
     public String toString() {
         return String.format(
-                Locale.ENGLISH,
-                "Kp: %.4f, Ki: %.4f, Kd: %.4f, Kf: %.4f, Kl: %.4f",
-                Kp,
-                Ki,
-                Kd,
-                Kf,
-                Kl);
+            Locale.ENGLISH, "Kp: %.4f, Ki: %.4f, Kd: %.4f, Kf: %.4f, Kl: %.4f", Kp, Ki, Kd, Kf, Kl);
     }
 }

@@ -15,10 +15,12 @@ public class DelayAction implements Action {
 
     @Override
     public boolean run() {
-        if (start < 0) start = TimeHelpers.getRuntime();
+        if (start < 0)
+            start = TimeHelpers.getRuntime();
 
         boolean done = TimeHelpers.getRuntime() - start >= delay;
-        if (!done) doWhile.run();
+        if (!done)
+            doWhile.run();
         return done;
     }
 }

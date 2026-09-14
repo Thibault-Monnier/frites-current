@@ -3,7 +3,6 @@ package pedropathing;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.localization.Localizer;
 import com.pedropathing.math.Vector;
-
 import logic.position.RobotPosition;
 
 public class RobotLocalizer implements Localizer {

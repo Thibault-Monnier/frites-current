@@ -1,9 +1,7 @@
 package logic.position;
 
 import android.util.Pair;
-
 import config.KalmanFilterConfig;
-
 import utils.geometry.Angle;
 import utils.geometry.Distance;
 import utils.geometry.Pose2D;
@@ -16,33 +14,31 @@ public class KalmanFilter {
 
     public KalmanFilter(Pose2D initialPose) {
         this.pose = initialPose;
-        this.poseVariance =
-                new Pose2D(
-                        KalmanFilterConfig.MODEL_VARIANCE_DIST,
-                        KalmanFilterConfig.MODEL_VARIANCE_DIST,
-                        KalmanFilterConfig.MODEL_VARIANCE_ANGLE);
+        this.poseVariance = new Pose2D(
+            KalmanFilterConfig.MODEL_VARIANCE_DIST,
+            KalmanFilterConfig.MODEL_VARIANCE_DIST,
+            KalmanFilterConfig.MODEL_VARIANCE_ANGLE
+        );
     }
 
     public Pose2D predict(Transform2D displacement) {
         pose = pose.add(displacement);
         poseVariance =
-                poseVariance
-                        .add(
-                                new Vector2D(
-                                        KalmanFilterConfig.MODEL_VARIANCE_DIST,
-                                        KalmanFilterConfig.MODEL_VARIANCE_DIST))
-                        .add(KalmanFilterConfig.MODEL_VARIANCE_ANGLE);
+            poseVariance
+                .add(new Vector2D(
+                    KalmanFilterConfig.MODEL_VARIANCE_DIST, KalmanFilterConfig.MODEL_VARIANCE_DIST
+                ))
+                .add(KalmanFilterConfig.MODEL_VARIANCE_ANGLE);
         return pose;
     }
 
     public Pose2D update(Pose2D newCameraPose) {
         Pair<Distance, Distance> updatedX =
-                updateDist(pose.getX(), poseVariance.getX(), newCameraPose.getX());
+            updateDist(pose.getX(), poseVariance.getX(), newCameraPose.getX());
         Pair<Distance, Distance> updatedY =
-                updateDist(pose.getY(), poseVariance.getY(), newCameraPose.getY());
+            updateDist(pose.getY(), poseVariance.getY(), newCameraPose.getY());
         Pair<Angle, Angle> updatedHeading =
-                updateAngle(
-                        pose.getHeading(), poseVariance.getHeading(), newCameraPose.getHeading());
+            updateAngle(pose.getHeading(), poseVariance.getHeading(), newCameraPose.getHeading());
 
         pose = new Pose2D(updatedX.first, updatedY.first, updatedHeading.first);
         poseVariance = new Pose2D(updatedX.second, updatedY.second, updatedHeading.second);
@@ -51,7 +47,8 @@ public class KalmanFilter {
     }
 
     public Pair<Distance, Distance> updateDist(
-            Distance value, Distance variance, Distance newCameravalue) {
+        Distance value, Distance variance, Distance newCameravalue
+    ) {
         double gain = variance.ratio(variance.add(KalmanFilterConfig.CAMERA_VARIANCE_DIST));
 
         Distance updatedValue = value.add(newCameravalue.subtract(value).multiply(gain));

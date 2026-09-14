@@ -1,10 +1,8 @@
 package utils;
 
 import androidx.annotation.Nullable;
-
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
-
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class TelemetryHandler {
@@ -16,7 +14,7 @@ public class TelemetryHandler {
 
     public static void instantiate(Telemetry telemetry) {
         TelemetryHandler.telemetry =
-                new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+            new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
     }
 
     public static void update() {

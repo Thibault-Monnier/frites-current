@@ -3,14 +3,11 @@ package opmodes.debug;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-
 import config.HardwareConfig;
-
 import opmodes.GroupConstants;
 
-@TeleOp(
-        name = GroupConstants.TEST_MODES_GROUP + ": Independent motor test",
-        group = GroupConstants.TEST_MODES_GROUP)
+@TeleOp(name = GroupConstants.TEST_MODES_GROUP + ": Independent motor test",
+    group = GroupConstants.TEST_MODES_GROUP)
 public class IndependentMotorTest extends OpMode {
     private DcMotor testMotor1;
     private DcMotor testMotor2;

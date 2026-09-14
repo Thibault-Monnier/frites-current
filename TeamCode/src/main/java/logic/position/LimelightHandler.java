@@ -8,21 +8,16 @@ import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-
 import config.HardwareConfig;
-
+import java.util.List;
+import java.util.stream.Collectors;
 import logic.field.PlayingField;
-
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
-
 import utils.TelemetryHandler;
 import utils.geometry.Pose2D;
 import utils.geometry.Position2D;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class LimelightHandler {
     private final FtcDashboard dashboard = FtcDashboard.getInstance();
@@ -68,7 +63,8 @@ public class LimelightHandler {
             return false;
         }
 
-        if (!isNewResult(result)) return false;
+        if (!isNewResult(result))
+            return false;
 
         List<LLResultTypes.FiducialResult> tags = result.getFiducialResults();
         lastDetectedTags = tags;
@@ -76,8 +72,8 @@ public class LimelightHandler {
         printDetectionInfo(result);
 
         // Filter to only the positioning tags
-        if (tags.stream()
-                .noneMatch(tag -> tag.getFiducialId() == 20 || tag.getFiducialId() == 24)) {
+        if (tags.stream().noneMatch(
+                tag -> tag.getFiducialId() == 20 || tag.getFiducialId() == 24)) {
             handleNoDetection();
             return false;
         }
@@ -108,11 +104,10 @@ public class LimelightHandler {
 
         TelemetryHandler.addLine("--- Detected Tags ---");
         TelemetryHandler.addData("Number of tags", lastDetectedTags.size());
-        TelemetryHandler.addData(
-                "Tag IDs",
-                lastDetectedTags.stream()
-                        .map(LLResultTypes.FiducialResult::getFiducialId)
-                        .collect(Collectors.toList()));
+        TelemetryHandler.addData("Tag IDs",
+            lastDetectedTags.stream()
+                .map(LLResultTypes.FiducialResult::getFiducialId)
+                .collect(Collectors.toList()));
 
         TelemetryHandler.addLine("--- Camera Localization ---");
         TelemetryHandler.addData("Unit", pos.unit);
@@ -143,6 +138,6 @@ public class LimelightHandler {
         Position newPos = newResult.getBotpose().getPosition();
         Position prevPos = lastResult.getBotpose().getPosition();
         return distance(newPos, prevPos) < STABILITY_THRESHOLD_METERS
-                && PlayingField.isInField(Position2D.fromPosition(newPos));
+            && PlayingField.isInField(Position2D.fromPosition(newPos));
     }
 }

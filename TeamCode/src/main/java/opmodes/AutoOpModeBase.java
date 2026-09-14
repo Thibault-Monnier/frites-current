@@ -5,14 +5,12 @@ import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
-
 import logic.Team;
 import logic.action.Action;
 import logic.action.DelayAction;
 import logic.action.SimpleAction;
 import logic.action.WaitForArtifactsAction;
 import logic.field.PlayingField;
-
 import utils.TelemetryHandler;
 
 public abstract class AutoOpModeBase extends OpModeBase {
@@ -51,9 +49,8 @@ public abstract class AutoOpModeBase extends OpModeBase {
     protected void initialize() {
         super.initialize();
 
-        TelemetryHandler.addData(
-                "Pose start (Pedro Pathing)",
-                PlayingField.startPose(team).toPedropathingPose().toString());
+        TelemetryHandler.addData("Pose start (Pedro Pathing)",
+            PlayingField.startPose(team).toPedropathingPose().toString());
     }
 
     @Override
@@ -103,7 +100,8 @@ public abstract class AutoOpModeBase extends OpModeBase {
         return new WaitForArtifactsAction(delay, doWhile, distanceSensorMonitor);
     }
 
-    protected Action pathAction(PathChain path, boolean useIntake, boolean isSlow, boolean holdAfterDone) {
+    protected Action pathAction(
+        PathChain path, boolean useIntake, boolean isSlow, boolean holdAfterDone) {
         return () -> {
             if (!pathActive) {
                 follower.followPath(path, isSlow ? 0.7 : 1, holdAfterDone);
@@ -111,11 +109,11 @@ public abstract class AutoOpModeBase extends OpModeBase {
                 pathStartTime = runtime.milliseconds();
             }
 
-            if (useIntake) intake();
+            if (useIntake)
+                intake();
 
-            if (!follower.isBusy()
-                    || follower.isRobotStuck()
-                    || runtime.milliseconds() - pathStartTime > 3000) { // Hard time limit as backup
+            if (!follower.isBusy() || follower.isRobotStuck()
+                || runtime.milliseconds() - pathStartTime > 3000) { // Hard time limit as backup
                 pathActive = false;
                 return true;
             }
@@ -134,7 +132,8 @@ public abstract class AutoOpModeBase extends OpModeBase {
             }
 
             boolean done = cannonBuffers.shootContinue();
-            if (done) cannonBuffers.shootReset();
+            if (done)
+                cannonBuffers.shootReset();
 
             return done;
         };
@@ -155,7 +154,8 @@ public abstract class AutoOpModeBase extends OpModeBase {
             createPaths();
         }
 
-        /// Create paths for red team. It will be automatically mirrored if necessary later on.
+        /// Create paths for red team. It will be automatically mirrored if
+        /// necessary later on.
         protected abstract void createPaths();
 
         protected PathChain lineToPath(Pose start, Pose end) {
@@ -163,9 +163,9 @@ public abstract class AutoOpModeBase extends OpModeBase {
             end = resolveRealPose(end);
 
             return follower.pathBuilder()
-                    .addPath(new BezierLine(start, end))
-                    .setLinearHeadingInterpolation(start.getHeading(), end.getHeading())
-                    .build();
+                .addPath(new BezierLine(start, end))
+                .setLinearHeadingInterpolation(start.getHeading(), end.getHeading())
+                .build();
         }
 
         protected PathChain curveToPath(Pose start, Pose controlPoint, Pose end) {
@@ -174,9 +174,9 @@ public abstract class AutoOpModeBase extends OpModeBase {
             end = resolveRealPose(end);
 
             return follower.pathBuilder()
-                    .addPath(new BezierCurve(start, controlPoint, end))
-                    .setLinearHeadingInterpolation(start.getHeading(), end.getHeading())
-                    .build();
+                .addPath(new BezierCurve(start, controlPoint, end))
+                .setLinearHeadingInterpolation(start.getHeading(), end.getHeading())
+                .build();
         }
 
         /// Mirrors pose if blue team

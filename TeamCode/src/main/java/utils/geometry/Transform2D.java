@@ -1,7 +1,6 @@
 package utils.geometry;
 
 import androidx.annotation.NonNull;
-
 import java.util.Locale;
 
 /// Represents the transform between two poses.
@@ -25,6 +24,6 @@ public class Transform2D {
     @NonNull
     public String toString() {
         return String.format(
-                Locale.ENGLISH, "(Transform2D) translation=%s, rotation=%s", translation, rotation);
+            Locale.ENGLISH, "(Transform2D) translation=%s, rotation=%s", translation, rotation);
     }
 }

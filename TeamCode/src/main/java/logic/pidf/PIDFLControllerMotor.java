@@ -1,7 +1,6 @@
 package logic.pidf;
 
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-
 import utils.TelemetryHandler;
 
 public class PIDFLControllerMotor extends PIDFLController {
@@ -14,19 +13,20 @@ public class PIDFLControllerMotor extends PIDFLController {
     }
 
     public PIDFLControllerMotor(
-            DcMotorEx motor, double maxMotorVelocity, PIDFLCoefficients initialCoeffs) {
+        DcMotorEx motor, double maxMotorVelocity, PIDFLCoefficients initialCoeffs) {
         super(initialCoeffs);
         this.motor = motor;
         this.maxMotorVelocity = maxMotorVelocity;
     }
 
-    /// Calculates the PID output for the saved error. The output is normalized to \[-1, 1\].
+    /// Calculates the PID output for the saved error. The output is normalized to
+    /// \[-1, 1\].
     public double get(double targetVelocity, boolean debugInfo) {
         double error = targetVelocity - motor.getVelocity();
         setError(error);
 
         if (Math.abs(targetVelocity) < maxMotorVelocity / 100.0
-                && Math.abs(error) < maxMotorVelocity / 100.0) {
+            && Math.abs(error) < maxMotorVelocity / 100.0) {
             return 0.0;
         }
 
@@ -38,7 +38,8 @@ public class PIDFLControllerMotor extends PIDFLController {
         return super.get(debugInfo);
     }
 
-    /// Calculates the PID output for the saved error. The output is normalized to \[-1, 1\].
+    /// Calculates the PID output for the saved error. The output is normalized to
+    /// \[-1, 1\].
     public double get(double targetVelocity) {
         return get(targetVelocity, false);
     }

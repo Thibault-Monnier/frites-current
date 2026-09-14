@@ -7,16 +7,14 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
 import config.HardwareConfig;
-
+import java.util.List;
 import logic.Movement;
 import logic.ShotHandler;
 import logic.Team;
 import logic.action.DriveActions;
 import logic.field.ArtifactSequence;
 import logic.position.RobotPosition;
-
 import modules.actuator.cannon.Cannon;
 import modules.actuator.cannonBuffer.CannonBuffer;
 import modules.actuator.cannonBuffer.CannonBufferHandler;
@@ -25,12 +23,8 @@ import modules.sensor.ArtifactMonitor;
 import modules.sensor.BatteryMonitor;
 import modules.sensor.DistanceSensorMonitor;
 import modules.sensor.GamepadController;
-
 import pedropathing.Constants;
-
 import utils.TelemetryHandler;
-
-import java.util.List;
 
 public abstract class OpModeBase extends LinearOpMode {
     protected ElapsedTime runtime;
@@ -68,8 +62,7 @@ public abstract class OpModeBase extends LinearOpMode {
         this.shouldResetPose = shouldResetPose;
     }
 
-    @Override
-    public abstract void runOpMode();
+    @Override public abstract void runOpMode();
 
     protected void initialize() {
         TelemetryHandler.instantiate(telemetry);
@@ -83,7 +76,7 @@ public abstract class OpModeBase extends LinearOpMode {
         runtime = new ElapsedTime();
 
         robotPosition =
-                RobotPosition.getInstance(hardwareMap, team, useFarStartPose, shouldResetPose);
+            RobotPosition.getInstance(hardwareMap, team, useFarStartPose, shouldResetPose);
         follower = Constants.createFollower(hardwareMap, robotPosition);
         shotHandler = new ShotHandler(robotPosition, team);
 
@@ -97,11 +90,11 @@ public abstract class OpModeBase extends LinearOpMode {
         DcMotor moveBR = hardwareMap.get(DcMotor.class, HardwareConfig.BACK_RIGHT_MOTOR_ID);
 
         DcMotorEx cannonLeft =
-                hardwareMap.get(DcMotorEx.class, HardwareConfig.CANNON_MOTOR_LEFT_ID);
+            hardwareMap.get(DcMotorEx.class, HardwareConfig.CANNON_MOTOR_LEFT_ID);
         DcMotorEx cannonRight =
-                hardwareMap.get(DcMotorEx.class, HardwareConfig.CANNON_MOTOR_RIGHT_ID);
+            hardwareMap.get(DcMotorEx.class, HardwareConfig.CANNON_MOTOR_RIGHT_ID);
         DcMotor cannonBufferMotor =
-                hardwareMap.get(DcMotor.class, HardwareConfig.CANNON_BUFFER_MOTOR_ID);
+            hardwareMap.get(DcMotor.class, HardwareConfig.CANNON_BUFFER_MOTOR_ID);
 
         DcMotor intake = hardwareMap.get(DcMotor.class, HardwareConfig.INTAKE_MOTOR_ID);
 
@@ -110,23 +103,23 @@ public abstract class OpModeBase extends LinearOpMode {
         this.artifactMonitorThread = new Thread(this.artifactMonitor);
         this.artifactMonitorThread.start();
 
-        move =
-                new Movement(
-                        robotPosition,
-                        shotHandler,
-                        team,
-                        moveFL,
-                        moveFR,
-                        moveBL,
-                        moveBR,
-                        Movement.MovementMode.FIELD_CENTRIC);
+        move = new Movement(
+            robotPosition,
+            shotHandler,
+            team,
+            moveFL,
+            moveFR,
+            moveBL,
+            moveBR,
+            Movement.MovementMode.FIELD_CENTRIC
+        );
 
         driveActions = new DriveActions(move, robotPosition, team);
 
         cannon = new Cannon(cannonLeft, cannonRight);
 
         CannonBuffer cannonBuffer =
-                new CannonBuffer(cannonBufferMotor, DcMotorSimple.Direction.REVERSE);
+            new CannonBuffer(cannonBufferMotor, DcMotorSimple.Direction.REVERSE);
         this.cannonBuffers = new CannonBufferHandler(cannonBuffer);
 
         this.intake = new Intake(intake);
@@ -157,12 +150,13 @@ public abstract class OpModeBase extends LinearOpMode {
 
         System.out.println("Robot Pose: " + robotPosition.getPose().toString());
         TelemetryHandler.addData(
-                "Shooting target distance", shotHandler.getShotMagnitude().toString());
+            "Shooting target distance", shotHandler.getShotMagnitude().toString()
+        );
         TelemetryHandler.addData("Shooting target angle", shotHandler.getShotAngle().toString());
 
         if (artifactSequence == null)
             artifactSequence =
-                    ArtifactSequence.findCurrentSequence(robotPosition.getLimelightHandler());
+                ArtifactSequence.findCurrentSequence(robotPosition.getLimelightHandler());
         if (artifactSequence != null)
             TelemetryHandler.addData("Pattern", artifactSequence.toString());
     }
@@ -184,8 +178,10 @@ public abstract class OpModeBase extends LinearOpMode {
     }
 
     protected void apply(boolean usingFollower) {
-        if (usingFollower) follower.update();
-        else move.apply();
+        if (usingFollower)
+            follower.update();
+        else
+            move.apply();
 
         intake.apply();
 
@@ -193,7 +189,5 @@ public abstract class OpModeBase extends LinearOpMode {
         cannonBuffers.apply();
     }
 
-    protected void apply() {
-        apply(false);
-    }
+    protected void apply() { apply(false); }
 }

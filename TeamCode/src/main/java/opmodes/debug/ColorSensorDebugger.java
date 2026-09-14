@@ -1,22 +1,18 @@
 package opmodes.debug;
 
 import android.graphics.Color;
-
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.ColorSensor;
-
 import opmodes.GroupConstants;
-
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 @Config
-@TeleOp(
-        name = GroupConstants.DEBUGGER_MODES_GROUP + ": Color Sensor",
-        group = GroupConstants.DEBUGGER_MODES_GROUP)
+@TeleOp(name = GroupConstants.DEBUGGER_MODES_GROUP + ": Color Sensor",
+    group = GroupConstants.DEBUGGER_MODES_GROUP)
 public class ColorSensorDebugger extends OpMode {
     public static String sensorId = "color_sensor";
 
@@ -26,7 +22,7 @@ public class ColorSensorDebugger extends OpMode {
     @Override
     public void init() {
         globalTelemetry =
-                new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+            new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         sensor = hardwareMap.get(ColorSensor.class, sensorId);
         sensor.resetDeviceConfigurationForOpMode();

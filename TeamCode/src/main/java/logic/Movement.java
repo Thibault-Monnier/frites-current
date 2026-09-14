@@ -13,23 +13,18 @@ import static config.MovementConfig.TURN_TOLERANCE;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
-
+import java.util.HashMap;
 import logic.field.PlayingField;
 import logic.pidf.PIDFLController;
 import logic.position.RobotPosition;
-
 import modules.actuator.RobotActuatorModule;
 import modules.actuator.drive.MecanumDrive;
-
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-
 import utils.TelemetryHandler;
 import utils.geometry.Angle;
 import utils.geometry.Pose2D;
 import utils.geometry.Position2D;
 import utils.geometry.Vector2D;
-
-import java.util.HashMap;
 
 @Config
 public class Movement implements RobotActuatorModule {
@@ -51,14 +46,15 @@ public class Movement implements RobotActuatorModule {
     private Macro activeMacro = Macro.NONE;
 
     public Movement(
-            RobotPosition robotPosition,
-            ShotHandler shotHandler,
-            Team team,
-            DcMotor FL,
-            DcMotor FR,
-            DcMotor BL,
-            DcMotor BR,
-            MovementMode movementMode) {
+        RobotPosition robotPosition,
+        ShotHandler shotHandler,
+        Team team,
+        DcMotor FL,
+        DcMotor FR,
+        DcMotor BL,
+        DcMotor BR,
+        MovementMode movementMode
+    ) {
         this.robotPosition = robotPosition;
         this.team = team;
 
@@ -73,7 +69,8 @@ public class Movement implements RobotActuatorModule {
 
     /// Toggles the movement mode between field centric and robot centric.
     public void toggleMovementMode() {
-        if (movementMode == MovementMode.FIELD_CENTRIC) movementMode = MovementMode.ROBOT_CENTRIC;
+        if (movementMode == MovementMode.FIELD_CENTRIC)
+            movementMode = MovementMode.ROBOT_CENTRIC;
         else if (movementMode == MovementMode.ROBOT_CENTRIC)
             movementMode = MovementMode.FIELD_CENTRIC;
         else {
@@ -82,30 +79,20 @@ public class Movement implements RobotActuatorModule {
     }
 
     /// Toggles super slow mode.
-    public void toggleSuperSlow() {
-        isSuperSlow = !isSuperSlow;
-    }
+    public void toggleSuperSlow() { isSuperSlow = !isSuperSlow; }
 
-    public void toggleLockTowardsGoal() {
-        lockTowardGoal = !lockTowardGoal;
-    }
+    public void toggleLockTowardsGoal() { lockTowardGoal = !lockTowardGoal; }
 
-    public boolean lockingTowardsGoal() {
-        return lockTowardGoal;
-    }
+    public boolean lockingTowardsGoal() { return lockTowardGoal; }
 
     /// Returns whether the robot is currently moving.
-    public boolean isMoving() {
-        return mecanumDrive.isMoving();
-    }
+    public boolean isMoving() { return mecanumDrive.isMoving(); }
 
     /// Applies the computed motor powers to the motors, then resets them.
-    public void apply() {
-        mecanumDrive.apply();
-    }
+    public void apply() { mecanumDrive.apply(); }
 
-    /// Reloads the translation controller coefficients from the config. Useful for tuning the PIDF
-    /// controller coefficients using FTC Dashboard.
+    /// Reloads the translation controller coefficients from the config. Useful
+    /// for tuning the PIDF controller coefficients using FTC Dashboard.
     public void reloadPIDFCoefficients() {
         turnController.setCoefficients(TURN_PIDF_COEFFICIENTS);
         translationXController.setCoefficients(TRANSLATION_PIDF_COEFFICIENTS);
@@ -113,53 +100,50 @@ public class Movement implements RobotActuatorModule {
 
         TelemetryHandler.addData("Turn coefficients", turnController.getCoefficients());
         TelemetryHandler.addData(
-                "Translation X coefficients", translationXController.getCoefficients());
+            "Translation X coefficients", translationXController.getCoefficients()
+        );
         TelemetryHandler.addData(
-                "Translation Y coefficients", translationYController.getCoefficients());
+            "Translation Y coefficients", translationYController.getCoefficients()
+        );
     }
 
     /// Sets the provided macro as the active macro.
-    public void initMacro(Macro macro) {
-        activeMacro = macro;
-    }
+    public void initMacro(Macro macro) { activeMacro = macro; }
 
-    /// Executes the active macro, if any. Returns true if the macro has finished and false
-    /// otherwise.
+    /// Executes the active macro, if any. Returns true if the macro has finished
+    /// and false otherwise.
     public boolean executeActiveMacro() {
-        if (activeMacro == Macro.NONE) return true;
+        if (activeMacro == Macro.NONE)
+            return true;
 
         Position2D targetPos;
         Angle targetHeading;
 
         switch (activeMacro) {
-            case MOVE_TO_SHOOT:
-                {
-                    targetPos = PlayingField.shootingPosition(team);
-                    targetHeading = shotHandler.getShotAngle();
-                }
+            case MOVE_TO_SHOOT: {
+                targetPos = PlayingField.shootingPosition(team);
+                targetHeading = shotHandler.getShotAngle();
                 break;
-            case MOVE_TO_PARK:
-                {
-                    Pose2D targetPose = PlayingField.parkingPose(team);
-                    targetPos = targetPose.getPosition();
-                    targetHeading = targetPose.getHeading();
-                }
+            }
+            case MOVE_TO_PARK: {
+                Pose2D targetPose = PlayingField.parkingPose(team);
+                targetPos = targetPose.getPosition();
+                targetHeading = targetPose.getHeading();
                 isSuperSlow = true;
                 break;
-            case MOVE_TO_RAMP:
-                {
-                    Pose2D targetPose = PlayingField.rampPose(team);
-                    targetPos = targetPose.getPosition();
-                    targetHeading = targetPose.getHeading();
-                }
+            }
+            case MOVE_TO_RAMP: {
+                Pose2D targetPose = PlayingField.rampPose(team);
+                targetPos = targetPose.getPosition();
+                targetHeading = targetPose.getHeading();
                 break;
-            case MOVE_TO_RAMP_DEFENSE:
-                {
-                    Pose2D targetPose = PlayingField.rampDefensePose(team);
-                    targetPos = targetPose.getPosition();
-                    targetHeading = targetPose.getHeading();
-                }
+            }
+            case MOVE_TO_RAMP_DEFENSE: {
+                Pose2D targetPose = PlayingField.rampDefensePose(team);
+                targetPos = targetPose.getPosition();
+                targetHeading = targetPose.getHeading();
                 break;
+            }
             default:
                 throw new UnsupportedOperationException("Unhandled macro: " + activeMacro);
         }
@@ -167,17 +151,16 @@ public class Movement implements RobotActuatorModule {
         boolean done = translateToPosition(targetPos);
         done &= turnTowardsHeading(targetHeading);
 
-        if (done) stopMacro();
+        if (done)
+            stopMacro();
         return done;
     }
 
     /// Stops any active macro, returning control to the driver.
-    public void stopMacro() {
-        activeMacro = Macro.NONE;
-    }
+    public void stopMacro() { activeMacro = Macro.NONE; }
 
-    /// Rotates the robot using input from the *right* joystick of the gamepad. If locking towards
-    /// goal, rotate to face the goal instead.
+    /// Rotates the robot using input from the *right* joystick of the gamepad. If
+    /// locking towards goal, rotate to face the goal instead.
     public void rotate(Gamepad gamepad, boolean slow) {
         double turn = -gamepad.right_stick_x * speedMultiplier(slow);
 
@@ -214,14 +197,16 @@ public class Movement implements RobotActuatorModule {
         turnTowards(targetPos);
     }
 
-    /// Turns the robot towards a target position. Returns true if finished, false otherwise.
+    /// Turns the robot towards a target position. Returns true if finished, false
+    /// otherwise.
     public boolean turnTowards(Position2D targetPos) {
         Position2D robotPos = robotPosition.getPosition();
         Angle targetDirection = targetPos.subtract(robotPos).direction();
         return turnTowardsHeading(targetDirection);
     }
 
-    /// Turns the robot towards a target heading. Returns true finished, false otherwise.
+    /// Turns the robot towards a target heading. Returns true finished, false
+    /// otherwise.
     public boolean turnTowardsHeading(Angle targetHeading) {
         Pose2D robotPose = robotPosition.getPose();
 
@@ -231,9 +216,9 @@ public class Movement implements RobotActuatorModule {
         TelemetryHandler.addData("Turn error", angleError.toString());
         TelemetryHandler.addData("Turn error change", turnController.getErrorChange());
 
-        boolean isFinished =
-                turnController.isStableAtTarget(
-                        TURN_TOLERANCE.toRadians(), NOT_TURNING_THRESHOLD.toRadians());
+        boolean isFinished = turnController.isStableAtTarget(
+            TURN_TOLERANCE.toRadians(), NOT_TURNING_THRESHOLD.toRadians()
+        );
         if (isFinished) {
             TelemetryHandler.addLine("Turn controller is finished");
             return true;
@@ -247,7 +232,8 @@ public class Movement implements RobotActuatorModule {
         return false;
     }
 
-    /// Translates the robot towards a target position. Returns true if finished, false otherwise.
+    /// Translates the robot towards a target position. Returns true if finished,
+    /// false otherwise.
     public boolean translateToPosition(Position2D targetPos) {
         Position2D robotPos = robotPosition.getPosition();
         Vector2D error = targetPos.subtract(robotPos);
@@ -263,13 +249,14 @@ public class Movement implements RobotActuatorModule {
         TelemetryHandler.addData("X Error", xError);
         TelemetryHandler.addData("Y Error", yError);
 
-        boolean isFinished =
-                translationXController.isStableAtTarget(
-                                TRANSLATION_TOLERANCE.getValue(errorUnit),
-                                NOT_TRANSLATING_THRESHOLD.getValue(errorUnit))
-                        && translationYController.isStableAtTarget(
-                                TRANSLATION_TOLERANCE.getValue(errorUnit),
-                                NOT_TRANSLATING_THRESHOLD.getValue(errorUnit));
+        boolean isFinished = translationXController.isStableAtTarget(
+                                 TRANSLATION_TOLERANCE.getValue(errorUnit),
+                                 NOT_TRANSLATING_THRESHOLD.getValue(errorUnit)
+                             )
+            && translationYController.isStableAtTarget(
+                TRANSLATION_TOLERANCE.getValue(errorUnit),
+                NOT_TRANSLATING_THRESHOLD.getValue(errorUnit)
+            );
         if (isFinished) {
             TelemetryHandler.addLine("Translation controller is finished");
             return true;
@@ -310,8 +297,10 @@ public class Movement implements RobotActuatorModule {
         Angle robotAngle = robotPosition.getHeading();
 
         Angle delta = Angle.fromDegrees(90);
-        if (team.isBlue()) robotAngle = robotAngle.add(delta);
-        if (team.isRed()) robotAngle = robotAngle.subtract(delta);
+        if (team.isBlue())
+            robotAngle = robotAngle.add(delta);
+        if (team.isRed())
+            robotAngle = robotAngle.subtract(delta);
 
         translateFieldCentric(robotAngle, translation);
     }
@@ -321,13 +310,9 @@ public class Movement implements RobotActuatorModule {
         translate(translation);
     }
 
-    private void turn(double turnSpeed) {
-        move(new Translation(), turnSpeed);
-    }
+    private void turn(double turnSpeed) { move(new Translation(), turnSpeed); }
 
-    private void translate(Translation translation) {
-        move(translation, 0);
-    }
+    private void translate(Translation translation) { move(translation, 0); }
 
     private void move(Translation translation, double turnSpeed) {
         double forward = translation.forward;
@@ -345,18 +330,9 @@ public class Movement implements RobotActuatorModule {
         mecanumDrive.setState(state);
     }
 
-    public enum MovementMode {
-        ROBOT_CENTRIC,
-        FIELD_CENTRIC
-    }
+    public enum MovementMode { ROBOT_CENTRIC, FIELD_CENTRIC }
 
-    public enum Macro {
-        MOVE_TO_SHOOT,
-        MOVE_TO_PARK,
-        MOVE_TO_RAMP,
-        MOVE_TO_RAMP_DEFENSE,
-        NONE
-    }
+    public enum Macro { MOVE_TO_SHOOT, MOVE_TO_PARK, MOVE_TO_RAMP, MOVE_TO_RAMP_DEFENSE, NONE }
 
     private static class Translation {
         public double forward;
@@ -367,9 +343,7 @@ public class Movement implements RobotActuatorModule {
             this.strafe = strafe;
         }
 
-        public Translation() {
-            this(0, 0);
-        }
+        public Translation() { this(0, 0); }
 
         public void rotate(Angle angle) {
             DistanceUnit unit = DistanceUnit.MM;

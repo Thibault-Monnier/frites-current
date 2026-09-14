@@ -10,13 +10,10 @@ import static config.MovementConfig.FRONT_RIGHT_COEFF;
 import static config.MovementConfig.FRONT_RIGHT_DIRECTION;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
-
-import modules.actuator.RobotActuatorModule;
-
-import utils.TelemetryHandler;
-
 import java.util.HashMap;
 import java.util.Objects;
+import modules.actuator.RobotActuatorModule;
+import utils.TelemetryHandler;
 
 public class MecanumDrive implements RobotActuatorModule {
     private final DcMotor frontLeftDrive;
@@ -61,7 +58,7 @@ public class MecanumDrive implements RobotActuatorModule {
 
     public void move(double forward, double strafe, double turnSpeed) {
         double denominator =
-                Math.max(Math.abs(forward) + Math.abs(strafe) + Math.abs(turnSpeed), 1);
+            Math.max(Math.abs(forward) + Math.abs(strafe) + Math.abs(turnSpeed), 1);
 
         frontLeftPower += (forward - strafe - turnSpeed) / denominator;
         frontRightPower += (forward + strafe + turnSpeed) / denominator;
@@ -92,9 +89,10 @@ public class MecanumDrive implements RobotActuatorModule {
 
     public boolean isMoving() {
         return Math.max(
-                        Math.max(Math.abs(frontLeftPower), Math.abs(frontRightPower)),
-                        Math.max(Math.abs(backLeftPower), Math.abs(backRightPower)))
-                > 0.05;
+                   Math.max(Math.abs(frontLeftPower), Math.abs(frontRightPower)),
+                   Math.max(Math.abs(backLeftPower), Math.abs(backRightPower))
+               )
+            > 0.05;
     }
 
     private void reset() {

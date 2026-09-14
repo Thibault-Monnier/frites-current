@@ -11,9 +11,7 @@ import static config.HardwareConfig.RGB_LIGHT_ID;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
-
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-
 import utils.TelemetryHandler;
 
 public class DistanceSensorMonitor {
@@ -40,23 +38,27 @@ public class DistanceSensorMonitor {
 
         final int maxBackDist = 80;
         final int maxIntakeDist = 110;
-        if (left.getDistance(DistanceUnit.MM) < maxBackDist) count++;
-        if (right.getDistance(DistanceUnit.MM) < maxBackDist) count++;
+        if (left.getDistance(DistanceUnit.MM) < maxBackDist)
+            count++;
+        if (right.getDistance(DistanceUnit.MM) < maxBackDist)
+            count++;
         if (intake_left1.getDistance(DistanceUnit.MM) < maxIntakeDist
-                || intake_left2.getDistance(DistanceUnit.MM) < maxIntakeDist) count++;
+            || intake_left2.getDistance(DistanceUnit.MM) < maxIntakeDist)
+            count++;
         if (intake_right1.getDistance(DistanceUnit.MM) < maxIntakeDist
-                || intake_right2.getDistance(DistanceUnit.MM) < maxIntakeDist) count++;
+            || intake_right2.getDistance(DistanceUnit.MM) < maxIntakeDist)
+            count++;
 
         TelemetryHandler.addData("_Left Distance", left.getDistance(DistanceUnit.MM));
         TelemetryHandler.addData("_Right Distance", right.getDistance(DistanceUnit.MM));
         TelemetryHandler.addData(
-                "_Intake Left 1 Distance", intake_left1.getDistance(DistanceUnit.MM));
+            "_Intake Left 1 Distance", intake_left1.getDistance(DistanceUnit.MM));
         TelemetryHandler.addData(
-                "_Intake Left 2 Distance", intake_left2.getDistance(DistanceUnit.MM));
+            "_Intake Left 2 Distance", intake_left2.getDistance(DistanceUnit.MM));
         TelemetryHandler.addData(
-                "_Intake Right 1 Distance", intake_right1.getDistance(DistanceUnit.MM));
+            "_Intake Right 1 Distance", intake_right1.getDistance(DistanceUnit.MM));
         TelemetryHandler.addData(
-                "_Intake Right 2 Distance", intake_right2.getDistance(DistanceUnit.MM));
+            "_Intake Right 2 Distance", intake_right2.getDistance(DistanceUnit.MM));
 
         return count;
     }

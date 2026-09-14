@@ -6,21 +6,16 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-
 import config.HardwareConfig;
-
 import logic.pidf.PIDFLCoefficients;
 import logic.pidf.PIDFLControllerMotor;
-
 import opmodes.GroupConstants;
-
 import utils.TelemetryHandler;
 import utils.TimeHelpers;
 
 @Config
-@TeleOp(
-        name = GroupConstants.DEBUGGER_MODES_GROUP + ": Shooter PID Calibrator",
-        group = GroupConstants.DEBUGGER_MODES_GROUP)
+@TeleOp(name = GroupConstants.DEBUGGER_MODES_GROUP + ": Shooter PID Calibrator",
+    group = GroupConstants.DEBUGGER_MODES_GROUP)
 public class ShooterPIDTest extends LinearOpMode {
     DcMotorEx motorLeft;
     DcMotorEx motorRight;
@@ -48,14 +43,14 @@ public class ShooterPIDTest extends LinearOpMode {
         motorRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
         motorLeft.setMode(
-                DcMotor.RunMode.RUN_WITHOUT_ENCODER); // Important to avoid an extra PID layer
+            DcMotor.RunMode.RUN_WITHOUT_ENCODER); // Important to avoid an extra PID layer
         motorRight.setMode(
-                DcMotor.RunMode.RUN_WITHOUT_ENCODER); // Important to avoid an extra PID layer
+            DcMotor.RunMode.RUN_WITHOUT_ENCODER); // Important to avoid an extra PID layer
 
         PIDFControllerLeft =
-                new PIDFLControllerMotor(motorLeft, HardwareConfig.SHOOTER_MAX_VELOCITY);
+            new PIDFLControllerMotor(motorLeft, HardwareConfig.SHOOTER_MAX_VELOCITY);
         PIDFControllerRight =
-                new PIDFLControllerMotor(motorRight, HardwareConfig.SHOOTER_MAX_VELOCITY);
+            new PIDFLControllerMotor(motorRight, HardwareConfig.SHOOTER_MAX_VELOCITY);
 
         waitForStart();
 

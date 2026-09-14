@@ -1,16 +1,12 @@
 package opmodes;
 
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-
 import config.HardwareConfig;
 import config.ManualOpModeMappings;
-
 import logic.Team;
 import logic.field.PlayingField;
-
 import modules.actuator.cannon.CannonCalibrator;
 import modules.sensor.GamepadController;
-
 import utils.TelemetryHandler;
 import utils.geometry.Distance;
 
@@ -46,10 +42,9 @@ public class CannonCalibrationOpMode extends OpModeBase {
     @Override
     protected void initialize() {
         super.initialize();
-        cannon =
-                new CannonCalibrator(
-                        hardwareMap.get(DcMotorEx.class, HardwareConfig.CANNON_MOTOR_LEFT_ID),
-                        hardwareMap.get(DcMotorEx.class, HardwareConfig.CANNON_MOTOR_RIGHT_ID));
+        cannon = new CannonCalibrator(
+            hardwareMap.get(DcMotorEx.class, HardwareConfig.CANNON_MOTOR_LEFT_ID),
+            hardwareMap.get(DcMotorEx.class, HardwareConfig.CANNON_MOTOR_RIGHT_ID));
     }
 
     private void runStep() {
@@ -65,19 +60,18 @@ public class CannonCalibrationOpMode extends OpModeBase {
     public void executeActions() {
         if (gamepadController.isPressing(GamepadController.Button.BUMPER_LEFT)) {
             // Lock towards the goal
-            move.lockedJoystickMove(
-                    gamepad1,
-                    gamepadController.isPressing(GamepadController.Button.LEFT_STICK),
-                    PlayingField.goalPos(team));
+            move.lockedJoystickMove(gamepad1,
+                gamepadController.isPressing(GamepadController.Button.LEFT_STICK),
+                PlayingField.goalPos(team));
         } else {
             move.joystickTranslate(
-                    gamepad1, gamepadController.isPressing(GamepadController.Button.LEFT_STICK));
+                gamepad1, gamepadController.isPressing(GamepadController.Button.LEFT_STICK));
             move.rotate(
-                    gamepad1, gamepadController.isPressing(GamepadController.Button.RIGHT_STICK));
+                gamepad1, gamepadController.isPressing(GamepadController.Button.RIGHT_STICK));
         }
 
         if ((isPressActive(ManualOpModeMappings.SHOOT) && cannon.isReadyToShoot())
-                || isPressActive(ManualOpModeMappings.FORCE_SHOOT)) {
+            || isPressActive(ManualOpModeMappings.FORCE_SHOOT)) {
             cannonBuffers.shootContinue();
             intake.on();
         } else {
@@ -85,17 +79,23 @@ public class CannonCalibrationOpMode extends OpModeBase {
 
             if (isPressActive(ManualOpModeMappings.SHOOT))
                 gamepadController.rumble(50); // Cannon isn't ready
-            else cannonBuffers.shootReset();
+            else
+                cannonBuffers.shootReset();
         }
 
-        if (gamepadController.isPressed(GamepadController.Button.X)) cannon.toggle();
-        if (gamepadController.isPressed(GamepadController.Button.Y)) cannon().speedup();
-        if (gamepadController.isLongPressed(GamepadController.Button.Y)) cannon().fastSpeedup();
-        if (gamepadController.isPressed(GamepadController.Button.A)) cannon().slowdown();
-        if (gamepadController.isLongPressed(GamepadController.Button.A)) cannon().fastSlowdown();
+        if (gamepadController.isPressed(GamepadController.Button.X))
+            cannon.toggle();
+        if (gamepadController.isPressed(GamepadController.Button.Y))
+            cannon().speedup();
+        if (gamepadController.isLongPressed(GamepadController.Button.Y))
+            cannon().fastSpeedup();
+        if (gamepadController.isPressed(GamepadController.Button.A))
+            cannon().slowdown();
+        if (gamepadController.isLongPressed(GamepadController.Button.A))
+            cannon().fastSlowdown();
         if (gamepadController.isPressed(GamepadController.Button.B)) {
             Distance targetDistance =
-                    PlayingField.distanceToGoal(robotPosition.getPosition(), team);
+                PlayingField.distanceToGoal(robotPosition.getPosition(), team);
             cannon().saveCurrentCalibrationData(targetDistance);
         }
         if (gamepadController.isLongPressed(GamepadController.Button.B)) {

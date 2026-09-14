@@ -1,10 +1,8 @@
 package utils.geometry;
 
 import androidx.annotation.NonNull;
-
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-
 import java.util.Locale;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 public class Distance {
     private final double value;
@@ -93,7 +91,8 @@ public class Distance {
         return divide(2);
     }
 
-    /// Divides this Distance by another Distance and returns the result as a unitless ratio
+    /// Divides this Distance by another Distance and returns the result as a
+    /// unitless ratio
     public double ratio(Distance other) {
         return toMillimeters() / other.toMillimeters();
     }
@@ -111,6 +110,6 @@ public class Distance {
     @NonNull
     public String toString() {
         return String.format(
-                Locale.ENGLISH, "%.3f %s", getValue(DistanceUnit.METER), DistanceUnit.METER);
+            Locale.ENGLISH, "%.3f %s", getValue(DistanceUnit.METER), DistanceUnit.METER);
     }
 }

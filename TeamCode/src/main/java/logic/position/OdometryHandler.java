@@ -6,11 +6,8 @@ import static config.OdometryConfig.ENCODER_Y_DIRECTION;
 import static config.OdometryConfig.ENCODER_Y_X_OFFSET;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
-
 import config.HardwareConfig;
-
 import modules.sensor.GoBildaPinpointDriver;
-
 import utils.geometry.Pose2D;
 
 public final class OdometryHandler {
@@ -29,8 +26,8 @@ public final class OdometryHandler {
     }
 
     /**
-     * Returns the current pose estimate. NOTE: Does not update the pose estimate; you must call
-     * update() to update the pose estimate.
+     * Returns the current pose estimate. NOTE: Does not update the pose estimate;
+     * you must call update() to update the pose estimate.
      *
      * @return the current pose estimate
      */

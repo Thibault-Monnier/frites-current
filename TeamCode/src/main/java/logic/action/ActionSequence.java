@@ -3,8 +3,8 @@ package logic.action;
 import java.util.ArrayList;
 import java.util.List;
 
-/// An Action that runs a sequence of Actions in order. Each Action must complete before the next
-/// one starts.
+/// An Action that runs a sequence of Actions in order. Each Action must
+/// complete before the next one starts.
 public class ActionSequence implements Action {
     private final ArrayList<Action> actions;
     private int currentActionIndex = 0;

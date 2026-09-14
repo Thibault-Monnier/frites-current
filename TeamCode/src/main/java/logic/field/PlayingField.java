@@ -1,11 +1,8 @@
 package logic.field;
 
 import config.FieldConfig;
-
 import logic.Team;
-
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-
 import utils.geometry.Distance;
 import utils.geometry.Pose2D;
 import utils.geometry.Position2D;
@@ -15,34 +12,31 @@ public class PlayingField {
         // Prevent instantiation
     }
 
-    public static final FieldElement FIELD =
-            new FieldElement(
-                    new Position2D(),
-                    FieldConfig.FIELD_SIZE,
-                    FieldConfig.FIELD_SIZE,
-                    new Distance());
+    public static final FieldElement FIELD = new FieldElement(
+        new Position2D(), FieldConfig.FIELD_SIZE, FieldConfig.FIELD_SIZE, new Distance());
 
-    /// Switches the color of a Pose2D by negating the y-coordinate and heading, effectively
-    /// mirroring it across the x-axis.
+    /// Switches the color of a Pose2D by negating the y-coordinate and heading,
+    /// effectively mirroring it across the x-axis.
     private static Pose2D switchColor(Pose2D pose) {
         return new Pose2D(pose.getX(), pose.getY().negate(), pose.getHeading().negate());
     }
 
-    /// Computes the pose of a point based on the team color. If the team is red, it
-    /// returns the original pose; if the team is blue, it returns the mirrored pose across the
-    /// x-axis.
+    /// Computes the pose of a point based on the team color. If the team is red,
+    /// it returns the original pose; if the team is blue, it returns the mirrored
+    /// pose across the x-axis.
     private static Pose2D switchColor(Pose2D redPose, Team color) {
         return color.isRed() ? redPose : switchColor(redPose);
     }
 
-    /// Switches the color of a Position2D by negating the y-coordinate, effectively mirroring it
-    /// across the x-axis.
+    /// Switches the color of a Position2D by negating the y-coordinate,
+    /// effectively mirroring it across the x-axis.
     private static Position2D switchColor(Position2D pos) {
         return new Position2D(pos.getX(), pos.getY().negate());
     }
 
-    /// Computes the position of a point based on the team color. If the team is red, it returns the
-    /// original position; if the team is blue, it returns the mirrored position across the x-axis.
+    /// Computes the position of a point based on the team color. If the team is
+    /// red, it returns the original position; if the team is blue, it returns the
+    /// mirrored position across the x-axis.
     private static Position2D switchColor(Position2D redPos, Team color) {
         return color.isRed() ? redPos : switchColor(redPos);
     }
@@ -92,8 +86,8 @@ public class PlayingField {
         }
     }
 
-    /// Calculates the distance from the robot's current position to the targeting point of the
-    /// specified goal.
+    /// Calculates the distance from the robot's current position to the targeting
+    /// point of the specified goal.
     /// @param robotPos The current position of the robot.
     /// @param color The color of the goal to target.
     /// @return The distance to the targeting point of the specified goal.

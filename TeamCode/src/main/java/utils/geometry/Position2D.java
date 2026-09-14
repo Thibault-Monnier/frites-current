@@ -1,11 +1,9 @@
 package utils.geometry;
 
 import androidx.annotation.NonNull;
-
+import java.util.Locale;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
-
-import java.util.Locale;
 
 public class Position2D {
     private final double x;
@@ -28,37 +26,25 @@ public class Position2D {
         this(DistanceUnit.MM, x.toMillimeters(), y.toMillimeters());
     }
 
-    public Position2D() {
-        this(DistanceUnit.MM, 0, 0);
-    }
+    public Position2D() { this(DistanceUnit.MM, 0, 0); }
 
     public static Position2D fromPosition(Position position) {
         return new Position2D(position.unit, position.x, position.y);
     }
 
     /// The x component converted to the desired distance unit
-    public double getX(DistanceUnit unit) {
-        return unit.fromUnit(this.unit, x);
-    }
+    public double getX(DistanceUnit unit) { return unit.fromUnit(this.unit, x); }
 
     /// The x component as a Distance object
-    public Distance getX() {
-        return new Distance(unit, x);
-    }
+    public Distance getX() { return new Distance(unit, x); }
 
     /// The y component converted to the desired distance unit
-    public double getY(DistanceUnit unit) {
-        return unit.fromUnit(this.unit, y);
-    }
+    public double getY(DistanceUnit unit) { return unit.fromUnit(this.unit, y); }
 
     /// The y component as a Distance object
-    public Distance getY() {
-        return new Distance(unit, y);
-    }
+    public Distance getY() { return new Distance(unit, y); }
 
-    public boolean hasNaN() {
-        return Double.isNaN(x) || Double.isNaN(y);
-    }
+    public boolean hasNaN() { return Double.isNaN(x) || Double.isNaN(y); }
 
     /// Translates this Position2D by a Vector2D
     public Position2D add(Vector2D translation) {
@@ -78,28 +64,27 @@ public class Position2D {
     /// Useful for transforming the coordinate system.
     public Position2D rotateAroundOrigin(Angle angle) {
         return new Position2D(
-                getX().multiply(angle.cos()).subtract(getY().multiply(angle.sin())),
-                getX().multiply(angle.sin()).add(getY().multiply(angle.cos())));
+            getX().multiply(angle.cos()).subtract(getY().multiply(angle.sin())),
+            getX().multiply(angle.sin()).add(getY().multiply(angle.cos()))
+        );
     }
 
-    /// Calculates the Euclidean distance from this Position2D to another Position2D
-    public Distance distanceTo(Position2D other) {
-        return subtract(other).magnitude();
-    }
+    /// Calculates the Euclidean distance from this Position2D to another
+    /// Position2D
+    public Distance distanceTo(Position2D other) { return subtract(other).magnitude(); }
 
     /// Calculates the angle from this Position2D to another Position2D
-    public Angle angleTo(Position2D other) {
-        return other.subtract(this).direction();
-    }
+    public Angle angleTo(Position2D other) { return other.subtract(this).direction(); }
 
     @NonNull
     public String toString() {
         return String.format(
-                Locale.ENGLISH,
-                "(Position2D) x=%.3f %s, y=%.3f %s",
-                getX(DistanceUnit.METER),
-                DistanceUnit.METER,
-                getY(DistanceUnit.METER),
-                DistanceUnit.METER);
+            Locale.ENGLISH,
+            "(Position2D) x=%.3f %s, y=%.3f %s",
+            getX(DistanceUnit.METER),
+            DistanceUnit.METER,
+            getY(DistanceUnit.METER),
+            DistanceUnit.METER
+        );
     }
 }

@@ -1,10 +1,8 @@
 package utils.geometry;
 
 import androidx.annotation.NonNull;
-
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-
 import java.util.Locale;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 /// Represents a 2D vector, which is a displacement between two positions.
 public class Vector2D {
@@ -59,7 +57,10 @@ public class Vector2D {
         return Angle.fromRadians(rads);
     }
 
-    /** Normalizes the vector to have a magnitude of 1 while maintaining its direction. */
+    /**
+     * Normalizes the vector to have a magnitude of 1 while maintaining its
+     * direction.
+     */
     public Vector2D normalize() {
         Distance mag = magnitude();
         if (mag.isZero()) {
@@ -69,9 +70,9 @@ public class Vector2D {
     }
 
     /**
-     * Normalizes the vector by dividing both components by the maximum absolute value of the
-     * components, ensuring that the vector scales to fit within a unit square while maintaining its
-     * direction.
+     * Normalizes the vector by dividing both components by the maximum absolute
+     * value of the components, ensuring that the vector scales to fit within a
+     * unit square while maintaining its direction.
      */
     public Vector2D normalizeMax() {
         double max = Math.max(Math.abs(x), Math.abs(y));

@@ -1,26 +1,19 @@
 package opmodes.debug;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-
+import java.util.Random;
 import logic.Team;
 import logic.field.PlayingField;
-
 import modules.sensor.GamepadController;
-
 import opmodes.GroupConstants;
 import opmodes.OpModeBase;
-
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-
 import utils.TelemetryHandler;
 import utils.geometry.Distance;
 import utils.geometry.Position2D;
 
-import java.util.Random;
-
-@TeleOp(
-        name = GroupConstants.DEBUGGER_MODES_GROUP + ": Go To Position",
-        group = GroupConstants.DEBUGGER_MODES_GROUP)
+@TeleOp(name = GroupConstants.DEBUGGER_MODES_GROUP + ": Go To Position",
+    group = GroupConstants.DEBUGGER_MODES_GROUP)
 public class GoToPositionOpMode extends OpModeBase {
     private static final Distance MIN_WALL_DISTANCE = new Distance(DistanceUnit.CM, 75);
 
@@ -81,7 +74,7 @@ public class GoToPositionOpMode extends OpModeBase {
 
     private Position2D pickRandomTarget() {
         double rangeRadius =
-                PlayingField.FIELD.halfWidth().subtract(MIN_WALL_DISTANCE).toMillimeters();
+            PlayingField.FIELD.halfWidth().subtract(MIN_WALL_DISTANCE).toMillimeters();
         double x = randomInRange(-rangeRadius, rangeRadius);
         double y = randomInRange(-rangeRadius, rangeRadius);
         return new Position2D(Distance.fromMillimeters(x), Distance.fromMillimeters(y));

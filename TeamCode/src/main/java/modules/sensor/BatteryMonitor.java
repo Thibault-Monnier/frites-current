@@ -2,7 +2,6 @@ package modules.sensor;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
-
 import utils.TelemetryHandler;
 
 public class BatteryMonitor {

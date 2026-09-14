@@ -7,19 +7,13 @@ import static config.CannonConfig.STABLE_THRESHOLD;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-
 import config.HardwareConfig;
-
+import java.util.HashMap;
 import logic.pidf.PIDFLControllerMotor;
-
 import modules.actuator.RobotActuatorModule;
-
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-
 import utils.TelemetryHandler;
 import utils.geometry.Distance;
-
-import java.util.HashMap;
 
 public class Cannon implements RobotActuatorModule {
     private final DcMotorEx motorLeft;
@@ -36,7 +30,8 @@ public class Cannon implements RobotActuatorModule {
         this.motorLeft = motorLeft;
         this.motorRight = motorRight;
 
-        // Without encoders is important to prevent the library from adding an extra PID over ours
+        // Without encoders is important to prevent the library from adding an extra
+        // PID over ours
         this.motorLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         this.motorRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
@@ -47,11 +42,9 @@ public class Cannon implements RobotActuatorModule {
         this.motorRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
         this.PIDFControllerLeft =
-                new PIDFLControllerMotor(
-                        motorLeft, HardwareConfig.SHOOTER_MAX_VELOCITY, CANNON_PID);
+            new PIDFLControllerMotor(motorLeft, HardwareConfig.SHOOTER_MAX_VELOCITY, CANNON_PID);
         this.PIDFControllerRight =
-                new PIDFLControllerMotor(
-                        motorRight, HardwareConfig.SHOOTER_MAX_VELOCITY, CANNON_PID);
+            new PIDFLControllerMotor(motorRight, HardwareConfig.SHOOTER_MAX_VELOCITY, CANNON_PID);
     }
 
     @Override
@@ -60,7 +53,7 @@ public class Cannon implements RobotActuatorModule {
         motorRight.setPower(PIDFControllerRight.get(motorTargetVelocity));
 
         TelemetryHandler.addData(
-                "Cannon Motor velocity/target", getAverageVelocity() + "/" + motorTargetVelocity);
+            "Cannon Motor velocity/target", getAverageVelocity() + "/" + motorTargetVelocity);
         TelemetryHandler.addData("Cannon MotorLeft velocity", motorLeft.getVelocity());
         TelemetryHandler.addData("Cannon MotorRight velocity", motorRight.getVelocity());
     }
@@ -103,29 +96,26 @@ public class Cannon implements RobotActuatorModule {
     }
 
     /**
-     * @return Whether the cannon is ready to shoot (at target velocity and stable)
+     * @return Whether the cannon is ready to shoot (at target velocity and
+     *     stable)
      */
     public boolean isReadyToShoot() {
         return PIDFControllerLeft.isStableAtTarget(ERROR_MARGIN, STABLE_THRESHOLD)
-                && PIDFControllerRight.isStableAtTarget(ERROR_MARGIN, STABLE_THRESHOLD)
-                && getAverageVelocity() >= 100; // Not stopped
+            && PIDFControllerRight.isStableAtTarget(ERROR_MARGIN, STABLE_THRESHOLD)
+            && getAverageVelocity() >= 100; // Not stopped
     }
 
     protected double computeVelocity(Distance horizontalShootingDistance) {
-        // Calibrated from the following data in (shooting distance meters, motor velocity):
-        // 1.345 -> 1240
-        // 1.826 -> 1360
-        // 2.640 -> 1490
-        // 3.181 -> 1580
-        // 3.886 -> 1710
-        // Uses a quartic regression to interpolate between these values.
+        // Calibrated from the following data in (shooting distance meters, motor
+        // velocity): 1.345 -> 1240 1.826 -> 1360 2.640 -> 1490 3.181 -> 1580 3.886
+        // -> 1710 Uses a quartic regression to interpolate between these values.
 
         double d = horizontalShootingDistance.getValue(DistanceUnit.METER);
-//        return -14.0845 * d * d * d * d
-//                + 167.08063 * d * d * d
-//                - 717.12718 * d * d
-//                + 1483.50937 * d
-//                + 181.54309;
+        //        return -14.0845 * d * d * d * d
+        //                + 167.08063 * d * d * d
+        //                - 717.12718 * d * d
+        //                + 1483.50937 * d
+        //                + 181.54309;
 
         return -8.3333 * d * d + 237.5 * d + 833.333;
     }

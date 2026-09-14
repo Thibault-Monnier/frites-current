@@ -2,7 +2,6 @@ package config;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.bylazar.configurables.annotations.Configurable;
-
 import utils.geometry.Angle;
 import utils.geometry.Distance;
 

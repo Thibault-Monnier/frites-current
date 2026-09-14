@@ -3,12 +3,9 @@ package modules.actuator.intake;
 import static config.IntakeConfig.INTAKE_MOVING_SPEED;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
-
-import modules.actuator.RobotActuatorModule;
-
-import utils.TelemetryHandler;
-
 import java.util.HashMap;
+import modules.actuator.RobotActuatorModule;
+import utils.TelemetryHandler;
 
 public class Intake implements RobotActuatorModule {
     private final DcMotor motor;

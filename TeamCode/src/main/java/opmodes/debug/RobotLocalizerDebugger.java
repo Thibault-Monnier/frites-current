@@ -1,19 +1,14 @@
 package opmodes.debug;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-
 import logic.Team;
-
 import opmodes.GroupConstants;
 import opmodes.OpModeBase;
-
 import pedropathing.RobotLocalizer;
-
 import utils.TelemetryHandler;
 
-@TeleOp(
-        name = GroupConstants.DEBUGGER_MODES_GROUP + ": RobotLocalizer",
-        group = GroupConstants.DEBUGGER_MODES_GROUP)
+@TeleOp(name = GroupConstants.DEBUGGER_MODES_GROUP + ": RobotLocalizer",
+    group = GroupConstants.DEBUGGER_MODES_GROUP)
 public class RobotLocalizerDebugger extends OpModeBase {
     private RobotLocalizer localizer;
 

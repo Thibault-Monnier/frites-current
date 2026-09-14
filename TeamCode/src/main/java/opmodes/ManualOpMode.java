@@ -2,15 +2,11 @@ package opmodes;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.Gamepad;
-
 import config.ManualOpModeMappings;
-
 import logic.Movement.Macro;
 import logic.Team;
 import logic.field.PlayingField;
-
 import modules.sensor.GamepadController;
-
 import utils.TelemetryHandler;
 import utils.geometry.Angle;
 
@@ -61,16 +57,18 @@ public class ManualOpMode extends OpModeBase {
     }
 
     private void executeActions() {
-        if (isPressActive(ManualOpModeMappings.DRIVE_MODE_TOGGLE)) move.toggleMovementMode();
+        if (isPressActive(ManualOpModeMappings.DRIVE_MODE_TOGGLE))
+            move.toggleMovementMode();
         if (isPressActive(ManualOpModeMappings.LOCK_TOWARDS_SHOOT_TOGGLE))
             move.toggleLockTowardsGoal();
 
         move.joystickTranslate(
-                gamepadController.gamepad, isPressActive(ManualOpModeMappings.SLOW_MOVE));
+            gamepadController.gamepad, isPressActive(ManualOpModeMappings.SLOW_MOVE));
 
         if (isPressActive(ManualOpModeMappings.LOCK_TOWARDS_SHOOT) && !move.lockingTowardsGoal())
             move.turnTowardsHeading(shotHandler.getShotAngle());
-        else move.rotate(gamepadController.gamepad, isPressActive(ManualOpModeMappings.SLOW_TURN));
+        else
+            move.rotate(gamepadController.gamepad, isPressActive(ManualOpModeMappings.SLOW_TURN));
 
         if (isPressActive(ManualOpModeMappings.MOVE_TO_SHOOTING_SPOT))
             move.initMacro(Macro.MOVE_TO_SHOOT);
@@ -82,14 +80,18 @@ public class ManualOpMode extends OpModeBase {
             move.initMacro(Macro.MOVE_TO_PARK);
             cannon.off();
         }
-        if (move.isMoving()) move.stopMacro();
+        if (move.isMoving())
+            move.stopMacro();
 
         move.executeActiveMacro();
 
-        if (isPressActive(ManualOpModeMappings.CANNON_ON_OFF_TOGGLE)) cannon.toggle();
+        if (isPressActive(ManualOpModeMappings.CANNON_ON_OFF_TOGGLE))
+            cannon.toggle();
 
-        if (cannon.isReadyToShoot()) gamepadController.ledGreen(Gamepad.LED_DURATION_CONTINUOUS);
-        else gamepadController.ledRed(Gamepad.LED_DURATION_CONTINUOUS);
+        if (cannon.isReadyToShoot())
+            gamepadController.ledGreen(Gamepad.LED_DURATION_CONTINUOUS);
+        else
+            gamepadController.ledRed(Gamepad.LED_DURATION_CONTINUOUS);
 
         intake.off();
 
@@ -98,13 +100,14 @@ public class ManualOpMode extends OpModeBase {
             Angle threshold = Angle.fromDegrees(15);
             Angle angle = robotPosition.getPose().getPosition().angleTo(PlayingField.goalPos(team));
             Angle angleDiff = angle.subtract(robotPosition.getHeading());
-            if (!angleDiff.abs().leq(threshold)) allowedToShoot = false;
+            if (!angleDiff.abs().leq(threshold))
+                allowedToShoot = false;
         }
 
         // Make sure the cannon reached its target velocity
         if (allowedToShoot
-                && ((isPressActive(ManualOpModeMappings.SHOOT) && cannon.isReadyToShoot())
-                        || (isPressActive(ManualOpModeMappings.FORCE_SHOOT) && !isChildMode))) {
+            && ((isPressActive(ManualOpModeMappings.SHOOT) && cannon.isReadyToShoot())
+                || (isPressActive(ManualOpModeMappings.FORCE_SHOOT) && !isChildMode))) {
             cannonBuffers.shootContinue();
             intake.on();
         } else {
@@ -112,7 +115,8 @@ public class ManualOpMode extends OpModeBase {
 
             if (isPressActive(ManualOpModeMappings.SHOOT))
                 gamepadController.rumble(50); // Cannon isn't ready
-            else cannonBuffers.shootReset();
+            else
+                cannonBuffers.shootReset();
         }
 
         if (isPressActive(ManualOpModeMappings.INTAKE_ON)) {
@@ -125,8 +129,10 @@ public class ManualOpMode extends OpModeBase {
             cannonBuffers.reverse();
         }
 
-        if (isPressActive(ManualOpModeMappings.SUPER_SLOW_MODE_TOGGLE)) move.toggleSuperSlow();
-        if (isPressActive(ManualOpModeMappings.RESET_ROBOT_POSE)) robotPosition.resetPose();
+        if (isPressActive(ManualOpModeMappings.SUPER_SLOW_MODE_TOGGLE))
+            move.toggleSuperSlow();
+        if (isPressActive(ManualOpModeMappings.RESET_ROBOT_POSE))
+            robotPosition.resetPose();
     }
 
     /** Returns true if the button mapping is active based on its press type. */

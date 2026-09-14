@@ -1,14 +1,14 @@
 package logic.field;
 
 import androidx.annotation.NonNull;
-
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
-
+import java.util.List;
 import logic.position.LimelightHandler;
 
-import java.util.List;
-
-/** A sequence represents a set of 3 artifacts with differing colors and ordering. */
+/**
+ * A sequence represents a set of 3 artifacts with differing colors and
+ * ordering.
+ */
 public class ArtifactSequence {
     Artifact[] artifacts;
 
@@ -20,40 +20,40 @@ public class ArtifactSequence {
     }
 
     /**
-     * Attempts to retrieve the current sequence using the central AprilTag if it is visible.
+     * Attempts to retrieve the current sequence using the central AprilTag if it
+     * is visible.
      *
      * @return the sequence if found; otherwise {@code null}
      */
     public static ArtifactSequence findCurrentSequence(LimelightHandler limelightHandler) {
         List<LLResultTypes.FiducialResult> tags = limelightHandler.getLastDetectedTags();
-        if (tags == null || tags.isEmpty()) return null;
+        if (tags == null || tags.isEmpty())
+            return null;
 
         for (LLResultTypes.FiducialResult tag : tags) {
             /*
-             * See https://ftc-resources.firstinspires.org/ftc/game/manual, page 72 for sequence tag ids
+             * See https://ftc-resources.firstinspires.org/ftc/game/manual, page 72
+             * for sequence tag ids
              */
             switch (tag.getFiducialId()) {
                 case 21:
-                    return new ArtifactSequence(
-                            new Artifact[] {
-                                new Artifact(Artifact.Color.GREEN),
-                                new Artifact(Artifact.Color.PURPLE),
-                                new Artifact(Artifact.Color.PURPLE)
-                            });
+                    return new ArtifactSequence(new Artifact[] {
+                        new Artifact(Artifact.Color.GREEN),
+                        new Artifact(Artifact.Color.PURPLE),
+                        new Artifact(Artifact.Color.PURPLE)
+                    });
                 case 22:
-                    return new ArtifactSequence(
-                            new Artifact[] {
-                                new Artifact(Artifact.Color.PURPLE),
-                                new Artifact(Artifact.Color.GREEN),
-                                new Artifact(Artifact.Color.PURPLE)
-                            });
+                    return new ArtifactSequence(new Artifact[] {
+                        new Artifact(Artifact.Color.PURPLE),
+                        new Artifact(Artifact.Color.GREEN),
+                        new Artifact(Artifact.Color.PURPLE)
+                    });
                 case 23:
-                    return new ArtifactSequence(
-                            new Artifact[] {
-                                new Artifact(Artifact.Color.PURPLE),
-                                new Artifact(Artifact.Color.PURPLE),
-                                new Artifact(Artifact.Color.GREEN)
-                            });
+                    return new ArtifactSequence(new Artifact[] {
+                        new Artifact(Artifact.Color.PURPLE),
+                        new Artifact(Artifact.Color.PURPLE),
+                        new Artifact(Artifact.Color.GREEN)
+                    });
             }
         }
 
@@ -62,8 +62,7 @@ public class ArtifactSequence {
 
     @NonNull
     public String toString() {
-        return artifacts[0].color.toString()
-                + artifacts[1].color.toString()
-                + artifacts[2].color.toString();
+        return artifacts[0].color.toString() + artifacts[1].color.toString()
+            + artifacts[2].color.toString();
     }
 }

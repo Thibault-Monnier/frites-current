@@ -1,13 +1,11 @@
 package logic.action;
 
 import config.FieldConfig;
-
 import logic.Movement;
 import logic.Team;
 import logic.field.Artifact;
 import logic.field.PlayingField;
 import logic.position.RobotPosition;
-
 import utils.geometry.Pose2D;
 import utils.geometry.Position2D;
 import utils.geometry.Vector2D;
@@ -28,7 +26,7 @@ public class DriveActions {
         return () -> {
             Position2D goalShootPosition = PlayingField.shootingPosition(team);
             return drive.translateToPosition(goalShootPosition)
-                    && drive.turnTowards(PlayingField.goalPos(team));
+                && drive.turnTowards(PlayingField.goalPos(team));
         };
     }
 
@@ -36,7 +34,7 @@ public class DriveActions {
         return () -> {
             Pose2D leavePose = PlayingField.autoModeLeavePose(team);
             return drive.translateToPosition(leavePose.getPosition())
-                    && drive.turnTowardsHeading(leavePose.getHeading());
+                && drive.turnTowardsHeading(leavePose.getHeading());
         };
     }
 
@@ -44,7 +42,7 @@ public class DriveActions {
         return () -> {
             Pose2D entryPose = PlayingField.artifactRowEntryPose(team, row);
             return drive.translateToPosition(entryPose.getPosition())
-                    && drive.turnTowardsHeading(entryPose.getHeading());
+                && drive.turnTowardsHeading(entryPose.getHeading());
         };
     }
 
@@ -53,8 +51,7 @@ public class DriveActions {
             Position2D entryPose = PlayingField.artifactRowEntryPose(team, row).getPosition();
 
             Vector2D forwardVector =
-                    new Vector2D(
-                            FieldConfig.ARTIFACT_COLLECTION_DISTANCE, robotPosition.getHeading());
+                new Vector2D(FieldConfig.ARTIFACT_COLLECTION_DISTANCE, robotPosition.getHeading());
             Position2D endPos = entryPose.add(forwardVector);
 
             return drive.translateToPosition(endPos);

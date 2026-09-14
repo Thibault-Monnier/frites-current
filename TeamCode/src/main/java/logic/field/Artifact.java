@@ -24,9 +24,5 @@ public class Artifact {
         }
     }
 
-    public enum Row {
-        FRONT,
-        MIDDLE,
-        BACK
-    }
+    public enum Row { FRONT, MIDDLE, BACK }
 }

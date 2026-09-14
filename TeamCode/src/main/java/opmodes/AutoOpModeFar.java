@@ -5,14 +5,11 @@ import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
-
 import logic.Team;
 import logic.field.PlayingField;
-
 import utils.TelemetryHandler;
 
 public class AutoOpModeFar extends OpModeBase {
-
     private Paths paths;
 
     private boolean pathActive = false;
@@ -34,9 +31,7 @@ public class AutoOpModeFar extends OpModeBase {
 
     private AutoState state = AutoState.MOVE_TO_SHOOT_1;
 
-    public AutoOpModeFar(Team team) {
-        super(team, true, true);
-    }
+    public AutoOpModeFar(Team team) { super(team, true, true); }
 
     @Override
     public void runOpMode() {
@@ -69,7 +64,8 @@ public class AutoOpModeFar extends OpModeBase {
         paths = new Paths(follower, team.isBlue());
 
         TelemetryHandler.addData(
-                "Pose start", PlayingField.startPose(team).toPedropathingPose().toString());
+            "Pose start", PlayingField.startPose(team).toPedropathingPose().toString()
+        );
     }
 
     @Override
@@ -118,9 +114,10 @@ public class AutoOpModeFar extends OpModeBase {
             case COLLECT_HUMAN_PLAYER:
                 intake();
                 runPath(
-                        paths.CollectHumanPlayer,
-                        AutoState.MOVE_TO_SHOOT_AFTER_COLLECT_HUMAN_PLAYER,
-                        true);
+                    paths.CollectHumanPlayer,
+                    AutoState.MOVE_TO_SHOOT_AFTER_COLLECT_HUMAN_PLAYER,
+                    true
+                );
                 break;
             case MOVE_TO_SHOOT_AFTER_COLLECT_HUMAN_PLAYER:
                 intake();
@@ -133,9 +130,8 @@ public class AutoOpModeFar extends OpModeBase {
             case COLLECT_BOTTOM_ROW:
                 intake();
                 runPath(
-                        paths.CollectBottomRow,
-                        AutoState.MOVE_TO_SHOOT_AFTER_COLLECT_BOTTOM_ROW,
-                        true);
+                    paths.CollectBottomRow, AutoState.MOVE_TO_SHOOT_AFTER_COLLECT_BOTTOM_ROW, true
+                );
                 break;
             case MOVE_TO_SHOOT_AFTER_COLLECT_BOTTOM_ROW:
                 intake();
@@ -159,9 +155,8 @@ public class AutoOpModeFar extends OpModeBase {
             pathStartTime = runtime.milliseconds();
         }
 
-        if (!follower.isBusy()
-                || follower.isRobotStuck()
-                || runtime.milliseconds() - pathStartTime > 4000) {
+        if (!follower.isBusy() || follower.isRobotStuck()
+            || runtime.milliseconds() - pathStartTime > 4000) {
             follower.breakFollowing();
             pathActive = false;
             state = nextState;
@@ -170,7 +165,8 @@ public class AutoOpModeFar extends OpModeBase {
     }
 
     private void runShootCycle() {
-        if (!cannon.isReadyToShoot()) return;
+        if (!cannon.isReadyToShoot())
+            return;
 
         intake.on();
 
@@ -184,7 +180,8 @@ public class AutoOpModeFar extends OpModeBase {
                 state = AutoState.ALIGN_COLLECT_HUMAN_PLAYER;
             else if (nbShots == 4) {
                 state = AutoState.ALIGN_COLLECT_BOTTOM_ROW;
-            } else state = AutoState.LEAVE;
+            } else
+                state = AutoState.LEAVE;
         }
     }
 
@@ -194,14 +191,9 @@ public class AutoOpModeFar extends OpModeBase {
     }
 
     public static class Paths {
-        public PathChain MoveToShoot1,
-                AlignCollectHumanPlayer,
-                CollectHumanPlayer,
-                MoveToShootAfterCollectHumanPlayer,
-                AlignCollectBottomRow,
-                CollectBottomRow,
-                MoveToShootAfterCollectBottomRow,
-                Leave;
+        public PathChain MoveToShoot1, AlignCollectHumanPlayer, CollectHumanPlayer,
+            MoveToShootAfterCollectHumanPlayer, AlignCollectBottomRow, CollectBottomRow,
+            MoveToShootAfterCollectBottomRow, Leave;
 
         private Pose mirror(Pose pose, boolean shouldMirror) {
             double x = pose.getX();
@@ -225,63 +217,67 @@ public class AutoOpModeFar extends OpModeBase {
             Pose bottomRowAlignPose = mirror(new Pose(90, 36, Math.toRadians(0)), isBlue);
             Pose bottomRowCollectPose = mirror(new Pose(138, 36, Math.toRadians(0)), isBlue);
 
-            MoveToShoot1 =
-                    follower.pathBuilder()
-                            .addPath(new BezierLine(startPose, shootingPose))
-                            .setLinearHeadingInterpolation(
-                                    startPose.getHeading(), shootingPose.getHeading())
-                            .build();
+            MoveToShoot1 = follower.pathBuilder()
+                               .addPath(new BezierLine(startPose, shootingPose))
+                               .setLinearHeadingInterpolation(
+                                   startPose.getHeading(), shootingPose.getHeading()
+                               )
+                               .build();
 
             AlignCollectHumanPlayer =
-                    follower.pathBuilder()
-                            .addPath(new BezierCurve(shootingPose, humanPlayerAlignPose, leavePose))
-                            .setLinearHeadingInterpolation(
-                                    shootingPose.getHeading(), humanPlayerAlignPose.getHeading())
-                            .build();
+                follower.pathBuilder()
+                    .addPath(new BezierCurve(shootingPose, humanPlayerAlignPose, leavePose))
+                    .setLinearHeadingInterpolation(
+                        shootingPose.getHeading(), humanPlayerAlignPose.getHeading()
+                    )
+                    .build();
 
             CollectHumanPlayer =
-                    follower.pathBuilder()
-                            .addPath(new BezierLine(humanPlayerAlignPose, humanPlayerCollectPose))
-                            .setLinearHeadingInterpolation(
-                                    humanPlayerAlignPose.getHeading(),
-                                    humanPlayerCollectPose.getHeading())
-                            .build();
+                follower.pathBuilder()
+                    .addPath(new BezierLine(humanPlayerAlignPose, humanPlayerCollectPose))
+                    .setLinearHeadingInterpolation(
+                        humanPlayerAlignPose.getHeading(), humanPlayerCollectPose.getHeading()
+                    )
+                    .build();
 
             MoveToShootAfterCollectHumanPlayer =
-                    follower.pathBuilder()
-                            .addPath(new BezierLine(humanPlayerCollectPose, shootingPose))
-                            .setLinearHeadingInterpolation(
-                                    humanPlayerCollectPose.getHeading(), shootingPose.getHeading())
-                            .build();
+                follower.pathBuilder()
+                    .addPath(new BezierLine(humanPlayerCollectPose, shootingPose))
+                    .setLinearHeadingInterpolation(
+                        humanPlayerCollectPose.getHeading(), shootingPose.getHeading()
+                    )
+                    .build();
 
             AlignCollectBottomRow =
-                    follower.pathBuilder()
-                            .addPath(new BezierCurve(shootingPose, bottomRowAlignPose, leavePose))
-                            .setLinearHeadingInterpolation(
-                                    shootingPose.getHeading(), bottomRowAlignPose.getHeading())
-                            .build();
+                follower.pathBuilder()
+                    .addPath(new BezierCurve(shootingPose, bottomRowAlignPose, leavePose))
+                    .setLinearHeadingInterpolation(
+                        shootingPose.getHeading(), bottomRowAlignPose.getHeading()
+                    )
+                    .build();
 
             CollectBottomRow =
-                    follower.pathBuilder()
-                            .addPath(new BezierLine(bottomRowAlignPose, bottomRowCollectPose))
-                            .setLinearHeadingInterpolation(
-                                    bottomRowAlignPose.getHeading(),
-                                    bottomRowCollectPose.getHeading())
-                            .build();
+                follower.pathBuilder()
+                    .addPath(new BezierLine(bottomRowAlignPose, bottomRowCollectPose))
+                    .setLinearHeadingInterpolation(
+                        bottomRowAlignPose.getHeading(), bottomRowCollectPose.getHeading()
+                    )
+                    .build();
 
             MoveToShootAfterCollectBottomRow =
-                    follower.pathBuilder()
-                            .addPath(new BezierLine(bottomRowCollectPose, shootingPose))
-                            .setLinearHeadingInterpolation(
-                                    bottomRowCollectPose.getHeading(), shootingPose.getHeading())
-                            .build();
+                follower.pathBuilder()
+                    .addPath(new BezierLine(bottomRowCollectPose, shootingPose))
+                    .setLinearHeadingInterpolation(
+                        bottomRowCollectPose.getHeading(), shootingPose.getHeading()
+                    )
+                    .build();
 
-            Leave =
-                    follower.pathBuilder()
-                            .addPath(new BezierLine(shootingPose, leavePose))
-                            .setLinearHeadingInterpolation(
-                                    shootingPose.getHeading(), leavePose.getHeading())
-                            .build();
+            Leave = follower.pathBuilder()
+                        .addPath(new BezierLine(shootingPose, leavePose))
+                        .setLinearHeadingInterpolation(
+                            shootingPose.getHeading(), leavePose.getHeading()
+                        )
+                        .build();
         }
     }
 }

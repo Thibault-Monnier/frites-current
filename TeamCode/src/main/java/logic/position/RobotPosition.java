@@ -4,12 +4,9 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-
 import logic.Team;
 import logic.field.PlayingField;
-
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-
 import utils.TelemetryHandler;
 import utils.TimeHelpers;
 import utils.geometry.Angle;
@@ -37,10 +34,7 @@ public class RobotPosition {
     private double previousPoseTimeSec;
 
     public static RobotPosition getInstance(
-            HardwareMap hardwareMap,
-            Team color,
-            boolean useFarStartPose,
-            boolean forceNewInstance) {
+        HardwareMap hardwareMap, Team color, boolean useFarStartPose, boolean forceNewInstance) {
         if (instance == null || forceNewInstance) {
             instance = new RobotPosition(hardwareMap, color, useFarStartPose);
         }
@@ -50,8 +44,10 @@ public class RobotPosition {
     private RobotPosition(HardwareMap hardwareMap, Team color, boolean useFarStartPose) {
         this.color = color;
 
-        if (useFarStartPose) pose = PlayingField.farStartPose(color);
-        else pose = PlayingField.startPose(color);
+        if (useFarStartPose)
+            pose = PlayingField.farStartPose(color);
+        else
+            pose = PlayingField.startPose(color);
 
         limelightHandler = new LimelightHandler(hardwareMap);
         odometryHandler = new OdometryHandler(hardwareMap, pose);
@@ -83,8 +79,8 @@ public class RobotPosition {
     }
 
     /**
-     * Updates the robot pose. This MUST be called each step to ensure the information is
-     * up-to-date.
+     * Updates the robot pose. This MUST be called each step to ensure the
+     * information is up-to-date.
      */
     public void updatePose() {
         previousPose = pose;
@@ -108,7 +104,8 @@ public class RobotPosition {
             Pose2D limelightPose = limelightHandler.getLastKnownPose();
             pose = kalmanFilter.update(limelightPose);
             odometryHandler.setPose(pose);
-        } else TelemetryHandler.addLine("Using pose from Odometry");
+        } else
+            TelemetryHandler.addLine("Using pose from Odometry");
 
         TelemetryHandler.addData("Odometry displacement", odometryDelta.toString());
         TelemetryHandler.addData("Computed pose", pose.toString());
@@ -136,7 +133,8 @@ public class RobotPosition {
         return new Velocity2D(previousPose, pose, time);
     }
 
-    /// Gets the current robot velocity as a Pedropathing Pose, in displacement / second
+    /// Gets the current robot velocity as a Pedropathing Pose, in displacement /
+    /// second
     public Pose getPedroPoseVelocity() {
         Pose pedroPose = pose.toPedropathingPose();
         Pose previousPedroPose = previousPose.toPedropathingPose();
@@ -172,9 +170,8 @@ public class RobotPosition {
         double endYInches = robotYInches + lineLength * heading.sin();
 
         packet.fieldOverlay().setStroke("red").strokeCircle(robotXInches, robotYInches, 4);
-        packet.fieldOverlay()
-                .setStroke("green")
-                .strokeLine(robotXInches, robotYInches, endXInches, endYInches);
+        packet.fieldOverlay().setStroke("green").strokeLine(
+            robotXInches, robotYInches, endXInches, endYInches);
         dashboard.sendTelemetryPacket(packet);
     }
 }

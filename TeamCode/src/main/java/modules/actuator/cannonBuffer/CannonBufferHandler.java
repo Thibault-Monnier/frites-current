@@ -3,11 +3,9 @@ package modules.actuator.cannonBuffer;
 import static config.CannonConfig.SHOOT_BALLS_AMOUNT;
 import static config.CannonConfig.SHOOT_DELAY;
 
-import modules.actuator.RobotActuatorModule;
-
-import utils.TimeHelpers;
-
 import java.util.HashMap;
+import modules.actuator.RobotActuatorModule;
+import utils.TimeHelpers;
 
 public class CannonBufferHandler implements RobotActuatorModule {
     private final CannonBuffer buffer;
@@ -40,7 +38,8 @@ public class CannonBufferHandler implements RobotActuatorModule {
                 shootingStage = ShootingStage.SHOOTING;
             // fall through
             case SHOOTING:
-                if (isRoundFinished()) nextRound();
+                if (isRoundFinished())
+                    nextRound();
 
                 on();
                 return shotsFired > SHOOT_BALLS_AMOUNT;
@@ -92,11 +91,8 @@ public class CannonBufferHandler implements RobotActuatorModule {
     @Override
     public void setState(HashMap<String, String> state) {
         throw new UnsupportedOperationException(
-                "Cannon buffers handler does not support state loading.");
+            "Cannon buffers handler does not support state loading.");
     }
 
-    enum ShootingStage {
-        IDLE,
-        SHOOTING
-    }
+    enum ShootingStage { IDLE, SHOOTING }
 }

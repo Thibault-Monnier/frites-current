@@ -2,13 +2,10 @@ package logic;
 
 import config.CannonConfig;
 import config.FieldConfig;
-
 import logic.field.PlayingField;
 import logic.position.RobotPosition;
-
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-
 import utils.TelemetryHandler;
 import utils.geometry.Angle;
 import utils.geometry.Distance;
@@ -33,8 +30,10 @@ public class ShotHandler {
 
     /** Updates the shot vector based on the robot's current velocity and pose. */
     public void update() {
-        if (usingMovingShot) computedShotVector = computeMovingShotVector();
-        else computedShotVector = computeStationaryShotVector();
+        if (usingMovingShot)
+            computedShotVector = computeMovingShotVector();
+        else
+            computedShotVector = computeStationaryShotVector();
 
         TelemetryHandler.addData("Computed shot vector", computedShotVector.toString());
     }
@@ -44,17 +43,26 @@ public class ShotHandler {
         return computedShotVector;
     }
 
-    /** Gets the magnitude of the computed shot vector. Should be called after update(). */
+    /**
+     * Gets the magnitude of the computed shot vector. Should be called after
+     * update().
+     */
     public Distance getShotMagnitude() {
         return computedShotVector.magnitude();
     }
 
-    /** Gets the angle of the computed shot vector. Should be called after update(). */
+    /**
+     * Gets the angle of the computed shot vector. Should be called after
+     * update().
+     */
     public Angle getShotAngle() {
         return computedShotVector.direction();
     }
 
-    /** Toggles between using the moving shot calculation and the stationary shot calculation. */
+    /**
+     * Toggles between using the moving shot calculation and the stationary shot
+     * calculation.
+     */
     public void toggleUsingMovingShot() {
         usingMovingShot = !usingMovingShot;
     }
@@ -83,11 +91,8 @@ public class ShotHandler {
         double ballSpeed = dx * Math.sqrt(g / (2 * (dx * theta.tan() - dy)));
         double robotSpeed = cannonLinearVelocity.magnitude().toMeters();
 
-        double shootSpeed =
-                Math.sqrt(
-                        ballSpeed * ballSpeed
-                                - 2 * robotSpeed * ballSpeed * phi.cos()
-                                + robotSpeed * robotSpeed);
+        double shootSpeed = Math.sqrt(ballSpeed * ballSpeed - 2 * robotSpeed * ballSpeed * phi.cos()
+            + robotSpeed * robotSpeed);
         double shootDistance = shootSpeed * dx / ballSpeed;
         double shootAngle = Math.atan2(ballSpeed * phi.sin(), ballSpeed * phi.cos() - robotSpeed);
 
