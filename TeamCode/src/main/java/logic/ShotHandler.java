@@ -39,33 +39,25 @@ public class ShotHandler {
     }
 
     /** Gets the computed shot vector. Should be called after update(). */
-    public Vector2D getShotVector() {
-        return computedShotVector;
-    }
+    public Vector2D getShotVector() { return computedShotVector; }
 
     /**
      * Gets the magnitude of the computed shot vector. Should be called after
      * update().
      */
-    public Distance getShotMagnitude() {
-        return computedShotVector.magnitude();
-    }
+    public Distance getShotMagnitude() { return computedShotVector.magnitude(); }
 
     /**
      * Gets the angle of the computed shot vector. Should be called after
      * update().
      */
-    public Angle getShotAngle() {
-        return computedShotVector.direction();
-    }
+    public Angle getShotAngle() { return computedShotVector.direction(); }
 
     /**
      * Toggles between using the moving shot calculation and the stationary shot
      * calculation.
      */
-    public void toggleUsingMovingShot() {
-        usingMovingShot = !usingMovingShot;
-    }
+    public void toggleUsingMovingShot() { usingMovingShot = !usingMovingShot; }
 
     private Vector2D computeMovingShotVector() {
         TelemetryHandler.addLine("Using moving shot calculation");
@@ -91,8 +83,9 @@ public class ShotHandler {
         double ballSpeed = dx * Math.sqrt(g / (2 * (dx * theta.tan() - dy)));
         double robotSpeed = cannonLinearVelocity.magnitude().toMeters();
 
-        double shootSpeed = Math.sqrt(ballSpeed * ballSpeed - 2 * robotSpeed * ballSpeed * phi.cos()
-            + robotSpeed * robotSpeed);
+        double shootSpeed = Math.sqrt(
+            ballSpeed * ballSpeed - 2 * robotSpeed * ballSpeed * phi.cos() + robotSpeed * robotSpeed
+        );
         double shootDistance = shootSpeed * dx / ballSpeed;
         double shootAngle = Math.atan2(ballSpeed * phi.sin(), ballSpeed * phi.cos() - robotSpeed);
 
@@ -116,7 +109,5 @@ public class ShotHandler {
         return robotPosition.getPointVelocity(CannonConfig.CANNON_RELATIVE_POSITION);
     }
 
-    private Position2D goalPos() {
-        return PlayingField.goalPos(team);
-    }
+    private Position2D goalPos() { return PlayingField.goalPos(team); }
 }
