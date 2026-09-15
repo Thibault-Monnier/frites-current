@@ -8,9 +8,7 @@ public class ArtifactMonitor implements Runnable {
         this.distanceSensorMonitor = distanceSensorMonitor;
     }
 
-    public void stop() {
-        running = false;
-    }
+    public void stop() { running = false; }
 
     @Override
     public void run() {

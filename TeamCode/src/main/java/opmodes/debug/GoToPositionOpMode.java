@@ -12,8 +12,10 @@ import utils.TelemetryHandler;
 import utils.geometry.Distance;
 import utils.geometry.Position2D;
 
-@TeleOp(name = GroupConstants.DEBUGGER_MODES_GROUP + ": Go To Position",
-    group = GroupConstants.DEBUGGER_MODES_GROUP)
+@TeleOp(
+    name = GroupConstants.DEBUGGER_MODES_GROUP + ": Go To Position",
+    group = GroupConstants.DEBUGGER_MODES_GROUP
+)
 public class GoToPositionOpMode extends OpModeBase {
     private static final Distance MIN_WALL_DISTANCE = new Distance(DistanceUnit.CM, 75);
 
@@ -21,9 +23,7 @@ public class GoToPositionOpMode extends OpModeBase {
 
     private Position2D targetPosition;
 
-    public GoToPositionOpMode() {
-        super(Team.BLUE, false, true);
-    }
+    public GoToPositionOpMode() { super(Team.BLUE, false, true); }
 
     @Override
     public void runOpMode() {

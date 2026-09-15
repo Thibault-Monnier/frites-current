@@ -53,29 +53,22 @@ public class Cannon implements RobotActuatorModule {
         motorRight.setPower(PIDFControllerRight.get(motorTargetVelocity));
 
         TelemetryHandler.addData(
-            "Cannon Motor velocity/target", getAverageVelocity() + "/" + motorTargetVelocity);
+            "Cannon Motor velocity/target", getAverageVelocity() + "/" + motorTargetVelocity
+        );
         TelemetryHandler.addData("Cannon MotorLeft velocity", motorLeft.getVelocity());
         TelemetryHandler.addData("Cannon MotorRight velocity", motorRight.getVelocity());
     }
 
     /// Toggle cannon motor on/off.
-    public void toggle() {
-        isRunning = !isRunning;
-    }
+    public void toggle() { isRunning = !isRunning; }
 
     /// Turn cannon motor on.
-    public void on() {
-        isRunning = true;
-    }
+    public void on() { isRunning = true; }
 
     /// Turn cannon motor off.
-    public void off() {
-        isRunning = false;
-    }
+    public void off() { isRunning = false; }
 
-    public void setTargetVelocity(double value) {
-        motorTargetVelocity = value;
-    }
+    public void setTargetVelocity(double value) { motorTargetVelocity = value; }
 
     /// Update motor power using a value interpolated from target distance.
     public void update(Distance horizontalShootingDistance) {

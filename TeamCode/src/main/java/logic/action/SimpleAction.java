@@ -3,9 +3,7 @@ package logic.action;
 public class SimpleAction implements Action {
     private final Runnable fn;
 
-    public SimpleAction(Runnable fn) {
-        this.fn = fn;
-    }
+    public SimpleAction(Runnable fn) { this.fn = fn; }
 
     @Override
     public boolean run() {

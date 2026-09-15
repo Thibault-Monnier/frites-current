@@ -31,17 +31,11 @@ public final class OdometryHandler {
      *
      * @return the current pose estimate
      */
-    public Pose2D getPose() {
-        return Pose2D.fromNavigationPose2D(driver.getPosition());
-    }
+    public Pose2D getPose() { return Pose2D.fromNavigationPose2D(driver.getPosition()); }
 
     /** Overrides the current pose estimate. */
-    public void setPose(Pose2D pose) {
-        driver.setPosition(pose.toNavigationPose2D());
-    }
+    public void setPose(Pose2D pose) { driver.setPosition(pose.toNavigationPose2D()); }
 
     /** Updates the pose estimate. */
-    public void update() {
-        driver.update();
-    }
+    public void update() { driver.update(); }
 }

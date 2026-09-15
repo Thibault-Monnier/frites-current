@@ -49,8 +49,10 @@ public abstract class AutoOpModeBase extends OpModeBase {
     protected void initialize() {
         super.initialize();
 
-        TelemetryHandler.addData("Pose start (Pedro Pathing)",
-            PlayingField.startPose(team).toPedropathingPose().toString());
+        TelemetryHandler.addData(
+            "Pose start (Pedro Pathing)",
+            PlayingField.startPose(team).toPedropathingPose().toString()
+        );
     }
 
     @Override
@@ -84,13 +86,9 @@ public abstract class AutoOpModeBase extends OpModeBase {
 
     protected abstract void execute();
 
-    protected Action startCannon() {
-        return new SimpleAction(() -> cannon.on());
-    }
+    protected Action startCannon() { return new SimpleAction(() -> cannon.on()); }
 
-    protected Action stopCannon() {
-        return new SimpleAction(() -> cannon.off());
-    }
+    protected Action stopCannon() { return new SimpleAction(() -> cannon.off()); }
 
     protected Action waitAction(double delay, Runnable doWhile) {
         return new DelayAction(delay, doWhile);
@@ -101,7 +99,8 @@ public abstract class AutoOpModeBase extends OpModeBase {
     }
 
     protected Action pathAction(
-        PathChain path, boolean useIntake, boolean isSlow, boolean holdAfterDone) {
+        PathChain path, boolean useIntake, boolean isSlow, boolean holdAfterDone
+    ) {
         return () -> {
             if (!pathActive) {
                 follower.followPath(path, isSlow ? 0.7 : 1, holdAfterDone);

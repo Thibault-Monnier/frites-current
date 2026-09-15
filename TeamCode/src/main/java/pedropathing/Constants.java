@@ -58,7 +58,8 @@ public class Constants {
             .yVelocity(66.5);
 
     public static Follower createFollower(
-        HardwareMap hardwareMap, @Nullable RobotPosition robotPosition) {
+        HardwareMap hardwareMap, @Nullable RobotPosition robotPosition
+    ) {
         FollowerBuilder builder = new FollowerBuilder(followerConstants, hardwareMap)
                                       .pathConstraints(pathConstraints)
                                       .mecanumDrivetrain(driveConstants);

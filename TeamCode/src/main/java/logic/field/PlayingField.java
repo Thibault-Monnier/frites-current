@@ -13,7 +13,8 @@ public class PlayingField {
     }
 
     public static final FieldElement FIELD = new FieldElement(
-        new Position2D(), FieldConfig.FIELD_SIZE, FieldConfig.FIELD_SIZE, new Distance());
+        new Position2D(), FieldConfig.FIELD_SIZE, FieldConfig.FIELD_SIZE, new Distance()
+    );
 
     /// Switches the color of a Pose2D by negating the y-coordinate and heading,
     /// effectively mirroring it across the x-axis.

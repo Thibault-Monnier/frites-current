@@ -11,9 +11,7 @@ import utils.TelemetryHandler;
 import utils.geometry.Distance;
 
 public class CannonCalibrationOpMode extends OpModeBase {
-    public CannonCalibrationOpMode(Team team) {
-        super(team, false, true);
-    }
+    public CannonCalibrationOpMode(Team team) { super(team, false, true); }
 
     @Override
     public void runOpMode() {
@@ -44,7 +42,8 @@ public class CannonCalibrationOpMode extends OpModeBase {
         super.initialize();
         cannon = new CannonCalibrator(
             hardwareMap.get(DcMotorEx.class, HardwareConfig.CANNON_MOTOR_LEFT_ID),
-            hardwareMap.get(DcMotorEx.class, HardwareConfig.CANNON_MOTOR_RIGHT_ID));
+            hardwareMap.get(DcMotorEx.class, HardwareConfig.CANNON_MOTOR_RIGHT_ID)
+        );
     }
 
     private void runStep() {
@@ -60,14 +59,18 @@ public class CannonCalibrationOpMode extends OpModeBase {
     public void executeActions() {
         if (gamepadController.isPressing(GamepadController.Button.BUMPER_LEFT)) {
             // Lock towards the goal
-            move.lockedJoystickMove(gamepad1,
+            move.lockedJoystickMove(
+                gamepad1,
                 gamepadController.isPressing(GamepadController.Button.LEFT_STICK),
-                PlayingField.goalPos(team));
+                PlayingField.goalPos(team)
+            );
         } else {
             move.joystickTranslate(
-                gamepad1, gamepadController.isPressing(GamepadController.Button.LEFT_STICK));
+                gamepad1, gamepadController.isPressing(GamepadController.Button.LEFT_STICK)
+            );
             move.rotate(
-                gamepad1, gamepadController.isPressing(GamepadController.Button.RIGHT_STICK));
+                gamepad1, gamepadController.isPressing(GamepadController.Button.RIGHT_STICK)
+            );
         }
 
         if ((isPressActive(ManualOpModeMappings.SHOOT) && cannon.isReadyToShoot())
@@ -110,9 +113,7 @@ public class CannonCalibrationOpMode extends OpModeBase {
         }
     }
 
-    private CannonCalibrator cannon() {
-        return (CannonCalibrator) cannon;
-    }
+    private CannonCalibrator cannon() { return (CannonCalibrator) cannon; }
 
     private boolean isPressActive(GamepadController.ButtonMapping mapping) {
         return gamepadController.isPressActive(mapping);

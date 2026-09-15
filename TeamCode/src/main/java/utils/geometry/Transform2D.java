@@ -13,17 +13,14 @@ public class Transform2D {
         this.rotation = rotation;
     }
 
-    public Vector2D getTranslation() {
-        return translation;
-    }
+    public Vector2D getTranslation() { return translation; }
 
-    public Angle getRotation() {
-        return rotation;
-    }
+    public Angle getRotation() { return rotation; }
 
     @NonNull
     public String toString() {
         return String.format(
-            Locale.ENGLISH, "(Transform2D) translation=%s, rotation=%s", translation, rotation);
+            Locale.ENGLISH, "(Transform2D) translation=%s, rotation=%s", translation, rotation
+        );
     }
 }

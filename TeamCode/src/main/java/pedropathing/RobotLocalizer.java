@@ -8,17 +8,13 @@ import logic.position.RobotPosition;
 public class RobotLocalizer implements Localizer {
     private final RobotPosition robotPosition;
 
-    public RobotLocalizer(RobotPosition robotPosition) {
-        this.robotPosition = robotPosition;
-    }
+    public RobotLocalizer(RobotPosition robotPosition) { this.robotPosition = robotPosition; }
 
     public void setStartPose(Pose pose) {
         throw new RuntimeException("Shouldn't be calling setStartPose()");
     }
 
-    public void setPose(Pose pose) {
-        throw new RuntimeException("Shouldn't be calling setPose()");
-    }
+    public void setPose(Pose pose) { throw new RuntimeException("Shouldn't be calling setPose()"); }
 
     public void update() {
         // Do nothing: this is handled separately
@@ -48,31 +44,19 @@ public class RobotLocalizer implements Localizer {
         throw new RuntimeException("Shouldn't be calling getIMUHeading()");
     }
 
-    public boolean isNAN() {
-        return robotPosition.getPose().hasNaN();
-    }
+    public boolean isNAN() { return robotPosition.getPose().hasNaN(); }
 
-    public void setX(double x) {
-        throw new RuntimeException("Shouldn't be calling setX()");
-    }
+    public void setX(double x) { throw new RuntimeException("Shouldn't be calling setX()"); }
 
-    public void setY(double y) {
-        throw new RuntimeException("Shouldn't be calling setX()");
-    }
+    public void setY(double y) { throw new RuntimeException("Shouldn't be calling setX()"); }
 
     public void setHeading(double heading) {
         throw new RuntimeException("Shouldn't be calling setHeading()");
     }
 
-    public Pose getPose() {
-        return robotPosition.getPose().toPedropathingPose();
-    }
+    public Pose getPose() { return robotPosition.getPose().toPedropathingPose(); }
 
-    public Pose getVelocity() {
-        return robotPosition.getPedroPoseVelocity();
-    }
+    public Pose getVelocity() { return robotPosition.getPedroPoseVelocity(); }
 
-    public Vector getVelocityVector() {
-        return getVelocity().getAsVector();
-    }
+    public Vector getVelocityVector() { return getVelocity().getAsVector(); }
 }

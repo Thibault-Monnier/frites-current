@@ -11,8 +11,10 @@ import opmodes.GroupConstants;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 @Config
-@TeleOp(name = GroupConstants.DEBUGGER_MODES_GROUP + ": Color Sensor",
-    group = GroupConstants.DEBUGGER_MODES_GROUP)
+@TeleOp(
+    name = GroupConstants.DEBUGGER_MODES_GROUP + ": Color Sensor",
+    group = GroupConstants.DEBUGGER_MODES_GROUP
+)
 public class ColorSensorDebugger extends OpMode {
     public static String sensorId = "color_sensor";
 

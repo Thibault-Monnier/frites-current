@@ -16,7 +16,7 @@ plugins {
 
 spotless {
     java {
-        target '**/*.java'
+        target fileTree(dir: 'src', include: '**/*.java')
 
         clangFormat('21.1.8').style('file')
 

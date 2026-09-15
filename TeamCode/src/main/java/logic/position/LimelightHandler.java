@@ -30,9 +30,7 @@ public class LimelightHandler {
 
     private List<LLResultTypes.FiducialResult> lastDetectedTags = null;
 
-    public List<LLResultTypes.FiducialResult> getLastDetectedTags() {
-        return lastDetectedTags;
-    }
+    public List<LLResultTypes.FiducialResult> getLastDetectedTags() { return lastDetectedTags; }
 
     public LimelightHandler(HardwareMap hardwareMap) {
         this.limelight = hardwareMap.get(Limelight3A.class, HardwareConfig.LIMELIGHT_CAMERA_ID);
@@ -49,9 +47,7 @@ public class LimelightHandler {
         dashboard.stopCameraStream();
     }
 
-    public Pose2D getLastKnownPose() {
-        return lastKnownPose;
-    }
+    public Pose2D getLastKnownPose() { return lastKnownPose; }
 
     /// Retrieves the latest camera data and updates internal state.
     /// @return true if a new stable pose has been set, false otherwise.
@@ -73,7 +69,8 @@ public class LimelightHandler {
 
         // Filter to only the positioning tags
         if (tags.stream().noneMatch(
-                tag -> tag.getFiducialId() == 20 || tag.getFiducialId() == 24)) {
+                tag -> tag.getFiducialId() == 20 || tag.getFiducialId() == 24
+            )) {
             handleNoDetection();
             return false;
         }
@@ -104,10 +101,12 @@ public class LimelightHandler {
 
         TelemetryHandler.addLine("--- Detected Tags ---");
         TelemetryHandler.addData("Number of tags", lastDetectedTags.size());
-        TelemetryHandler.addData("Tag IDs",
+        TelemetryHandler.addData(
+            "Tag IDs",
             lastDetectedTags.stream()
                 .map(LLResultTypes.FiducialResult::getFiducialId)
-                .collect(Collectors.toList()));
+                .collect(Collectors.toList())
+        );
 
         TelemetryHandler.addLine("--- Camera Localization ---");
         TelemetryHandler.addData("Unit", pos.unit);

@@ -4,11 +4,7 @@ public enum Team {
     BLUE,
     RED;
 
-    public boolean isBlue() {
-        return this == BLUE;
-    }
+    public boolean isBlue() { return this == BLUE; }
 
-    public boolean isRed() {
-        return this == RED;
-    }
+    public boolean isRed() { return this == RED; }
 }

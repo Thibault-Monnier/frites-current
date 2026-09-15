@@ -8,19 +8,13 @@ public class PIDFLController {
 
     public PIDFLController() {}
 
-    public PIDFLController(PIDFLCoefficients initialCoeffs) {
-        this.coefficients = initialCoeffs;
-    }
+    public PIDFLController(PIDFLCoefficients initialCoeffs) { this.coefficients = initialCoeffs; }
 
     /// Sets the PIDF coefficients.
-    public void setCoefficients(PIDFLCoefficients coeffs) {
-        this.coefficients = coeffs;
-    }
+    public void setCoefficients(PIDFLCoefficients coeffs) { this.coefficients = coeffs; }
 
     /// Returns the current PIDF coefficients.
-    public PIDFLCoefficients getCoefficients() {
-        return coefficients;
-    }
+    public PIDFLCoefficients getCoefficients() { return coefficients; }
 
     /// Returns whether the controller is stable at the target, meaning it will
     /// probably stay within the given error thresholds.
@@ -36,14 +30,10 @@ public class PIDFLController {
 
     protected double error = 0.0;
 
-    public void setError(double error) {
-        this.error = error;
-    }
+    public void setError(double error) { this.error = error; }
 
     /// Returns the change in error for the last two frames.
-    public double getErrorChange() {
-        return error - previousError;
-    }
+    public double getErrorChange() { return error - previousError; }
 
     /// Calculates the PID output for the saved error. The output is normalized to
     /// \[-1, 1\].
@@ -86,12 +76,8 @@ public class PIDFLController {
 
     /// Calculates the PID output for the saved error. The output is normalized to
     /// \[-1, 1\].
-    public double get() {
-        return get(false);
-    }
+    public double get() { return get(false); }
 
     /// Clamps the given value to the range \[-1, 1\].
-    protected double clamp(double v) {
-        return Math.clamp(v, -1.0, 1.0);
-    }
+    protected double clamp(double v) { return Math.clamp(v, -1.0, 1.0); }
 }

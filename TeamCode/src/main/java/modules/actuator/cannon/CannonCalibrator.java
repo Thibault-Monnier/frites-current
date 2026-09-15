@@ -19,21 +19,13 @@ public class CannonCalibrator extends Cannon {
     @Override
     public void update(Distance horizontalShootingDistance) {}
 
-    public void speedup() {
-        motorTargetVelocity += CALIBRATION_SPEED_CHANGE_OFFSET;
-    }
+    public void speedup() { motorTargetVelocity += CALIBRATION_SPEED_CHANGE_OFFSET; }
 
-    public void fastSpeedup() {
-        motorTargetVelocity += 2 * CALIBRATION_SPEED_CHANGE_OFFSET;
-    }
+    public void fastSpeedup() { motorTargetVelocity += 2 * CALIBRATION_SPEED_CHANGE_OFFSET; }
 
-    public void slowdown() {
-        motorTargetVelocity -= CALIBRATION_SPEED_CHANGE_OFFSET;
-    }
+    public void slowdown() { motorTargetVelocity -= CALIBRATION_SPEED_CHANGE_OFFSET; }
 
-    public void fastSlowdown() {
-        motorTargetVelocity -= 2 * CALIBRATION_SPEED_CHANGE_OFFSET;
-    }
+    public void fastSlowdown() { motorTargetVelocity -= 2 * CALIBRATION_SPEED_CHANGE_OFFSET; }
 
     public void saveCurrentCalibrationData(Distance target2dDistance) {
         lastCalibratedDistance = target2dDistance;

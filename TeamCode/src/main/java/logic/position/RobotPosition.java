@@ -34,7 +34,8 @@ public class RobotPosition {
     private double previousPoseTimeSec;
 
     public static RobotPosition getInstance(
-        HardwareMap hardwareMap, Team color, boolean useFarStartPose, boolean forceNewInstance) {
+        HardwareMap hardwareMap, Team color, boolean useFarStartPose, boolean forceNewInstance
+    ) {
         if (instance == null || forceNewInstance) {
             instance = new RobotPosition(hardwareMap, color, useFarStartPose);
         }
@@ -67,9 +68,7 @@ public class RobotPosition {
         odometryHandler.update();
     }
 
-    public void stop() {
-        limelightHandler.stop();
-    }
+    public void stop() { limelightHandler.stop(); }
 
     /** Resets the robot pose to the starting position. */
     public void resetPose() {
@@ -113,19 +112,13 @@ public class RobotPosition {
     }
 
     /// Gets the current robot pose as a Pose2D
-    public Pose2D getPose() {
-        return pose;
-    }
+    public Pose2D getPose() { return pose; }
 
     /// Gets the current robot position as a Position2D
-    public Position2D getPosition() {
-        return pose.getPosition();
-    }
+    public Position2D getPosition() { return pose.getPosition(); }
 
     /// Gets the current robot heading as an Angle
-    public Angle getHeading() {
-        return pose.getHeading();
-    }
+    public Angle getHeading() { return pose.getHeading(); }
 
     /// Gets the current robot velocity
     public Velocity2D getPoseVelocity() {
@@ -153,9 +146,7 @@ public class RobotPosition {
         return new Velocity2D(previousPointPos, currentPointPos, time);
     }
 
-    public LimelightHandler getLimelightHandler() {
-        return limelightHandler;
-    }
+    public LimelightHandler getLimelightHandler() { return limelightHandler; }
 
     private void renderFieldOverlayInDashboard() {
         TelemetryPacket packet = new TelemetryPacket();
@@ -171,7 +162,8 @@ public class RobotPosition {
 
         packet.fieldOverlay().setStroke("red").strokeCircle(robotXInches, robotYInches, 4);
         packet.fieldOverlay().setStroke("green").strokeLine(
-            robotXInches, robotYInches, endXInches, endYInches);
+            robotXInches, robotYInches, endXInches, endYInches
+        );
         dashboard.sendTelemetryPacket(packet);
     }
 }

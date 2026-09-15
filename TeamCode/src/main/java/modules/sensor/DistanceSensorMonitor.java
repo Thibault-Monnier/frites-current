@@ -52,13 +52,17 @@ public class DistanceSensorMonitor {
         TelemetryHandler.addData("_Left Distance", left.getDistance(DistanceUnit.MM));
         TelemetryHandler.addData("_Right Distance", right.getDistance(DistanceUnit.MM));
         TelemetryHandler.addData(
-            "_Intake Left 1 Distance", intake_left1.getDistance(DistanceUnit.MM));
+            "_Intake Left 1 Distance", intake_left1.getDistance(DistanceUnit.MM)
+        );
         TelemetryHandler.addData(
-            "_Intake Left 2 Distance", intake_left2.getDistance(DistanceUnit.MM));
+            "_Intake Left 2 Distance", intake_left2.getDistance(DistanceUnit.MM)
+        );
         TelemetryHandler.addData(
-            "_Intake Right 1 Distance", intake_right1.getDistance(DistanceUnit.MM));
+            "_Intake Right 1 Distance", intake_right1.getDistance(DistanceUnit.MM)
+        );
         TelemetryHandler.addData(
-            "_Intake Right 2 Distance", intake_right2.getDistance(DistanceUnit.MM));
+            "_Intake Right 2 Distance", intake_right2.getDistance(DistanceUnit.MM)
+        );
 
         return count;
     }

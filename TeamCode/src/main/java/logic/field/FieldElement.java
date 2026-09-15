@@ -16,11 +16,7 @@ public class FieldElement {
         this.height = height;
     }
 
-    public Distance halfWidth() {
-        return width.divide(2);
-    }
+    public Distance halfWidth() { return width.divide(2); }
 
-    public Distance halfDepth() {
-        return depth.divide(2);
-    }
+    public Distance halfDepth() { return depth.divide(2); }
 }

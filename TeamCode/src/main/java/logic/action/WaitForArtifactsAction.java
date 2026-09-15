@@ -16,7 +16,8 @@ public class WaitForArtifactsAction implements Action {
     private double start = -1;
 
     public WaitForArtifactsAction(
-        double delaySec, Runnable doWhile, DistanceSensorMonitor monitor) {
+        double delaySec, Runnable doWhile, DistanceSensorMonitor monitor
+    ) {
         this.delay = delaySec;
         this.doWhile = doWhile;
         this.distanceSensorMonitor = monitor;

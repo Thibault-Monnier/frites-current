@@ -17,9 +17,7 @@ public class TelemetryHandler {
             new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
     }
 
-    public static void update() {
-        telemetry().update();
-    }
+    public static void update() { telemetry().update(); }
 
     public static void addData(String key, Object value) {
         telemetry().addData(key, value);
@@ -35,9 +33,7 @@ public class TelemetryHandler {
         System.out.println(line);
     }
 
-    public static void clear() {
-        telemetry().clear();
-    }
+    public static void clear() { telemetry().clear(); }
 
     private static Telemetry telemetry() {
         if (telemetry == null) {

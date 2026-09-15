@@ -9,14 +9,10 @@ public class ActionSequence implements Action {
     private final ArrayList<Action> actions;
     private int currentActionIndex = 0;
 
-    public ActionSequence(Action... actions) {
-        this.actions = new ArrayList<>(List.of(actions));
-    }
+    public ActionSequence(Action... actions) { this.actions = new ArrayList<>(List.of(actions)); }
 
     /// Adds an Action to the end of the sequence.
-    public void addAction(Action action) {
-        actions.add(action);
-    }
+    public void addAction(Action action) { actions.add(action); }
 
     @Override
     public boolean run() {

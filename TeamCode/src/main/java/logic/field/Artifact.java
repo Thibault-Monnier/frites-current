@@ -5,9 +5,7 @@ import androidx.annotation.NonNull;
 public class Artifact {
     public Color color;
 
-    public Artifact(Color color) {
-        this.color = color;
-    }
+    public Artifact(Color color) { this.color = color; }
 
     public enum Color {
         PURPLE {

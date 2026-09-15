@@ -5,10 +5,10 @@ import logic.Team;
 import opmodes.AutoOpModeFar;
 import opmodes.GroupConstants;
 
-@Autonomous(name = GroupConstants.MAIN_MODES_GROUP + ": FAR Auto - BLUE Team",
-    group = GroupConstants.MAIN_MODES_GROUP)
+@Autonomous(
+    name = GroupConstants.MAIN_MODES_GROUP + ": FAR Auto - BLUE Team",
+    group = GroupConstants.MAIN_MODES_GROUP
+)
 public class BlueFar extends AutoOpModeFar {
-    public BlueFar() {
-        super(Team.BLUE);
-    }
+    public BlueFar() { super(Team.BLUE); }
 }

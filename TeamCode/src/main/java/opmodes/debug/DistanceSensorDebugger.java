@@ -11,8 +11,10 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 @Config
-@TeleOp(name = GroupConstants.DEBUGGER_MODES_GROUP + ": Distance Sensor",
-    group = GroupConstants.DEBUGGER_MODES_GROUP)
+@TeleOp(
+    name = GroupConstants.DEBUGGER_MODES_GROUP + ": Distance Sensor",
+    group = GroupConstants.DEBUGGER_MODES_GROUP
+)
 public class DistanceSensorDebugger extends OpMode {
     private static final String sensorId = "";
     private DistanceSensor distanceSensor;

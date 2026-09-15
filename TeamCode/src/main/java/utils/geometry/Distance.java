@@ -13,9 +13,7 @@ public class Distance {
         this.unit = unit;
     }
 
-    public Distance() {
-        this(DistanceUnit.MM, 0);
-    }
+    public Distance() { this(DistanceUnit.MM, 0); }
 
     public static Distance fromMillimeters(double millimeters) {
         return new Distance(DistanceUnit.MM, millimeters);
@@ -34,30 +32,18 @@ public class Distance {
     }
 
     /// The distance value converted to the desired distance unit
-    public double getValue(DistanceUnit unit) {
-        return unit.fromUnit(this.unit, value);
-    }
+    public double getValue(DistanceUnit unit) { return unit.fromUnit(this.unit, value); }
 
-    public double toMillimeters() {
-        return getValue(DistanceUnit.MM);
-    }
+    public double toMillimeters() { return getValue(DistanceUnit.MM); }
 
-    public double toInches() {
-        return getValue(DistanceUnit.INCH);
-    }
+    public double toInches() { return getValue(DistanceUnit.INCH); }
 
-    public double toMeters() {
-        return getValue(DistanceUnit.METER);
-    }
+    public double toMeters() { return getValue(DistanceUnit.METER); }
 
-    public boolean isZero() {
-        return value == 0;
-    }
+    public boolean isZero() { return value == 0; }
 
     /// The inverse of this Distance
-    public Distance negate() {
-        return new Distance(unit, -value);
-    }
+    public Distance negate() { return new Distance(unit, -value); }
 
     public Distance add(Distance other) {
         double sumInMM = toMillimeters() + other.toMillimeters();
@@ -87,29 +73,22 @@ public class Distance {
     }
 
     /// The half of this Distance
-    public Distance halve() {
-        return divide(2);
-    }
+    public Distance halve() { return divide(2); }
 
     /// Divides this Distance by another Distance and returns the result as a
     /// unitless ratio
-    public double ratio(Distance other) {
-        return toMillimeters() / other.toMillimeters();
-    }
+    public double ratio(Distance other) { return toMillimeters() / other.toMillimeters(); }
 
     /// Whether this Distance is greater or equal to another Distance.
-    public boolean geq(Distance other) {
-        return toMillimeters() >= other.toMillimeters();
-    }
+    public boolean geq(Distance other) { return toMillimeters() >= other.toMillimeters(); }
 
     /// Whether this Distance is less than or equal to another Distance.
-    public boolean leq(Distance other) {
-        return toMillimeters() <= other.toMillimeters();
-    }
+    public boolean leq(Distance other) { return toMillimeters() <= other.toMillimeters(); }
 
     @NonNull
     public String toString() {
         return String.format(
-            Locale.ENGLISH, "%.3f %s", getValue(DistanceUnit.METER), DistanceUnit.METER);
+            Locale.ENGLISH, "%.3f %s", getValue(DistanceUnit.METER), DistanceUnit.METER
+        );
     }
 }

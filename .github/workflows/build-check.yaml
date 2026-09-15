@@ -1,4 +1,4 @@
-name: Android Build
+name: Build & Check
 
 on:
   push:
@@ -61,7 +61,7 @@ jobs:
           echo "sdk.dir=$ANDROID_SDK_ROOT" > local.properties
           chmod +x ./gradlew
 
-      - name: Build with Gradle
+      - name: Build and Check with Gradle
         run: |
           ./gradlew --no-daemon --stacktrace build
 

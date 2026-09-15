@@ -16,9 +16,7 @@ public class Vector2D {
         this.distanceUnit = distanceUnit;
     }
 
-    public Vector2D() {
-        this(DistanceUnit.MM, 0, 0);
-    }
+    public Vector2D() { this(DistanceUnit.MM, 0, 0); }
 
     public Vector2D(Distance x, Distance y) {
         this(DistanceUnit.MM, x.getValue(DistanceUnit.MM), y.getValue(DistanceUnit.MM));
@@ -29,28 +27,18 @@ public class Vector2D {
     }
 
     /// The x component converted to the desired distance unit
-    public double getX(DistanceUnit unit) {
-        return unit.fromUnit(this.distanceUnit, x);
-    }
+    public double getX(DistanceUnit unit) { return unit.fromUnit(this.distanceUnit, x); }
 
     /// The x component as a Distance object
-    public Distance getX() {
-        return new Distance(distanceUnit, x);
-    }
+    public Distance getX() { return new Distance(distanceUnit, x); }
 
     /// The y component converted to the desired distance unit
-    public double getY(DistanceUnit unit) {
-        return unit.fromUnit(this.distanceUnit, y);
-    }
+    public double getY(DistanceUnit unit) { return unit.fromUnit(this.distanceUnit, y); }
 
     /// The y component as a Distance object
-    public Distance getY() {
-        return new Distance(distanceUnit, y);
-    }
+    public Distance getY() { return new Distance(distanceUnit, y); }
 
-    public Distance magnitude() {
-        return new Distance(distanceUnit, Math.hypot(x, y));
-    }
+    public Distance magnitude() { return new Distance(distanceUnit, Math.hypot(x, y)); }
 
     public Angle direction() {
         double rads = Math.atan2(getY(distanceUnit), getX(distanceUnit));

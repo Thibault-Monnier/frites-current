@@ -51,25 +51,19 @@ public class GamepadController {
     }
 
     /** Returns true if the button is currently being pressed. */
-    public boolean isPressing(Button button) {
-        return button.down;
-    }
+    public boolean isPressing(Button button) { return button.down; }
 
     /**
      * Returns true if the button was pressed since last update. Returns true
      * only once.
      */
-    public boolean isPressed(Button button) {
-        return button.pressed;
-    }
+    public boolean isPressed(Button button) { return button.pressed; }
 
     /**
      * Returns true if the button was released since last update. Returns true
      * only once.
      */
-    public boolean isReleased(Button button) {
-        return button.released;
-    }
+    public boolean isReleased(Button button) { return button.released; }
 
     /**
      * Returns true if the button has been held down for LONG_PRESS_TIME seconds.
@@ -88,17 +82,11 @@ public class GamepadController {
         return isPressed(button) && intervalMs <= DOUBLE_PRESS_INTERVAL;
     }
 
-    public void rumble(int i) {
-        this.gamepad.rumble(i);
-    }
+    public void rumble(int i) { this.gamepad.rumble(i); }
 
-    public void ledRed(int durationMs) {
-        this.gamepad.setLedColor(255, 0, 0, durationMs);
-    }
+    public void ledRed(int durationMs) { this.gamepad.setLedColor(255, 0, 0, durationMs); }
 
-    public void ledGreen(int durationMs) {
-        this.gamepad.setLedColor(0, 255, 0, durationMs);
-    }
+    public void ledGreen(int durationMs) { this.gamepad.setLedColor(0, 255, 0, durationMs); }
 
     public enum PressType {
         /// Returns true only on the first update after the button is pressed.
@@ -147,9 +135,7 @@ public class GamepadController {
         private double lastTimePressed = -10000.0;
         private double previousTimePressed = -10000.0;
 
-        Button(java.util.function.Function<Gamepad, Boolean> accessor) {
-            this.accessor = accessor;
-        }
+        Button(java.util.function.Function<Gamepad, Boolean> accessor) { this.accessor = accessor; }
 
         public void reset() {
             pressed = false;
@@ -160,9 +146,7 @@ public class GamepadController {
             previousTimePressed = -10000.0;
         }
 
-        public boolean get(Gamepad gamepad) {
-            return accessor.apply(gamepad);
-        }
+        public boolean get(Gamepad gamepad) { return accessor.apply(gamepad); }
 
         /** Update internal state for this button */
         public void update(Gamepad gamepad, ElapsedTime runtime) {

@@ -12,9 +12,7 @@ public class Intake implements RobotActuatorModule {
     private boolean isRunning = false;
     private boolean isReversing = false;
 
-    public Intake(DcMotor motor) {
-        this.motor = motor;
-    }
+    public Intake(DcMotor motor) { this.motor = motor; }
 
     @Override
     public void apply() {
@@ -49,14 +47,10 @@ public class Intake implements RobotActuatorModule {
     }
 
     /// Toggle intake motor on/off.
-    public void toggle() {
-        isRunning = !isRunning;
-    }
+    public void toggle() { isRunning = !isRunning; }
 
     /// Set intake motor state.
-    public void set(boolean isRunning) {
-        this.isRunning = isRunning;
-    }
+    public void set(boolean isRunning) { this.isRunning = isRunning; }
 
     @Override
     public HashMap<String, Object> getCurrentState() {

@@ -5,10 +5,10 @@ import logic.Team;
 import opmodes.AutoOpMode;
 import opmodes.GroupConstants;
 
-@Autonomous(name = GroupConstants.MAIN_MODES_GROUP + ": Normal Auto - RED Team",
-    group = GroupConstants.MAIN_MODES_GROUP)
+@Autonomous(
+    name = GroupConstants.MAIN_MODES_GROUP + ": Normal Auto - RED Team",
+    group = GroupConstants.MAIN_MODES_GROUP
+)
 public class Red extends AutoOpMode {
-    public Red() {
-        super(Team.RED);
-    }
+    public Red() { super(Team.RED); }
 }

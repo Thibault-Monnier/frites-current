@@ -7,14 +7,14 @@ import opmodes.OpModeBase;
 import pedropathing.RobotLocalizer;
 import utils.TelemetryHandler;
 
-@TeleOp(name = GroupConstants.DEBUGGER_MODES_GROUP + ": RobotLocalizer",
-    group = GroupConstants.DEBUGGER_MODES_GROUP)
+@TeleOp(
+    name = GroupConstants.DEBUGGER_MODES_GROUP + ": RobotLocalizer",
+    group = GroupConstants.DEBUGGER_MODES_GROUP
+)
 public class RobotLocalizerDebugger extends OpModeBase {
     private RobotLocalizer localizer;
 
-    public RobotLocalizerDebugger() {
-        super(Team.RED, false, true);
-    }
+    public RobotLocalizerDebugger() { super(Team.RED, false, true); }
 
     @Override
     public void runOpMode() {

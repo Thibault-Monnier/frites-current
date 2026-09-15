@@ -14,9 +14,7 @@ import utils.geometry.Angle;
 public class ManualOpMode extends OpModeBase {
     boolean isChildMode = false;
 
-    public ManualOpMode(Team team, boolean isAfterAuto) {
-        super(team, false, !isAfterAuto);
-    }
+    public ManualOpMode(Team team, boolean isAfterAuto) { super(team, false, !isAfterAuto); }
 
     public ManualOpMode(Team team, boolean isAfterAuto, boolean isChildMode) {
         super(team, false, !isAfterAuto);
@@ -63,7 +61,8 @@ public class ManualOpMode extends OpModeBase {
             move.toggleLockTowardsGoal();
 
         move.joystickTranslate(
-            gamepadController.gamepad, isPressActive(ManualOpModeMappings.SLOW_MOVE));
+            gamepadController.gamepad, isPressActive(ManualOpModeMappings.SLOW_MOVE)
+        );
 
         if (isPressActive(ManualOpModeMappings.LOCK_TOWARDS_SHOOT) && !move.lockingTowardsGoal())
             move.turnTowardsHeading(shotHandler.getShotAngle());

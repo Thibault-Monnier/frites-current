@@ -10,8 +10,10 @@ import opmodes.GroupConstants;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 @Config
-@TeleOp(name = GroupConstants.DEBUGGER_MODES_GROUP + ": Servo",
-    group = GroupConstants.DEBUGGER_MODES_GROUP)
+@TeleOp(
+    name = GroupConstants.DEBUGGER_MODES_GROUP + ": Servo",
+    group = GroupConstants.DEBUGGER_MODES_GROUP
+)
 public class ServoTest extends OpMode {
     public static String motorId = "rotation_servo";
 

@@ -11,8 +11,10 @@ import opmodes.GroupConstants;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 @Config
-@TeleOp(name = GroupConstants.DEBUGGER_MODES_GROUP + ": DcMotor",
-    group = GroupConstants.DEBUGGER_MODES_GROUP)
+@TeleOp(
+    name = GroupConstants.DEBUGGER_MODES_GROUP + ": DcMotor",
+    group = GroupConstants.DEBUGGER_MODES_GROUP
+)
 public class DcMotorDebugger extends OpMode {
     public static String motorId = HardwareConfig.TEST_MOTOR_1_ID;
 

@@ -13,7 +13,8 @@ public class PIDFLControllerMotor extends PIDFLController {
     }
 
     public PIDFLControllerMotor(
-        DcMotorEx motor, double maxMotorVelocity, PIDFLCoefficients initialCoeffs) {
+        DcMotorEx motor, double maxMotorVelocity, PIDFLCoefficients initialCoeffs
+    ) {
         super(initialCoeffs);
         this.motor = motor;
         this.maxMotorVelocity = maxMotorVelocity;
@@ -40,7 +41,5 @@ public class PIDFLControllerMotor extends PIDFLController {
 
     /// Calculates the PID output for the saved error. The output is normalized to
     /// \[-1, 1\].
-    public double get(double targetVelocity) {
-        return get(targetVelocity, false);
-    }
+    public double get(double targetVelocity) { return get(targetVelocity, false); }
 }

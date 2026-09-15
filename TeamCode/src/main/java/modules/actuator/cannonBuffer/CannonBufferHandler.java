@@ -14,21 +14,13 @@ public class CannonBufferHandler implements RobotActuatorModule {
     private double lastRoundStartTime = 0.0;
     private int shotsFired = 0;
 
-    public CannonBufferHandler(CannonBuffer buffer) {
-        this.buffer = buffer;
-    }
+    public CannonBufferHandler(CannonBuffer buffer) { this.buffer = buffer; }
 
-    public void on() {
-        buffer.on();
-    }
+    public void on() { buffer.on(); }
 
-    public void off() {
-        buffer.off();
-    }
+    public void off() { buffer.off(); }
 
-    public void reverse() {
-        buffer.reverse();
-    }
+    public void reverse() { buffer.reverse(); }
 
     /// Continues current round or shoots next round if done.
     /// Returns true if the shot is finished, false otherwise.
@@ -91,7 +83,8 @@ public class CannonBufferHandler implements RobotActuatorModule {
     @Override
     public void setState(HashMap<String, String> state) {
         throw new UnsupportedOperationException(
-            "Cannon buffers handler does not support state loading.");
+            "Cannon buffers handler does not support state loading."
+        );
     }
 
     enum ShootingStage { IDLE, SHOOTING }
