@@ -30,13 +30,19 @@ To compile, use Android Studio or run the following command (on Linux, you may h
 
 ### Formatting
 
+Reformat all code using:
+
+```bash
+./gradlew spotlessApply
+```
+
+This _must_ be done before committing, otherwise CI will fail. To avoid doing it manually and make formatting quicker, you can also configure your editor to run `clang-format` on file save (using the `.clang-format` config file).
+
+### Casing
+
 - __Classes and enums__ use _PascalCase_
 - __Objects, variables and functions__ use _camelCase_
 - __Constants and enum members__ use _CONSTANT_CASE_
-- Indent _4_ spaces
-- Brackets are on the same line as the clause
-- Split up long lines
-- **Use a formatter**
 
 ```java
 class Class { /*...*/
@@ -50,7 +56,7 @@ enum Enum {
 int exampleVariable;
 
 public void exampleFunction() { /*...*/ }
-``` 
+```
 
 ## License
 
