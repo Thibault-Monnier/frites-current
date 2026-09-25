@@ -10,8 +10,7 @@ import modules.actuator.RobotActuatorModule;
 
 public class CannonBuffer implements RobotActuatorModule {
     private final DcMotor motor;
-    private boolean isRunning = false;
-    private boolean isReversing = false;
+    private MotorState motorState;
 
     public CannonBuffer(DcMotor motor, DcMotorSimple.Direction direction) {
         this.motor = motor;
@@ -22,38 +21,28 @@ public class CannonBuffer implements RobotActuatorModule {
     @Override
     public void apply() {
         double servoTargetPower = 0;
-        if (isRunning) {
+        if (motorState.isOn()) {
             servoTargetPower = MOVING_SPEED;
-        } else if (isReversing) {
+        } else if (motorState.isReversed()) {
             servoTargetPower = REVERSE_SPEED;
-            isReversing = false;
+            off();
         }
         motor.setPower(servoTargetPower);
     }
 
     /// Turn buffer motor off.
-    public void off() {
-        isRunning = false;
-        isReversing = false;
-    }
+    public void off() { motorState = MotorState.OFF; }
 
     /// Turn buffer motor on.
-    public void on() {
-        off();
-        isRunning = true;
-    }
+    public void on() { motorState = MotorState.ON; }
 
     /// Clears the buffer by running it in reverse for one cycle.
-    public void reverse() {
-        off();
-        isReversing = true;
-    }
+    public void reverse() { motorState = MotorState.REVERSED; }
 
     @Override
     public HashMap<String, Object> getCurrentState() {
         HashMap<String, Object> state = new HashMap<>();
-        state.put("isRunning", isRunning);
-        state.put("isReversing", isReversing);
+        state.put("Cannon Buffer State", motorState);
         return state;
     }
 
