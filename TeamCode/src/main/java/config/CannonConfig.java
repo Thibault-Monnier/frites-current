@@ -2,10 +2,10 @@ package config;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.bylazar.configurables.annotations.Configurable;
-import logic.pidf.PIDFLCoefficients;
 import utils.geometry.Angle;
 import utils.geometry.Distance;
 import utils.geometry.Vector2D;
+import utils.pidfl.PIDFLCoefficients;
 
 @Config
 @Configurable

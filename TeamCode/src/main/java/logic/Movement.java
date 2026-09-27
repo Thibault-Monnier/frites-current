@@ -15,7 +15,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import java.util.HashMap;
 import logic.field.PlayingField;
-import logic.pidf.PIDFLController;
 import logic.position.RobotPosition;
 import modules.actuator.RobotActuatorModule;
 import modules.actuator.drive.MecanumDrive;
@@ -25,6 +24,7 @@ import utils.geometry.Angle;
 import utils.geometry.Pose2D;
 import utils.geometry.Position2D;
 import utils.geometry.Vector2D;
+import utils.pidfl.PIDFLController;
 
 @Config
 public class Movement implements RobotActuatorModule {

@@ -9,11 +9,11 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import config.HardwareConfig;
 import java.util.HashMap;
-import logic.pidf.PIDFLControllerMotor;
 import modules.actuator.RobotActuatorModule;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import utils.TelemetryHandler;
 import utils.geometry.Distance;
+import utils.pidfl.PIDFLControllerMotor;
 
 public class Cannon implements RobotActuatorModule {
     private final DcMotorEx motorLeft;

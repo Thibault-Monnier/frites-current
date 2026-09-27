@@ -4,7 +4,7 @@ Please read this document carefully to avoid subtle bugs related to non-matching
 
 The codebase uses multiple coordinate systems with different axis directions,
 origins, and rotation directions. These differences are imposed by third-party
-libraries (e.g. FTC SDK, Road Runner, hardware drivers) and cannot be changed.
+libraries (e.g. FTC SDK, Pedro Pathing, hardware drivers) and cannot be changed.
 
 Mixing coordinate systems without proper conversion leads to hard-to-debug-and-hard-to-understand
 bugs that compromise the whole navigation system. This document aims to clarify the coordinate

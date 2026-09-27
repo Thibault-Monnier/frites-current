@@ -7,11 +7,11 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import config.HardwareConfig;
-import logic.pidf.PIDFLCoefficients;
-import logic.pidf.PIDFLControllerMotor;
 import opmodes.GroupConstants;
 import utils.TelemetryHandler;
 import utils.TimeHelpers;
+import utils.pidfl.PIDFLCoefficients;
+import utils.pidfl.PIDFLControllerMotor;
 
 @Config
 @TeleOp(
