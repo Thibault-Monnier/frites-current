@@ -3,10 +3,14 @@ _This document describes how our project works to help understand the codebase._
 <!-- @formatter:off -->
 <!-- TOC -->
   * [Codebase Structure](#codebase-structure)
+    * [OpModeBase](#opmodebase)
+      * [AutoOpModeBase](#autoopmodebase)
+    * [Caveats](#caveats)
   * [Libraries](#libraries)
     * [External Libraries](#external-libraries)
     * [Internal Libraries](#internal-libraries)
       * [Geometry Library](#geometry-library)
+      * [PIDFL Library](#pidfl-library)
 <!-- TOC -->
 <!-- @formatter:on -->
 
@@ -29,6 +33,36 @@ configuration and libraries. There, you will find the following main packages:
 - `pedropathing` Small package containing code essential for interfacing between the main code and
   the pedropathing navigation library.
 - `utils` General use case, simple, reusable helpers. This includes the math library.
+
+### OpModeBase
+
+The `OpModeBase` class contains many things necessary to writing a full opmode. It handles storing
+and initializing hardware, positioning systems and others, it helps out writing the main loop,
+getting logs, etc.
+
+To use it, your opmode should extend `OpModeBase`. Then, query its methods to remove the ugly
+repeated logic between opmodes. Your opmode can now solely focus on its unique capabilities!
+
+#### AutoOpModeBase
+
+When writing an autonomous mode, you might want to extend `AutoOpModeBase` instead, which adds
+autonomous-specific helpers. In particular, it allows making a sequence auto by simply defining a
+list of `Paths` and chaining them using `Action`s.
+
+### Caveats
+
+There are several caveats one should be aware of when interacting with the codebase. Note that these
+apply to writing core code; some might be irrelevant when writing a debugging opmode for example.
+
+- Do not use `telemetry.addData`, `telemetry.addLine`, etc. Instead, you should use
+  `TelemetryHandler`'s methods that are accessible from anywhere and also log to Logcat. NOTE:
+  `TelemetryHandler` must be instantiated at some point using
+  `TelemetryHandler.instantiate(telemetry)`. This is usually already done at the initialization
+  phase.
+- Do not use `gamepad1.a` etc. to make gamepad interactions. Instead, you should use
+  `ButtonMapping` in combination with `GamepadController`. This allows one to use complex behavior (
+  long press, double press, debouncing, etc.) with simple to configure code (the button mappings can
+  be centralized in a `config` class).
 
 ## Libraries
 
@@ -78,3 +112,24 @@ purposes.
 - `Velocity2D`. Represents a velocity in 2D space. Includes a positional velocity `Vector2D`, and a
   rotational velocity `Angle`. The unit of time is always in seconds (so converting to `Transform2D`
   is trivial).
+
+#### PIDFL Library
+
+This simple library is located in the `utils/pidfl` package. It contains reusable components to
+easily create a PIDFL controller wherever necessary.
+
+A PIDFL controller may use either `PIDFLController` or `PIDFLControllerMotor`. The second one is a
+superset of the first that calculates the error automatically based on the motor encoder; it is
+preferred when the controller is directly linked to a single motor.
+
+A PIDFL (**P**roportional-**I**ntegral-**D**erivative-**F**eedforward-**L**ift) controller is an
+extended version of the
+classic [PID](https://en.wikipedia.org/wiki/PID_controller) algorithm.
+
+- The _**F**eedforward_ term is simply a constant that gets added to the output. It is useful in
+  cases where a minimum force needs to be applied just to maintain the same value over time (e.g. to
+  fight gravity, friction). It is a very rough estimate (e.g. to fight friction which depends on
+  speed, a constant term is very inaccurate).
+- The _**L**ift_ term is a constant that gets multiplied by the sign of the error, then is added to
+  the output. It is useful in cases where a motor needs a minimum power just to start turning (e.g.
+  a drivetrain positional controller).

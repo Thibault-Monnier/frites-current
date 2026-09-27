@@ -20,8 +20,9 @@ public class PIDFLControllerMotor extends PIDFLController {
         this.maxMotorVelocity = maxMotorVelocity;
     }
 
-    /// Calculates the PID output for the saved error. The output is normalized to
-    /// \[-1, 1\].
+    /// Calculates the PID output by calculating the error based on the motor sensor. The output is
+    /// normalized to \[-1, 1\]. If the targetVelocity and error are almost zero, the output is 0 to
+    /// avoid oscillations.
     public double get(double targetVelocity, boolean debugInfo) {
         double error = targetVelocity - motor.getVelocity();
         setError(error);
@@ -39,7 +40,8 @@ public class PIDFLControllerMotor extends PIDFLController {
         return super.get(debugInfo);
     }
 
-    /// Calculates the PID output for the saved error. The output is normalized to
-    /// \[-1, 1\].
+    /// Calculates the PID output by calculating the error based on the motor sensor. The output is
+    /// normalized to \[-1, 1\]. If the targetVelocity and error are almost zero, the output is 0 to
+    /// avoid oscillations.
     public double get(double targetVelocity) { return get(targetVelocity, false); }
 }
