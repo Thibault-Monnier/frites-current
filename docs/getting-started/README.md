@@ -1,5 +1,7 @@
 # Getting Started
 
+To get started with this project, check out [setup.md](setup.md).
+
 Coding style guidelines are defined in [guidelines.md](style-guidelines.md).
 
 You will find documentation about the codebase in [codebase.md](codebase.md). This is a great way to

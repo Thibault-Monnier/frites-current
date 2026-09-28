@@ -9,8 +9,8 @@ This is the codebase for the FTC team FRITES (20991 from France) during the 2026
 Start by cloning this repository with one of the following commands:
 
 ```bash
-git clone https://gitlab.com/ftc-civ/frites/2026.git
-git clone git@gitlab.com:ftc-civ/frites/2026.git
+git clone https://gitlab.com/ftc-civ/frites/2027.git
+git clone git@gitlab.com:ftc-civ/frites/2027.git
 ```
 
 Make sure you have [Android Studio](https://developer.android.com/studio) installed (this is
