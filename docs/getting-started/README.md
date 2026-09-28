@@ -1,6 +1,6 @@
 # Getting Started
 
-To get started with this project, check out [setup.md](setup.md).
+If you are new to FTC, check out [workflow.md](workflow.md).
 
 Coding style guidelines are defined in [guidelines.md](style-guidelines.md).
 

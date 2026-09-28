@@ -1,24 +1,4 @@
-## Setting up & Compiling
-
-Start by cloning this repository with one of the following commands:
-
-```bash
-git clone https://gitlab.com/ftc-civ/frites/2027.git
-git clone git@gitlab.com:ftc-civ/frites/2027.git
-```
-
-Make sure you have [Android Studio](https://developer.android.com/studio) installed (this is
-required to compile the code), and any version of Java.
-
-Open this directory in Android Studio and let it sync (required if you want to be able to compile
-the code, even from the terminal).
-
-To compile, use Android Studio or run the following command (on Linux, you may have to run
-`chmod +x ./gradlew` first):
-
-```bash
-./gradlew build
-```
+_This document aims to guide through using the code if you are new to FTC programming._
 
 ## Pushing to Robot
 
@@ -43,3 +23,15 @@ adb devices
 - If the device is not listed, ensure you are connected to the Control Hub's Wi-Fi, then re-run `adb connect 192.168.43.1:5555`.
 - If the device is listed as "device", click the device dropdown next to the Run button and ensure the Control Hub is selected. Then, sync Gradle project.
 - If the device is listed as "offline", run `adb disconnect` then reconnect. If it still doesn't work, run `adb disconnect && adb kill-server`, restart Android Studio, then reconnect.
+
+## Running Code
+
+Once the code has been pushed, open the `FTC Driver Station` app on the Driver Station (or use a dashboard, see [libraries](codebase.md#external-libraries)). Make sure the Driver Station is connected to the Control Hub's Wi-Fi.
+
+Click one of the dropdown menus around the center of the screen: to the left, you will be given a choice between the Auto OpModes, to the right, between the Manual OpModes.
+
+The terminal below (or to the right) of the INIT button displays the logs (telemetry) from the robot.
+
+## Configuring Robot
+
+To change the hardware recognized by the code, click Menu > Configure Robot. Select a configuration (or create one). You can then associate names to Control Hub ports which makes them accessible through the code. NOTE: make sure to select the correct hardware type.
