@@ -10,10 +10,12 @@ import static config.MovementConfig.TRANSLATION_TOLERANCE;
 import static config.MovementConfig.TURN_PIDF_COEFFICIENTS;
 import static config.MovementConfig.TURN_TOLERANCE;
 
+import androidx.annotation.Nullable;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import java.util.HashMap;
+import java.util.Objects;
 import logic.field.PlayingField;
 import logic.position.RobotPosition;
 import modules.actuator.RobotActuatorModule;
@@ -28,10 +30,7 @@ import utils.pidfl.PIDFLController;
 
 @Config
 public class Movement implements RobotActuatorModule {
-    private final RobotPosition robotPosition;
-    private final Team team;
-
-    private final ShotHandler shotHandler;
+    @Nullable private final MatchContext matchContext;
 
     private final MecanumDrive mecanumDrive;
 
@@ -45,6 +44,22 @@ public class Movement implements RobotActuatorModule {
 
     private Macro activeMacro = Macro.NONE;
 
+    private Movement(
+        @Nullable MatchContext matchContext,
+        DcMotor FL,
+        DcMotor FR,
+        DcMotor BL,
+        DcMotor BR,
+        MovementMode movementMode
+    ) {
+        this.matchContext = matchContext;
+        this.mecanumDrive = new MecanumDrive(FL, FR, BL, BR);
+        this.turnController = new PIDFLController(TURN_PIDF_COEFFICIENTS);
+        this.translationXController = new PIDFLController(TRANSLATION_PIDF_COEFFICIENTS);
+        this.translationYController = new PIDFLController(TRANSLATION_PIDF_COEFFICIENTS);
+        this.movementMode = movementMode;
+    }
+
     public Movement(
         RobotPosition robotPosition,
         ShotHandler shotHandler,
@@ -55,20 +70,18 @@ public class Movement implements RobotActuatorModule {
         DcMotor BR,
         MovementMode movementMode
     ) {
-        this.robotPosition = robotPosition;
-        this.team = team;
+        this(new MatchContext(robotPosition, shotHandler, team), FL, FR, BL, BR, movementMode);
+    }
 
-        this.shotHandler = shotHandler;
-
-        this.mecanumDrive = new MecanumDrive(FL, FR, BL, BR);
-        this.turnController = new PIDFLController(TURN_PIDF_COEFFICIENTS);
-        this.translationXController = new PIDFLController(TRANSLATION_PIDF_COEFFICIENTS);
-        this.translationYController = new PIDFLController(TRANSLATION_PIDF_COEFFICIENTS);
-        this.movementMode = movementMode;
+    /// Creates a Movement instance without match context. Forces movement mode to ROBOT_CENTRIC.
+    public Movement(DcMotor FL, DcMotor FR, DcMotor BL, DcMotor BR) {
+        this(null, FL, FR, BL, BR, MovementMode.ROBOT_CENTRIC);
     }
 
     /// Toggles the movement mode between field centric and robot centric.
     public void toggleMovementMode() {
+        requireMatchContext();
+
         if (movementMode == MovementMode.FIELD_CENTRIC)
             movementMode = MovementMode.ROBOT_CENTRIC;
         else if (movementMode == MovementMode.ROBOT_CENTRIC)
@@ -81,7 +94,10 @@ public class Movement implements RobotActuatorModule {
     /// Toggles super slow mode.
     public void toggleSuperSlow() { isSuperSlow = !isSuperSlow; }
 
-    public void toggleLockTowardsGoal() { lockTowardGoal = !lockTowardGoal; }
+    public void toggleLockTowardsGoal() {
+        requireMatchContext();
+        lockTowardGoal = !lockTowardGoal;
+    }
 
     public boolean lockingTowardsGoal() { return lockTowardGoal; }
 
@@ -113,6 +129,8 @@ public class Movement implements RobotActuatorModule {
     /// Executes the active macro, if any. Returns true if the macro has finished
     /// and false otherwise.
     public boolean executeActiveMacro() {
+        requireMatchContext();
+
         if (activeMacro == Macro.NONE)
             return true;
 
@@ -121,25 +139,25 @@ public class Movement implements RobotActuatorModule {
 
         switch (activeMacro) {
             case MOVE_TO_SHOOT: {
-                targetPos = PlayingField.shootingPosition(team);
-                targetHeading = shotHandler.getShotAngle();
+                targetPos = PlayingField.shootingPosition(team());
+                targetHeading = shotHandler().getShotAngle();
                 break;
             }
             case MOVE_TO_PARK: {
-                Pose2D targetPose = PlayingField.parkingPose(team);
+                Pose2D targetPose = PlayingField.parkingPose(team());
                 targetPos = targetPose.getPosition();
                 targetHeading = targetPose.getHeading();
                 isSuperSlow = true;
                 break;
             }
             case MOVE_TO_RAMP: {
-                Pose2D targetPose = PlayingField.rampPose(team);
+                Pose2D targetPose = PlayingField.rampPose(team());
                 targetPos = targetPose.getPosition();
                 targetHeading = targetPose.getHeading();
                 break;
             }
             case MOVE_TO_RAMP_DEFENSE: {
-                Pose2D targetPose = PlayingField.rampDefensePose(team);
+                Pose2D targetPose = PlayingField.rampDefensePose(team());
                 targetPos = targetPose.getPosition();
                 targetHeading = targetPose.getHeading();
                 break;
@@ -169,7 +187,7 @@ public class Movement implements RobotActuatorModule {
             turn(turn);
             lockTowardGoal = false;
         } else if (lockTowardGoal) {
-            turnTowardsHeading(shotHandler.getShotAngle());
+            turnTowardsHeading(shotHandler().getShotAngle());
             lockTowardGoal = true; // Should not get overridden
         }
     }
@@ -187,6 +205,8 @@ public class Movement implements RobotActuatorModule {
 
     /// Moves while turning towards a target position.
     public void lockedJoystickMove(Gamepad gamepad, boolean slow, Position2D targetPos) {
+        requireMatchContext();
+
         Translation velocity = getTranslationVelocity(gamepad, slow);
         if (movementMode == MovementMode.FIELD_CENTRIC) {
             translateFieldCentric(velocity);
@@ -200,7 +220,9 @@ public class Movement implements RobotActuatorModule {
     /// Turns the robot towards a target position. Returns true if finished, false
     /// otherwise.
     public boolean turnTowards(Position2D targetPos) {
-        Position2D robotPos = robotPosition.getPosition();
+        requireMatchContext();
+
+        Position2D robotPos = robotPosition().getPosition();
         Angle targetDirection = targetPos.subtract(robotPos).direction();
         return turnTowardsHeading(targetDirection);
     }
@@ -208,7 +230,9 @@ public class Movement implements RobotActuatorModule {
     /// Turns the robot towards a target heading. Returns true finished, false
     /// otherwise.
     public boolean turnTowardsHeading(Angle targetHeading) {
-        Pose2D robotPose = robotPosition.getPose();
+        requireMatchContext();
+
+        Pose2D robotPose = robotPosition().getPose();
 
         Angle angleError = targetHeading.subtract(robotPose.getHeading());
         turnController.setError(angleError.toRadians());
@@ -235,7 +259,9 @@ public class Movement implements RobotActuatorModule {
     /// Translates the robot towards a target position. Returns true if finished,
     /// false otherwise.
     public boolean translateToPosition(Position2D targetPos) {
-        Position2D robotPos = robotPosition.getPosition();
+        requireMatchContext();
+
+        Position2D robotPos = robotPosition().getPosition();
         Vector2D error = targetPos.subtract(robotPos);
 
         DistanceUnit errorUnit = DistanceUnit.MM;
@@ -265,7 +291,7 @@ public class Movement implements RobotActuatorModule {
         double dx = translationXController.get();
         double dy = translationYController.get();
 
-        Angle robotAngle = robotPosition.getHeading();
+        Angle robotAngle = robotPosition().getHeading();
         Translation translation = new Translation(dx, dy);
         translateFieldCentric(robotAngle, translation);
 
@@ -274,6 +300,18 @@ public class Movement implements RobotActuatorModule {
 
         return false;
     }
+
+    private MatchContext requireMatchContext() {
+        if (matchContext == null)
+            throw new IllegalStateException("Missing match context for operation");
+        return matchContext;
+    }
+
+    private RobotPosition robotPosition() { return requireMatchContext().robotPosition; }
+
+    private ShotHandler shotHandler() { return requireMatchContext().shotHandler; }
+
+    private Team team() { return requireMatchContext().team; }
 
     private Translation getTranslationVelocity(Gamepad gamepad, boolean slow) {
         double forward = -gamepad.left_stick_y * speedMultiplier(slow);
@@ -294,12 +332,12 @@ public class Movement implements RobotActuatorModule {
     }
 
     private void translateFieldCentric(Translation translation) {
-        Angle robotAngle = robotPosition.getHeading();
+        Angle robotAngle = robotPosition().getHeading();
 
         Angle delta = Angle.fromDegrees(90);
-        if (team.isBlue())
+        if (team().isBlue())
             robotAngle = robotAngle.add(delta);
-        if (team.isRed())
+        if (team().isRed())
             robotAngle = robotAngle.subtract(delta);
 
         translateFieldCentric(robotAngle, translation);
@@ -352,6 +390,14 @@ public class Movement implements RobotActuatorModule {
             vec = vec.rotate(angle);
             forward = vec.getX(unit);
             strafe = vec.getY(unit);
+        }
+    }
+
+    private record MatchContext(RobotPosition robotPosition, ShotHandler shotHandler, Team team) {
+        private MatchContext(RobotPosition robotPosition, ShotHandler shotHandler, Team team) {
+            this.robotPosition = Objects.requireNonNull(robotPosition);
+            this.shotHandler = Objects.requireNonNull(shotHandler);
+            this.team = Objects.requireNonNull(team);
         }
     }
 }

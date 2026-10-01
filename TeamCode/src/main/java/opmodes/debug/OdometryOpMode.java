@@ -5,9 +5,13 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import modules.sensor.GoBildaPinpointDriver;
+import opmodes.GroupConstants;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
-@TeleOp(name = "Odometry OpMode", group = "concept")
+@TeleOp(
+    name = GroupConstants.DEBUGGER_MODES_GROUP + "Odometry OpMode",
+    group = GroupConstants.DEBUGGER_MODES_GROUP
+)
 public class OdometryOpMode extends LinearOpMode {
     Telemetry globalTelemetry;
 

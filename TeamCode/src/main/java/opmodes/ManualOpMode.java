@@ -1,6 +1,5 @@
 package opmodes;
 
-import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import config.ManualOpModeMappings;
 import logic.Movement.Macro;
@@ -10,7 +9,6 @@ import modules.sensor.GamepadController;
 import utils.TelemetryHandler;
 import utils.geometry.Angle;
 
-@Config
 public class ManualOpMode extends OpModeBase {
     boolean isChildMode = false;
 

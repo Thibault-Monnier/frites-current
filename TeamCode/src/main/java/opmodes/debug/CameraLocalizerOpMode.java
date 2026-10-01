@@ -3,12 +3,16 @@ package opmodes.debug;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import logic.position.LimelightHandler;
+import opmodes.GroupConstants;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import utils.TelemetryHandler;
 import utils.geometry.Pose2D;
 
-@TeleOp(name = "Camera Localizer OpMode", group = "Concept")
+@TeleOp(
+    name = GroupConstants.DEBUGGER_MODES_GROUP + "Camera Localizer OpMode",
+    group = GroupConstants.DEBUGGER_MODES_GROUP
+)
 public class CameraLocalizerOpMode extends LinearOpMode {
     private LimelightHandler limelightHandler;
 

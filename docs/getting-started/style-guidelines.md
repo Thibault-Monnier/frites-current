@@ -11,7 +11,8 @@ Reformat all code using:
 This _must_ be done before committing, otherwise CI will fail. To avoid doing it manually and make
 formatting quicker, you can also configure your editor to run `clang-format` on file save. To do
 this, go to `File > Settings > Tools > File Watchers` and click the _import_ button. Select the
-`watchers.xml` file at the root of this repository and click _OK_.
+`watchers.xml` file at the root of this repository and click _OK_. Then, go to
+`File > Settings > Tools > Actions on Save` and make sure `File Watcher` action is enabled.
 
 ### Casing
 
@@ -32,4 +33,3 @@ int exampleVariable;
 
 public void exampleFunction() { /*...*/ }
 ```
-
