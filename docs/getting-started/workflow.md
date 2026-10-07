@@ -27,8 +27,8 @@ adb devices
   `adb connect 192.168.43.1:5555`.
 - If the device is listed as "device", click the device dropdown next to the Run button and ensure
   the Control Hub is selected. Then, sync Gradle project.
-- If the device is listed as "offline", run `adb disconnect` then reconnect. If it still doesn't
-  work, run `adb disconnect && adb kill-server`, restart Android Studio, then reconnect.
+- If the device is listed as "offline", run `adb kill-server` then reconnect. If it still doesn't
+  work, run `adb kill-server`, restart Android Studio, then reconnect.
 
 ## Running Code
 
