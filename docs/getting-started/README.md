@@ -1,6 +1,8 @@
 # Getting Started
 
-If you are new to FTC, check out [workflow.md](workflow.md). You can also check out [FTC code samples](https://github.com/FIRST-Tech-Challenge/FtcRobotController/tree/master/FtcRobotController/src/main/java/org/firstinspires/ftc/robotcontroller/external/samples).
+If you are new to FTC, check out [ftc-programming.md](ftc-programming.md)
+and [workflow.md](workflow.md). You can also check
+out [FTC code samples](https://github.com/FIRST-Tech-Challenge/FtcRobotController/tree/master/FtcRobotController/src/main/java/org/firstinspires/ftc/robotcontroller/external/samples).
 
 Coding style guidelines are defined in [guidelines.md](style-guidelines.md).
 
