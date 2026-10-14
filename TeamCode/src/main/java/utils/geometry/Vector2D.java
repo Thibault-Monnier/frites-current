@@ -70,6 +70,12 @@ public class Vector2D {
         return new Vector2D(distanceUnit, x / max, y / max);
     }
 
+    public Vector2D subtract(Vector2D other) {
+        Distance newX = getX().subtract(other.getX());
+        Distance newY = getY().subtract(other.getY());
+        return new Vector2D(newX, newY);
+    }
+
     public Vector2D scale(double scalar) {
         return new Vector2D(distanceUnit, x * scalar, y * scalar);
     }

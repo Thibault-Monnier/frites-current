@@ -1,5 +1,6 @@
 package utils.pidfl;
 
+import androidx.annotation.Nullable;
 import utils.TelemetryHandler;
 import utils.TimeHelpers;
 
@@ -30,7 +31,13 @@ public class PIDFLController {
 
     protected double error = 0.0;
 
-    public void setError(double error) { this.error = error; }
+    public void setError(double error, @Nullable String telemetryKey) {
+        this.error = error;
+        if (telemetryKey != null)
+            TelemetryHandler.addData(telemetryKey, error);
+    }
+
+    public void setError(double error) { setError(error, null); }
 
     /// Returns the change in error for the last two frames.
     public double getErrorChange() { return error - previousError; }

@@ -33,4 +33,12 @@ public class MovementConfig {
         new PIDFLCoefficients(0.0025, 0, 0.0005, 0.0, 0.08);
     public static Distance TRANSLATION_TOLERANCE = Distance.fromMillimeters(40);
     public static Distance NOT_TRANSLATING_THRESHOLD = Distance.fromMillimeters(1); // per frame
+
+    // Field centric velocity control
+    public static Angle MAX_TURN_SPEED = Angle.fromDegrees(360); // per second
+    public static Distance MAX_TRANSLATION_SPEED = Distance.fromMeters(1.5); // per second
+    public static PIDFLCoefficients FIELD_CENTRIC_TURN_PIDF_COEFFICIENTS =
+        new PIDFLCoefficients(0.75, 0.0, 0.1, 0.0, 0.08);
+    public static PIDFLCoefficients FIELD_CENTRIC_TRANSLATION_PIDF_COEFFICIENTS =
+        new PIDFLCoefficients(0.0025, 0, 0.0005, 0.0, 0.08);
 }

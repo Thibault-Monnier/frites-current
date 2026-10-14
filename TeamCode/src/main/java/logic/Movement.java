@@ -1,5 +1,9 @@
 package logic;
 
+import static config.MovementConfig.FIELD_CENTRIC_TRANSLATION_PIDF_COEFFICIENTS;
+import static config.MovementConfig.FIELD_CENTRIC_TURN_PIDF_COEFFICIENTS;
+import static config.MovementConfig.MAX_TRANSLATION_SPEED;
+import static config.MovementConfig.MAX_TURN_SPEED;
 import static config.MovementConfig.NOT_TRANSLATING_THRESHOLD;
 import static config.MovementConfig.NOT_TURNING_THRESHOLD;
 import static config.MovementConfig.SLOW_SPEED_MULTIPLIER;
@@ -20,12 +24,14 @@ import logic.field.PlayingField;
 import logic.position.RobotPosition;
 import modules.actuator.RobotActuatorModule;
 import modules.actuator.drive.MecanumDrive;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import utils.TelemetryHandler;
 import utils.geometry.Angle;
 import utils.geometry.Pose2D;
 import utils.geometry.Position2D;
 import utils.geometry.Vector2D;
+import utils.geometry.Velocity2D;
 import utils.pidfl.PIDFLController;
 
 @Config
@@ -37,6 +43,10 @@ public class Movement implements RobotActuatorModule {
     private final PIDFLController turnController;
     private final PIDFLController translationXController;
     private final PIDFLController translationYController;
+
+    private final PIDFLController fieldCentricTurnController;
+    private final PIDFLController fieldCentricTranslationXController;
+    private final PIDFLController fieldCentricTranslationYController;
 
     private MovementMode movementMode;
     private boolean isSuperSlow = false;
@@ -54,9 +64,17 @@ public class Movement implements RobotActuatorModule {
     ) {
         this.matchContext = matchContext;
         this.mecanumDrive = new MecanumDrive(FL, FR, BL, BR);
+
         this.turnController = new PIDFLController(TURN_PIDF_COEFFICIENTS);
         this.translationXController = new PIDFLController(TRANSLATION_PIDF_COEFFICIENTS);
         this.translationYController = new PIDFLController(TRANSLATION_PIDF_COEFFICIENTS);
+
+        this.fieldCentricTurnController = new PIDFLController(FIELD_CENTRIC_TURN_PIDF_COEFFICIENTS);
+        this.fieldCentricTranslationXController =
+            new PIDFLController(FIELD_CENTRIC_TRANSLATION_PIDF_COEFFICIENTS);
+        this.fieldCentricTranslationYController =
+            new PIDFLController(FIELD_CENTRIC_TRANSLATION_PIDF_COEFFICIENTS);
+
         this.movementMode = movementMode;
     }
 
@@ -113,6 +131,14 @@ public class Movement implements RobotActuatorModule {
         turnController.setCoefficients(TURN_PIDF_COEFFICIENTS);
         translationXController.setCoefficients(TRANSLATION_PIDF_COEFFICIENTS);
         translationYController.setCoefficients(TRANSLATION_PIDF_COEFFICIENTS);
+
+        fieldCentricTurnController.setCoefficients(FIELD_CENTRIC_TURN_PIDF_COEFFICIENTS);
+        fieldCentricTranslationXController.setCoefficients(
+            FIELD_CENTRIC_TRANSLATION_PIDF_COEFFICIENTS
+        );
+        fieldCentricTranslationYController.setCoefficients(
+            FIELD_CENTRIC_TRANSLATION_PIDF_COEFFICIENTS
+        );
 
         TelemetryHandler.addData("Turn coefficients", turnController.getCoefficients());
         TelemetryHandler.addData(
@@ -197,6 +223,7 @@ public class Movement implements RobotActuatorModule {
         Translation velocity = getTranslationVelocity(gamepad, slow);
 
         if (movementMode == MovementMode.FIELD_CENTRIC) {
+            applyTeamRotationFieldCentric(velocity);
             translateFieldCentric(velocity);
         } else {
             translate(velocity);
@@ -209,6 +236,7 @@ public class Movement implements RobotActuatorModule {
 
         Translation velocity = getTranslationVelocity(gamepad, slow);
         if (movementMode == MovementMode.FIELD_CENTRIC) {
+            applyTeamRotationFieldCentric(velocity);
             translateFieldCentric(velocity);
         } else {
             translate(velocity);
@@ -269,11 +297,8 @@ public class Movement implements RobotActuatorModule {
         double xError = error.getX(errorUnit);
         double yError = error.getY(errorUnit);
 
-        translationXController.setError(xError);
-        translationYController.setError(yError);
-
-        TelemetryHandler.addData("X Error", xError);
-        TelemetryHandler.addData("Y Error", yError);
+        translationXController.setError(xError, "X error");
+        translationYController.setError(yError, "Y error");
 
         boolean isFinished = translationXController.isStableAtTarget(
                                  TRANSLATION_TOLERANCE.getValue(errorUnit),
@@ -291,9 +316,8 @@ public class Movement implements RobotActuatorModule {
         double dx = translationXController.get();
         double dy = translationYController.get();
 
-        Angle robotAngle = robotPosition().getHeading();
         Translation translation = new Translation(dx, dy);
-        translateFieldCentric(robotAngle, translation);
+        translateFieldCentric(translation);
 
         TelemetryHandler.addData("Dx", dx);
         TelemetryHandler.addData("Dy", dy);
@@ -331,24 +355,57 @@ public class Movement implements RobotActuatorModule {
         return slow ? SLOW_SPEED_MULTIPLIER : SPEED_MULTIPLIER;
     }
 
-    private void translateFieldCentric(Translation translation) {
-        Angle robotAngle = robotPosition().getHeading();
-
+    /// Applies 90-degree rotation to the translation vector based on the team color.
+    private void applyTeamRotationFieldCentric(Translation translation) {
         Angle delta = Angle.fromDegrees(90);
-        if (team().isBlue())
-            robotAngle = robotAngle.add(delta);
         if (team().isRed())
-            robotAngle = robotAngle.subtract(delta);
-
-        translateFieldCentric(robotAngle, translation);
+            translation.rotate(delta);
+        if (team().isBlue())
+            translation.rotate(delta.negate());
     }
 
-    private void translateFieldCentric(Angle heading, Translation translation) {
-        translation.rotate(heading.negate());
+    /// Field centric mode includes a PID controller: joystick input does not determine power, but
+    /// target speed.
+    private void translateFieldCentric(Translation translation) {
+        Vector2D scaledTranslation =
+            new Vector2D(DistanceUnit.METER, translation.forward, translation.strafe)
+                .scale(MAX_TRANSLATION_SPEED.toMeters());
+        Velocity2D targetVelocity = new Velocity2D(scaledTranslation, new Angle(), 1);
+
+        Velocity2D error = targetVelocity.subtract(robotPosition().getPoseVelocity());
+        double xError = error.getLinearVelocity().getX(DistanceUnit.MM);
+        double yError = error.getLinearVelocity().getY(DistanceUnit.MM);
+
+        fieldCentricTranslationXController.setError(xError, "Field centric X error");
+        fieldCentricTranslationYController.setError(yError, "Field centric Y error");
+
+        double dx = fieldCentricTranslationXController.get();
+        double dy = fieldCentricTranslationYController.get();
+
+        translation = new Translation(dx, dy);
+        // Convert field centric to robot centric
+        translation.rotate(robotPosition().getHeading().negate());
         translate(translation);
     }
 
-    private void turn(double turnSpeed) { move(new Translation(), turnSpeed); }
+    /// Field centric mode includes a PID controller: joystick input does not determine power, but
+    /// target speed.
+    private void turn(double turnSpeed) {
+        if (movementMode == MovementMode.FIELD_CENTRIC) {
+            Angle scaledTurn =
+                new Angle(AngleUnit.RADIANS, turnSpeed).multiply(MAX_TURN_SPEED.toRadians());
+            Velocity2D targetVelocity = new Velocity2D(new Vector2D(), scaledTurn, 1);
+
+            double error = targetVelocity.subtract(robotPosition().getPoseVelocity())
+                               .getAngularVelocity()
+                               .toRadians();
+            fieldCentricTurnController.setError(error, "Field centric TURN error");
+
+            turnSpeed = fieldCentricTurnController.get();
+        }
+
+        move(new Translation(), turnSpeed);
+    }
 
     private void translate(Translation translation) { move(translation, 0); }
 

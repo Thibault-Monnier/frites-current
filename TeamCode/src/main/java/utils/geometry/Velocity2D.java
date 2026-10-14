@@ -39,6 +39,12 @@ public class Velocity2D {
     /// Per second
     public Vector2D getLinearVelocity() { return linear; }
 
+    public Velocity2D subtract(Velocity2D other) {
+        Vector2D newLinear = linear.subtract(other.linear);
+        Angle newAngular = angular.subtract(other.angular);
+        return new Velocity2D(newLinear, newAngular, 1);
+    }
+
     @NonNull
     public String toString() {
         return getRawVelocity().toString() + " / sec";
