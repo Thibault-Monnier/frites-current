@@ -1,23 +1,21 @@
 package opmodes.debug;
 
-import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import config.HardwareConfig;
-import opmodes.GroupConstants;
 import utils.TelemetryHandler;
 import utils.TimeHelpers;
 import utils.pidfl.PIDFLCoefficients;
 import utils.pidfl.PIDFLControllerMotor;
 
+/*
 @Config
 @TeleOp(
     name = GroupConstants.DEBUGGER_MODES_GROUP + ": Shooter PID Calibrator",
     group = GroupConstants.DEBUGGER_MODES_GROUP
-)
+)*/
 public class ShooterPIDTest extends LinearOpMode {
     DcMotorEx motorLeft;
     DcMotorEx motorRight;

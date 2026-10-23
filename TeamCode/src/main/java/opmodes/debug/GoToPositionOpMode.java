@@ -1,21 +1,20 @@
 package opmodes.debug;
 
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import java.util.Random;
 import logic.Team;
 import logic.field.PlayingField;
 import modules.sensor.GamepadController;
-import opmodes.GroupConstants;
 import opmodes.OpModeBase;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import utils.TelemetryHandler;
 import utils.geometry.Distance;
 import utils.geometry.Position2D;
 
+/*
 @TeleOp(
     name = GroupConstants.DEBUGGER_MODES_GROUP + ": Go To Position",
     group = GroupConstants.DEBUGGER_MODES_GROUP
-)
+)*/
 public class GoToPositionOpMode extends OpModeBase {
     private static final Distance MIN_WALL_DISTANCE = new Distance(DistanceUnit.CM, 75);
 

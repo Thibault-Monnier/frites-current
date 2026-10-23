@@ -1,19 +1,17 @@
 package opmodes.debug;
 
 import com.acmerobotics.dashboard.FtcDashboard;
-import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
-import opmodes.GroupConstants;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
+/*
 @Config
 @TeleOp(
     name = GroupConstants.DEBUGGER_MODES_GROUP + ": Servo",
     group = GroupConstants.DEBUGGER_MODES_GROUP
-)
+)*/
 public class ServoTest extends OpMode {
     public static String motorId = "rotation_servo";
 
