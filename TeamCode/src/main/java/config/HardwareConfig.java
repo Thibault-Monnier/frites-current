@@ -30,9 +30,4 @@ public class HardwareConfig {
     public static double SHOOTER_MAX_VELOCITY = 2450.0;
 
     public static Distance ROBOT_SIZE = new Distance(DistanceUnit.INCH, 18.0);
-
-    public static String TEST_MOTOR_1_ID = "test_motor_1";
-    public static String TEST_MOTOR_2_ID = "test_motor_2";
-    public static double TEST_MOTOR_1_POWER = -1.0;
-    public static double TEST_MOTOR_2_POWER = 1.0;
 }
