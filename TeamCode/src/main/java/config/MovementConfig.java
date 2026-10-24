@@ -27,18 +27,21 @@ public class MovementConfig {
     public static PIDFLCoefficients TURN_PIDF_COEFFICIENTS =
         new PIDFLCoefficients(0.75, 0.0, 0.1, 0.0, 0.08);
     public static Angle TURN_TOLERANCE = Angle.fromDegrees(5.0);
-    public static Angle NOT_TURNING_THRESHOLD = Angle.fromDegrees(0.5); // per frame
 
     public static PIDFLCoefficients TRANSLATION_PIDF_COEFFICIENTS =
         new PIDFLCoefficients(0.0025, 0, 0.0005, 0.0, 0.08);
     public static Distance TRANSLATION_TOLERANCE = Distance.fromMillimeters(40);
-    public static Distance NOT_TRANSLATING_THRESHOLD = Distance.fromMillimeters(1); // per frame
 
+    // ------------------------------
     // Field centric velocity control
-    public static Angle MAX_TURN_SPEED = Angle.fromDegrees(360); // per second
-    public static Distance MAX_TRANSLATION_SPEED = Distance.fromMeters(1.5); // per second
+    // ------------------------------
+    public static Angle MAX_TURN_SPEED = Angle.fromDegrees(450); // per second
+    public static Distance MAX_TRANSLATION_SPEED = Distance.fromMeters(2.3); // per second
+    public static Angle FIELD_CENTRIC_TURN_PIDF_THRESHOLD = Angle.fromDegrees(5); // per second
+    public static Distance FIELD_CENTRIC_TRANSLATION_PIDF_THRESHOLD =
+        Distance.fromMillimeters(50); // per second
     public static PIDFLCoefficients FIELD_CENTRIC_TURN_PIDF_COEFFICIENTS =
-        new PIDFLCoefficients(0.75, 0.0, 0.1, 0.0, 0.08);
+        new PIDFLCoefficients(0.3, 0.0, 0.0, 0.0, 0.0);
     public static PIDFLCoefficients FIELD_CENTRIC_TRANSLATION_PIDF_COEFFICIENTS =
-        new PIDFLCoefficients(0.0025, 0, 0.0005, 0.0, 0.08);
+        new PIDFLCoefficients(0.002, 0.0, 0.0, 0.0, 0.0);
 }

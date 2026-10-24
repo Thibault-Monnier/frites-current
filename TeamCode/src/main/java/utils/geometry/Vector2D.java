@@ -80,6 +80,12 @@ public class Vector2D {
         return new Vector2D(distanceUnit, x * scalar, y * scalar);
     }
 
+    public Vector2D scale(Distance scalar) {
+        return new Vector2D(
+            distanceUnit, x * scalar.getValue(distanceUnit), y * scalar.getValue(distanceUnit)
+        );
+    }
+
     /// Rotates the vector by the given angle
     public Vector2D rotate(Angle angle) {
         return new Vector2D(magnitude(), direction().add(angle));

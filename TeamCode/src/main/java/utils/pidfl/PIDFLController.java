@@ -17,12 +17,13 @@ public class PIDFLController {
     /// Returns the current PIDF coefficients.
     public PIDFLCoefficients getCoefficients() { return coefficients; }
 
+    /// Returns whether the error is less than the given threshold.
+    public boolean isAtTarget(double errorThreshold) { return Math.abs(error) < errorThreshold; }
+
     /// Returns whether the controller is stable at the target, meaning it will
     /// probably stay within the given error thresholds.
     public boolean isStableAtTarget(double errorThreshold, double errorChangeThreshold) {
-        return Math.abs(error) < errorThreshold
-            // && Math.abs(getErrorChange()) < errorChangeThreshold
-            ;
+        return isAtTarget(errorThreshold) && Math.abs(getErrorChange()) < errorChangeThreshold;
     }
 
     protected double lastTime = TimeHelpers.getRuntime();

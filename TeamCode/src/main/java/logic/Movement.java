@@ -1,11 +1,11 @@
 package logic;
 
 import static config.MovementConfig.FIELD_CENTRIC_TRANSLATION_PIDF_COEFFICIENTS;
+import static config.MovementConfig.FIELD_CENTRIC_TRANSLATION_PIDF_THRESHOLD;
 import static config.MovementConfig.FIELD_CENTRIC_TURN_PIDF_COEFFICIENTS;
+import static config.MovementConfig.FIELD_CENTRIC_TURN_PIDF_THRESHOLD;
 import static config.MovementConfig.MAX_TRANSLATION_SPEED;
 import static config.MovementConfig.MAX_TURN_SPEED;
-import static config.MovementConfig.NOT_TRANSLATING_THRESHOLD;
-import static config.MovementConfig.NOT_TURNING_THRESHOLD;
 import static config.MovementConfig.SLOW_SPEED_MULTIPLIER;
 import static config.MovementConfig.SPEED_MULTIPLIER;
 import static config.MovementConfig.SUPER_SLOW_SPEED_MULTIPLIER;
@@ -204,17 +204,19 @@ public class Movement implements RobotActuatorModule {
     public void stopMacro() { activeMacro = Macro.NONE; }
 
     /// Rotates the robot using input from the *right* joystick of the gamepad. If
-    /// locking towards goal, rotate to face the goal instead.
+    /// locking towards goal, rotates to face the goal instead.
     public void rotate(Gamepad gamepad, boolean slow) {
         double turn = -gamepad.right_stick_x * speedMultiplier(slow);
 
-        if (Math.abs(turn) > 0.1) {
-            turn = MecanumDrive.smooth(turn);
-            turn(turn);
+        if (Math.abs(turn) > 0.1)
             lockTowardGoal = false;
-        } else if (lockTowardGoal) {
+
+        if (lockTowardGoal) {
             turnTowardsHeading(shotHandler().getShotAngle());
             lockTowardGoal = true; // Should not get overridden
+        } else {
+            turn = MecanumDrive.smooth(turn);
+            turn(turn);
         }
     }
 
@@ -263,14 +265,9 @@ public class Movement implements RobotActuatorModule {
         Pose2D robotPose = robotPosition().getPose();
 
         Angle angleError = targetHeading.subtract(robotPose.getHeading());
-        turnController.setError(angleError.toRadians());
+        turnController.setError(angleError.toRadians(), "Turn error (rad)");
 
-        TelemetryHandler.addData("Turn error", angleError.toString());
-        TelemetryHandler.addData("Turn error change", turnController.getErrorChange());
-
-        boolean isFinished = turnController.isStableAtTarget(
-            TURN_TOLERANCE.toRadians(), NOT_TURNING_THRESHOLD.toRadians()
-        );
+        boolean isFinished = turnController.isAtTarget(TURN_TOLERANCE.toRadians());
         if (isFinished) {
             TelemetryHandler.addLine("Turn controller is finished");
             return true;
@@ -300,14 +297,9 @@ public class Movement implements RobotActuatorModule {
         translationXController.setError(xError, "X error");
         translationYController.setError(yError, "Y error");
 
-        boolean isFinished = translationXController.isStableAtTarget(
-                                 TRANSLATION_TOLERANCE.getValue(errorUnit),
-                                 NOT_TRANSLATING_THRESHOLD.getValue(errorUnit)
-                             )
-            && translationYController.isStableAtTarget(
-                TRANSLATION_TOLERANCE.getValue(errorUnit),
-                NOT_TRANSLATING_THRESHOLD.getValue(errorUnit)
-            );
+        boolean isFinished =
+            translationXController.isAtTarget(TRANSLATION_TOLERANCE.getValue(errorUnit))
+            && translationYController.isAtTarget(TRANSLATION_TOLERANCE.getValue(errorUnit));
         if (isFinished) {
             TelemetryHandler.addLine("Translation controller is finished");
             return true;
@@ -367,22 +359,33 @@ public class Movement implements RobotActuatorModule {
     /// Field centric mode includes a PID controller: joystick input does not determine power, but
     /// target speed.
     private void translateFieldCentric(Translation translation) {
+        // We use a PID controller which is added onto the input power to try to maintain the
+        // target velocity.
+
         Vector2D scaledTranslation =
             new Vector2D(DistanceUnit.METER, translation.forward, translation.strafe)
-                .scale(MAX_TRANSLATION_SPEED.toMeters());
+                .scale(MAX_TRANSLATION_SPEED);
         Velocity2D targetVelocity = new Velocity2D(scaledTranslation, new Angle(), 1);
 
-        Velocity2D error = targetVelocity.subtract(robotPosition().getPoseVelocity());
-        double xError = error.getLinearVelocity().getX(DistanceUnit.MM);
-        double yError = error.getLinearVelocity().getY(DistanceUnit.MM);
+        Vector2D error =
+            targetVelocity.subtract(robotPosition().getPoseVelocity()).getLinearVelocity();
+        DistanceUnit errorUnit = DistanceUnit.MM;
 
-        fieldCentricTranslationXController.setError(xError, "Field centric X error");
-        fieldCentricTranslationYController.setError(yError, "Field centric Y error");
+        fieldCentricTranslationXController.setError(error.getX(errorUnit), "Field centric X error");
+        fieldCentricTranslationYController.setError(error.getY(errorUnit), "Field centric Y error");
 
-        double dx = fieldCentricTranslationXController.get();
-        double dy = fieldCentricTranslationYController.get();
+        double pidX = fieldCentricTranslationXController.get();
+        double pidY = fieldCentricTranslationYController.get();
+        if (fieldCentricTranslationXController.isAtTarget(
+                FIELD_CENTRIC_TRANSLATION_PIDF_THRESHOLD.getValue(errorUnit)
+            ))
+            pidX = 0;
+        if (fieldCentricTranslationYController.isAtTarget(
+                FIELD_CENTRIC_TRANSLATION_PIDF_THRESHOLD.getValue(errorUnit)
+            ))
+            pidY = 0;
 
-        translation = new Translation(dx, dy);
+        translation = new Translation(translation.forward + pidX, translation.strafe + pidY);
         // Convert field centric to robot centric
         translation.rotate(robotPosition().getHeading().negate());
         translate(translation);
@@ -392,6 +395,9 @@ public class Movement implements RobotActuatorModule {
     /// target speed.
     private void turn(double turnSpeed) {
         if (movementMode == MovementMode.FIELD_CENTRIC) {
+            // We use a PID controller which is added onto the input power to try to maintain the
+            // target velocity.
+
             Angle scaledTurn =
                 new Angle(AngleUnit.RADIANS, turnSpeed).multiply(MAX_TURN_SPEED.toRadians());
             Velocity2D targetVelocity = new Velocity2D(new Vector2D(), scaledTurn, 1);
@@ -399,9 +405,12 @@ public class Movement implements RobotActuatorModule {
             double error = targetVelocity.subtract(robotPosition().getPoseVelocity())
                                .getAngularVelocity()
                                .toRadians();
-            fieldCentricTurnController.setError(error, "Field centric TURN error");
+            fieldCentricTurnController.setError(error, "Field centric TURN error (rad)");
 
-            turnSpeed = fieldCentricTurnController.get();
+            if (!fieldCentricTurnController.isAtTarget(
+                    FIELD_CENTRIC_TURN_PIDF_THRESHOLD.toRadians()
+                ))
+                turnSpeed += fieldCentricTurnController.get(true);
         }
 
         move(new Translation(), turnSpeed);
