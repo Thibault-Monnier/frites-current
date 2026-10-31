@@ -1,10 +1,9 @@
-package modules.actuator.intake;
+package modules.actuator;
 
 import static config.IntakeConfig.INTAKE_MOVING_SPEED;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import java.util.HashMap;
-import modules.actuator.RobotActuatorModule;
 import utils.TelemetryHandler;
 
 public class Intake implements RobotActuatorModule {

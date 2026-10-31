@@ -5,17 +5,17 @@ import static config.TransferConfig.SHOOT_DELAY;
 
 import java.util.HashMap;
 import modules.actuator.RobotActuatorModule;
-import modules.actuator.transfer.Transfer;
+import modules.actuator.Transfer;
 import utils.TimeHelpers;
 
-public class TransferHandler implements RobotActuatorModule {
+public class ShotHandler implements RobotActuatorModule {
     private final Transfer transfer;
 
     private ShootingStage shootingStage = ShootingStage.IDLE;
     private double lastRoundStartTime = 0.0;
     private int shotsFired = 0;
 
-    public TransferHandler(Transfer transfer) { this.transfer = transfer; }
+    public ShotHandler(Transfer transfer) { this.transfer = transfer; }
 
     public void on() { transfer.on(); }
 

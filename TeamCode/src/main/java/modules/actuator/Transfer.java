@@ -1,11 +1,10 @@
-package modules.actuator.transfer;
+package modules.actuator;
 
 import static config.TransferConfig.MOVING_SPEED;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import java.util.HashMap;
-import modules.actuator.RobotActuatorModule;
 
 public class Transfer implements RobotActuatorModule {
     private final DcMotor motor;

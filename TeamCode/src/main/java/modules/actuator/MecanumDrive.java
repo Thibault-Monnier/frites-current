@@ -1,4 +1,4 @@
-package modules.actuator.drive;
+package modules.actuator;
 
 import static config.MovementConfig.BACK_LEFT_COEFF;
 import static config.MovementConfig.BACK_LEFT_DIRECTION;
@@ -11,7 +11,6 @@ import static config.MovementConfig.FRONT_RIGHT_DIRECTION;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import java.util.HashMap;
-import modules.actuator.RobotActuatorModule;
 import utils.TelemetryHandler;
 
 public class MecanumDrive implements RobotActuatorModule {

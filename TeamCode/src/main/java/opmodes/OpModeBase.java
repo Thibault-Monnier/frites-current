@@ -10,12 +10,12 @@ import config.HardwareConfig;
 import java.util.List;
 import logic.Movement;
 import logic.ShotCalculator;
+import logic.ShotHandler;
 import logic.Team;
-import logic.TransferHandler;
 import logic.position.RobotPosition;
-import modules.actuator.intake.Intake;
-import modules.actuator.shooter.Shooter;
-import modules.actuator.transfer.Transfer;
+import modules.actuator.Intake;
+import modules.actuator.Shooter;
+import modules.actuator.Transfer;
 import modules.sensor.BatteryMonitor;
 import modules.sensor.GamepadController;
 import pedropathing.Constants;
@@ -37,7 +37,7 @@ public abstract class OpModeBase extends LinearOpMode {
     protected Movement move;
 
     protected Shooter shooter;
-    protected TransferHandler transfer;
+    protected ShotHandler transfer;
 
     protected Intake intake;
 
@@ -94,7 +94,7 @@ public abstract class OpModeBase extends LinearOpMode {
         DcMotorEx transferMotor =
             hardwareMap.get(DcMotorEx.class, HardwareConfig.TRANSFER_MOTOR_ID);
         Transfer transfer = new Transfer(transferMotor);
-        this.transfer = new TransferHandler(transfer);
+        this.transfer = new ShotHandler(transfer);
 
         DcMotorEx shooterMotor = hardwareMap.get(DcMotorEx.class, HardwareConfig.SHOOTER_MOTOR_ID);
         Servo hoodServo = hardwareMap.get(Servo.class, HardwareConfig.SHOOTER_HOOD_SERVO_ID);

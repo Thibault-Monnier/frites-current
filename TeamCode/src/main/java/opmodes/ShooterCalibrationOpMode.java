@@ -6,7 +6,7 @@ import config.HardwareConfig;
 import config.ManualOpModeMappings;
 import logic.Team;
 import logic.field.PlayingField;
-import modules.actuator.shooter.ShooterCalibrator;
+import modules.actuator.ShooterCalibrator;
 import modules.sensor.GamepadController;
 import utils.TelemetryHandler;
 import utils.geometry.Distance;

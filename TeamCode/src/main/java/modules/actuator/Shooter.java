@@ -1,4 +1,4 @@
-package modules.actuator.shooter;
+package modules.actuator;
 
 import static config.ShooterConfig.FLYWHEEL_ERROR_MARGIN;
 import static config.ShooterConfig.FLYWHEEL_MAX_VELOCITY;
@@ -13,7 +13,6 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import java.util.HashMap;
-import modules.actuator.RobotActuatorModule;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import utils.TelemetryHandler;
 import utils.geometry.Distance;

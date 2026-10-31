@@ -1,4 +1,4 @@
-package modules.actuator.shooter;
+package modules.actuator;
 
 import static config.ShooterConfig.CALIBRATION_HOOD_CHANGE_OFFSET;
 import static config.ShooterConfig.CALIBRATION_SPEED_CHANGE_OFFSET;

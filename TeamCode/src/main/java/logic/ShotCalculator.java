@@ -14,6 +14,9 @@ import utils.geometry.Position2D;
 import utils.geometry.Vector2D;
 import utils.geometry.Velocity2D;
 
+/// Calculates the shot vector for a SOTM (shoot on the move) algorithm. Based on the following
+/// paper: docs/moving-shot/moving-shot.pdf
+
 public class ShotCalculator {
     private final RobotPosition robotPosition;
 
