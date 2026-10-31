@@ -63,7 +63,7 @@ public class ManualOpMode extends OpModeBase {
         );
 
         if (isPressActive(ManualOpModeMappings.LOCK_TOWARDS_SHOOT) && !move.lockingTowardsGoal())
-            move.turnTowardsHeading(shotHandler.getShotAngle());
+            move.turnTowardsHeading(shotCalculator.getShotAngle());
         else
             move.rotate(gamepadController.gamepad, isPressActive(ManualOpModeMappings.SLOW_TURN));
 
@@ -118,12 +118,10 @@ public class ManualOpMode extends OpModeBase {
 
         if (isPressActive(ManualOpModeMappings.INTAKE_ON)) {
             intake.on();
-            transfer.reverse();
         }
 
-        if (isPressActive(ManualOpModeMappings.INTAKE_AND_TRANSFER_REVERSE)) {
+        if (isPressActive(ManualOpModeMappings.INTAKE_REVERSE)) {
             intake.reverse();
-            transfer.reverse();
         }
 
         if (isPressActive(ManualOpModeMappings.SUPER_SLOW_MODE_TOGGLE))

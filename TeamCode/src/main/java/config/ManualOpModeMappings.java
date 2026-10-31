@@ -25,7 +25,7 @@ public class ManualOpModeMappings {
     // Intake and transfer
     public static ButtonMapping INTAKE_ON =
         new ButtonMapping(Button.TRIGGER_LEFT, PressType.CONTINUOUS_PRESS);
-    public static ButtonMapping INTAKE_AND_TRANSFER_REVERSE =
+    public static ButtonMapping INTAKE_REVERSE =
         new ButtonMapping(Button.DPAD_DOWN, PressType.CONTINUOUS_PRESS);
 
     // Shooter and shooting

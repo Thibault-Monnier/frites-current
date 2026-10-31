@@ -1,13 +1,17 @@
 package modules.actuator.shooter;
 
-import static config.ShooterConfig.ERROR_MARGIN;
-import static config.ShooterConfig.SHOOTER_MAX_VELOCITY;
-import static config.ShooterConfig.SHOOTER_PID;
-import static config.ShooterConfig.STABLE_THRESHOLD;
+import static config.ShooterConfig.FLYWHEEL_ERROR_MARGIN;
+import static config.ShooterConfig.FLYWHEEL_MAX_VELOCITY;
+import static config.ShooterConfig.FLYWHEEL_PID;
+import static config.ShooterConfig.FLYWHEEL_STABLE_THRESHOLD;
+import static config.ShooterConfig.HOOD_ERROR_MARGIN;
+import static config.ShooterConfig.HOOD_MAX_POSITION;
+import static config.ShooterConfig.HOOD_MIN_POSITION;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Servo;
 import java.util.HashMap;
 import modules.actuator.RobotActuatorModule;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
@@ -16,86 +20,79 @@ import utils.geometry.Distance;
 import utils.pidfl.PIDFLControllerMotor;
 
 public class Shooter implements RobotActuatorModule {
-    private final DcMotorEx motorLeft;
-    private final DcMotorEx motorRight;
+    private final DcMotorEx motor;
+    private final Servo hoodServo;
 
-    private final PIDFLControllerMotor PIDFControllerLeft;
-    private final PIDFLControllerMotor PIDFControllerRight;
+    private final PIDFLControllerMotor motorPIDController;
 
-    protected double motorTargetVelocity;
+    private double motorTargetVelocity;
+    private double hoodTargetPosition;
 
     private boolean isRunning = false;
 
-    public Shooter(DcMotorEx motorLeft, DcMotorEx motorRight) {
-        this.motorLeft = motorLeft;
-        this.motorRight = motorRight;
+    public Shooter(DcMotorEx motor, Servo hoodServo) {
+        this.motor = motor;
+        this.hoodServo = hoodServo;
 
         // Without encoders is important to prevent the library from adding an extra
         // PID over ours
-        this.motorLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        this.motorRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        this.motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        this.motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        this.motor.setDirection(DcMotorSimple.Direction.FORWARD);
 
-        this.motorLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        this.motorRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        this.hoodServo.setDirection(Servo.Direction.FORWARD);
 
-        this.motorLeft.setDirection(DcMotorSimple.Direction.FORWARD);
-        this.motorRight.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        this.PIDFControllerLeft =
-            new PIDFLControllerMotor(motorLeft, SHOOTER_MAX_VELOCITY, SHOOTER_PID);
-        this.PIDFControllerRight =
-            new PIDFLControllerMotor(motorRight, SHOOTER_MAX_VELOCITY, SHOOTER_PID);
+        this.motorPIDController =
+            new PIDFLControllerMotor(motor, FLYWHEEL_MAX_VELOCITY, FLYWHEEL_PID);
     }
 
     @Override
     public void apply() {
-        motorLeft.setPower(PIDFControllerLeft.get(motorTargetVelocity));
-        motorRight.setPower(PIDFControllerRight.get(motorTargetVelocity));
-
+        motor.setPower(motorPIDController.get(motorTargetVelocity));
+        hoodServo.setPosition(hoodTargetPosition);
         TelemetryHandler.addData(
-            "Shooter Motor velocity/target", getAverageVelocity() + "/" + motorTargetVelocity
+            "Shooter motor velocity/target", velocity() + "/" + motorTargetVelocity
         );
-        TelemetryHandler.addData("Shooter MotorLeft velocity", motorLeft.getVelocity());
-        TelemetryHandler.addData("Shooter MotorRight velocity", motorRight.getVelocity());
+        TelemetryHandler.addData(
+            "Shooter hood position/target", hoodServo.getPosition() + "/" + hoodTargetPosition
+        );
     }
 
-    /// Toggle shooter motor on/off.
     public void toggle() { isRunning = !isRunning; }
 
-    /// Turn shooter motor on.
     public void on() { isRunning = true; }
 
-    /// Turn shooter motor off.
     public void off() { isRunning = false; }
 
-    public void setTargetVelocity(double value) { motorTargetVelocity = value; }
+    protected void setTargetVelocity(double value) { motorTargetVelocity = value; }
+    protected void setHoodTargetPosition(double value) {
+        if (value < HOOD_MIN_POSITION || value > HOOD_MAX_POSITION)
+            throw new IllegalArgumentException("Illegal hood position: " + value);
+
+        hoodTargetPosition = value;
+    }
 
     /// Update motor power using a value interpolated from target distance.
     public void update(Distance horizontalShootingDistance) {
         if (isRunning) {
             setTargetVelocity(computeVelocity(horizontalShootingDistance));
+            setHoodTargetPosition(0.1);
         } else {
             setTargetVelocity(0);
+            setHoodTargetPosition(0.0);
         }
     }
 
-    /**
-     * @return Average velocity between the two motors
-     */
-    protected double getAverageVelocity() {
-        double velocityLeft = motorLeft.getVelocity();
-        double velocityRight = motorRight.getVelocity();
-        return Math.abs(velocityLeft + velocityRight) / 2;
-    }
+    protected double velocity() { return motor.getVelocity(); }
 
-    /**
-     * @return Whether the shooter is ready to shoot (at target velocity and
-     *     stable)
-     */
+    protected double targetVelocity() { return motorTargetVelocity; }
+    protected double targetHoodPosition() { return hoodTargetPosition; }
+
     public boolean isReadyToShoot() {
-        return PIDFControllerLeft.isStableAtTarget(ERROR_MARGIN, STABLE_THRESHOLD)
-            && PIDFControllerRight.isStableAtTarget(ERROR_MARGIN, STABLE_THRESHOLD)
-            && getAverageVelocity() >= 100; // Not stopped
+        double hoodError = Math.abs(hoodServo.getPosition() - hoodTargetPosition);
+        return motorPIDController.isStableAtTarget(FLYWHEEL_ERROR_MARGIN, FLYWHEEL_STABLE_THRESHOLD)
+            && Math.abs(velocity()) >= 100 // Not stopped
+            && hoodError <= HOOD_ERROR_MARGIN;
     }
 
     protected double computeVelocity(Distance horizontalShootingDistance) {
@@ -117,12 +114,8 @@ public class Shooter implements RobotActuatorModule {
     public HashMap<String, Object> getCurrentState() {
         HashMap<String, Object> state = new HashMap<>();
         state.put("motorTargetVelocity", motorTargetVelocity);
+        state.put("hoodTargetPosition", hoodTargetPosition);
         state.put("isRunning", isRunning);
         return state;
-    }
-
-    @Override
-    public void setState(HashMap<String, String> state) {
-        throw new UnsupportedOperationException("Shooter module does not support state loading.");
     }
 }

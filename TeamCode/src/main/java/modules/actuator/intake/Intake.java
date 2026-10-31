@@ -8,42 +8,46 @@ import modules.actuator.RobotActuatorModule;
 import utils.TelemetryHandler;
 
 public class Intake implements RobotActuatorModule {
-    private final DcMotor motor;
-    private MotorState motorState;
+    private final DcMotor motor1;
+    private final DcMotor motor2;
+    private MotorState state;
 
-    public Intake(DcMotor motor) { this.motor = motor; }
+    public Intake(DcMotor motor1, DcMotor motor2) {
+        this.motor1 = motor1;
+        this.motor2 = motor2;
+    }
 
     @Override
     public void apply() {
         double motorTargetPower = 0;
-        if (motorState.isOn()) {
+        if (state.isOn()) {
             motorTargetPower = INTAKE_MOVING_SPEED;
-        } else if (motorState.isReversed()) {
+        } else if (state.isReversed()) {
             motorTargetPower = -INTAKE_MOVING_SPEED;
-            off();
         }
 
         TelemetryHandler.addData("Intake Motor Power", motorTargetPower);
-        motor.setPower(motorTargetPower);
+        motor1.setPower(motorTargetPower);
+        motor2.setPower(motorTargetPower);
     }
 
     /// Turn intake motor off.
-    public void off() { motorState = MotorState.OFF; }
+    public void off() { state = MotorState.OFF; }
 
     /// Turn intake motor on.
-    public void on() { motorState = MotorState.ON; }
+    public void on() { state = MotorState.ON; }
 
-    /// Clears the intake by running it in reverse for one cycle.
-    public void reverse() { motorState = MotorState.REVERSED; }
+    /// Clears the intake by running it in reverse.
+    public void reverse() { state = MotorState.REVERSED; }
 
     /// Toggle intake motor on/off.
     public void toggle() {
-        if (motorState.isOn())
+        if (state.isOn())
             off();
-        else if (motorState.isOff())
+        else if (state.isOff())
             on();
         else
-            throw new RuntimeException("Tried toggling an invalid motor state: " + motorState);
+            throw new RuntimeException("Tried toggling an invalid motor state: " + state);
     }
 
     /// Set intake motor state.
@@ -57,12 +61,7 @@ public class Intake implements RobotActuatorModule {
     @Override
     public HashMap<String, Object> getCurrentState() {
         HashMap<String, Object> state = new HashMap<>();
-        state.put("Intake State", motorState);
+        state.put("Intake State", this.state);
         return state;
-    }
-
-    @Override
-    public void setState(HashMap<String, String> state) {
-        throw new UnsupportedOperationException("Intake module does not support state loading.");
     }
 }

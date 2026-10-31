@@ -4,18 +4,18 @@ import com.pedropathing.follower.Follower;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import config.HardwareConfig;
 import java.util.List;
 import logic.Movement;
-import logic.ShotHandler;
+import logic.ShotCalculator;
 import logic.Team;
+import logic.TransferHandler;
 import logic.position.RobotPosition;
 import modules.actuator.intake.Intake;
 import modules.actuator.shooter.Shooter;
 import modules.actuator.transfer.Transfer;
-import modules.actuator.transfer.TransferHandler;
 import modules.sensor.BatteryMonitor;
 import modules.sensor.GamepadController;
 import pedropathing.Constants;
@@ -32,7 +32,7 @@ public abstract class OpModeBase extends LinearOpMode {
 
     protected RobotPosition robotPosition;
     protected Follower follower;
-    protected ShotHandler shotHandler;
+    protected ShotCalculator shotCalculator;
 
     protected Movement move;
 
@@ -66,7 +66,7 @@ public abstract class OpModeBase extends LinearOpMode {
         robotPosition =
             RobotPosition.getInstance(hardwareMap, team, useFarStartPose, shouldResetPose);
         follower = Constants.createFollower(hardwareMap, robotPosition);
-        shotHandler = new ShotHandler(robotPosition, team);
+        shotCalculator = new ShotCalculator(robotPosition, team);
 
         batteryMonitor = new BatteryMonitor(hardwareMap);
 
@@ -76,16 +76,9 @@ public abstract class OpModeBase extends LinearOpMode {
         DcMotorEx moveFR = hardwareMap.get(DcMotorEx.class, HardwareConfig.FRONT_RIGHT_MOTOR_ID);
         DcMotorEx moveBL = hardwareMap.get(DcMotorEx.class, HardwareConfig.BACK_LEFT_MOTOR_ID);
         DcMotorEx moveBR = hardwareMap.get(DcMotorEx.class, HardwareConfig.BACK_RIGHT_MOTOR_ID);
-
-        DcMotorEx shooterMotor = hardwareMap.get(DcMotorEx.class, HardwareConfig.SHOOTER_MOTOR_ID);
-        DcMotorEx transferMotor =
-            hardwareMap.get(DcMotorEx.class, HardwareConfig.TRANSFER_MOTOR_ID);
-
-        DcMotorEx intakeMotor = hardwareMap.get(DcMotorEx.class, HardwareConfig.INTAKE_MOTOR_1_ID);
-
         move = new Movement(
             robotPosition,
-            shotHandler,
+            shotCalculator,
             team,
             moveFL,
             moveFR,
@@ -94,12 +87,18 @@ public abstract class OpModeBase extends LinearOpMode {
             Movement.MovementMode.FIELD_CENTRIC
         );
 
-        shooter = new Shooter(shooterMotor, shooterMotor);
+        DcMotorEx intakeMotor1 = hardwareMap.get(DcMotorEx.class, HardwareConfig.INTAKE_MOTOR_1_ID);
+        DcMotorEx intakeMotor2 = hardwareMap.get(DcMotorEx.class, HardwareConfig.INTAKE_MOTOR_2_ID);
+        intake = new Intake(intakeMotor1, intakeMotor2);
 
-        Transfer transfer = new Transfer(transferMotor, DcMotorSimple.Direction.REVERSE);
+        DcMotorEx transferMotor =
+            hardwareMap.get(DcMotorEx.class, HardwareConfig.TRANSFER_MOTOR_ID);
+        Transfer transfer = new Transfer(transferMotor);
         this.transfer = new TransferHandler(transfer);
 
-        intake = new Intake(intakeMotor);
+        DcMotorEx shooterMotor = hardwareMap.get(DcMotorEx.class, HardwareConfig.SHOOTER_MOTOR_ID);
+        Servo hoodServo = hardwareMap.get(Servo.class, HardwareConfig.SHOOTER_HOOD_SERVO_ID);
+        shooter = new Shooter(shooterMotor, hoodServo);
     }
 
     protected void runStart() {
@@ -120,14 +119,14 @@ public abstract class OpModeBase extends LinearOpMode {
 
         robotPosition.updatePose();
 
-        shotHandler.update();
-        shooter.update(shotHandler.getShotMagnitude());
+        shotCalculator.update();
+        shooter.update(shotCalculator.getShotMagnitude());
 
         System.out.println("Robot Pose: " + robotPosition.getPose().toString());
         TelemetryHandler.addData(
-            "Shooting target distance", shotHandler.getShotMagnitude().toString()
+            "Shooting target distance", shotCalculator.getShotMagnitude().toString()
         );
-        TelemetryHandler.addData("Shooting target angle", shotHandler.getShotAngle().toString());
+        TelemetryHandler.addData("Shooting target angle", shotCalculator.getShotAngle().toString());
     }
 
     protected void log() {

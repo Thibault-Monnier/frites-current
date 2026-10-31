@@ -185,10 +185,7 @@ public class AutoOpModeFar extends OpModeBase {
         }
     }
 
-    private void intake() {
-        transfer.reverse();
-        intake.on();
-    }
+    private void intake() { intake.on(); }
 
     public static class Paths {
         public PathChain MoveToShoot1, AlignCollectHumanPlayer, CollectHumanPlayer,

@@ -14,7 +14,7 @@ import utils.geometry.Position2D;
 import utils.geometry.Vector2D;
 import utils.geometry.Velocity2D;
 
-public class ShotHandler {
+public class ShotCalculator {
     private final RobotPosition robotPosition;
 
     private final Team team;
@@ -23,7 +23,7 @@ public class ShotHandler {
 
     boolean usingMovingShot = true;
 
-    public ShotHandler(RobotPosition robotPosition, Team team) {
+    public ShotCalculator(RobotPosition robotPosition, Team team) {
         this.robotPosition = robotPosition;
         this.team = team;
     }

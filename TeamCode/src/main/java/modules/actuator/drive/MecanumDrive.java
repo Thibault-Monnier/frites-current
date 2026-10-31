@@ -11,7 +11,6 @@ import static config.MovementConfig.FRONT_RIGHT_DIRECTION;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import java.util.HashMap;
-import java.util.Objects;
 import modules.actuator.RobotActuatorModule;
 import utils.TelemetryHandler;
 
@@ -110,13 +109,5 @@ public class MecanumDrive implements RobotActuatorModule {
                 put("backRightPower", backRightPower);
             }
         };
-    }
-
-    @Override
-    public void setState(HashMap<String, String> state) {
-        frontLeftPower = Double.parseDouble(Objects.requireNonNull(state.get("frontLeftPower")));
-        frontRightPower = Double.parseDouble(Objects.requireNonNull(state.get("frontRightPower")));
-        backLeftPower = Double.parseDouble(Objects.requireNonNull(state.get("backLeftPower")));
-        backRightPower = Double.parseDouble(Objects.requireNonNull(state.get("backRightPower")));
     }
 }

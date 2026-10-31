@@ -7,8 +7,6 @@ public interface RobotActuatorModule {
 
     HashMap<String, Object> getCurrentState();
 
-    void setState(HashMap<String, String> state);
-
     enum MotorState {
         ON,
         REVERSED,

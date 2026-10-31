@@ -80,7 +80,7 @@ public class Movement implements RobotActuatorModule {
 
     public Movement(
         RobotPosition robotPosition,
-        ShotHandler shotHandler,
+        ShotCalculator shotCalculator,
         Team team,
         DcMotor FL,
         DcMotor FR,
@@ -88,7 +88,7 @@ public class Movement implements RobotActuatorModule {
         DcMotor BR,
         MovementMode movementMode
     ) {
-        this(new MatchContext(robotPosition, shotHandler, team), FL, FR, BL, BR, movementMode);
+        this(new MatchContext(robotPosition, shotCalculator, team), FL, FR, BL, BR, movementMode);
     }
 
     /// Creates a Movement instance without match context. Forces movement mode to ROBOT_CENTRIC.
@@ -325,7 +325,7 @@ public class Movement implements RobotActuatorModule {
 
     private RobotPosition robotPosition() { return requireMatchContext().robotPosition; }
 
-    private ShotHandler shotHandler() { return requireMatchContext().shotHandler; }
+    private ShotCalculator shotHandler() { return requireMatchContext().shotCalculator; }
 
     private Team team() { return requireMatchContext().team; }
 
@@ -429,11 +429,6 @@ public class Movement implements RobotActuatorModule {
         return mecanumDrive.getCurrentState();
     }
 
-    @Override
-    public void setState(HashMap<String, String> state) {
-        mecanumDrive.setState(state);
-    }
-
     public enum MovementMode { ROBOT_CENTRIC, FIELD_CENTRIC }
 
     public enum Macro { MOVE_TO_SHOOT, MOVE_TO_PARK, MOVE_TO_RAMP, MOVE_TO_RAMP_DEFENSE, NONE }
@@ -459,10 +454,13 @@ public class Movement implements RobotActuatorModule {
         }
     }
 
-    private record MatchContext(RobotPosition robotPosition, ShotHandler shotHandler, Team team) {
-        private MatchContext(RobotPosition robotPosition, ShotHandler shotHandler, Team team) {
+    private record
+        MatchContext(RobotPosition robotPosition, ShotCalculator shotCalculator, Team team) {
+        private MatchContext(
+            RobotPosition robotPosition, ShotCalculator shotCalculator, Team team
+        ) {
             this.robotPosition = Objects.requireNonNull(robotPosition);
-            this.shotHandler = Objects.requireNonNull(shotHandler);
+            this.shotCalculator = Objects.requireNonNull(shotCalculator);
             this.team = Objects.requireNonNull(team);
         }
     }

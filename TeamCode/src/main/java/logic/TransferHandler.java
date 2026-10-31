@@ -1,26 +1,25 @@
-package modules.actuator.transfer;
+package logic;
 
-import static config.ShooterConfig.SHOOT_BALLS_AMOUNT;
-import static config.ShooterConfig.SHOOT_DELAY;
+import static config.TransferConfig.SHOOT_BALLS_AMOUNT;
+import static config.TransferConfig.SHOOT_DELAY;
 
 import java.util.HashMap;
 import modules.actuator.RobotActuatorModule;
+import modules.actuator.transfer.Transfer;
 import utils.TimeHelpers;
 
 public class TransferHandler implements RobotActuatorModule {
-    private final Transfer buffer;
+    private final Transfer transfer;
 
     private ShootingStage shootingStage = ShootingStage.IDLE;
     private double lastRoundStartTime = 0.0;
     private int shotsFired = 0;
 
-    public TransferHandler(Transfer buffer) { this.buffer = buffer; }
+    public TransferHandler(Transfer transfer) { this.transfer = transfer; }
 
-    public void on() { buffer.on(); }
+    public void on() { transfer.on(); }
 
-    public void off() { buffer.off(); }
-
-    public void reverse() { buffer.reverse(); }
+    public void off() { transfer.off(); }
 
     /// Continues current round or shoots next round if done.
     /// Returns true if the shot is finished, false otherwise.
@@ -30,10 +29,10 @@ public class TransferHandler implements RobotActuatorModule {
                 shootingStage = ShootingStage.SHOOTING;
             // fall through
             case SHOOTING:
+                on();
+
                 if (isRoundFinished())
                     nextRound();
-
-                on();
                 return shotsFired > SHOOT_BALLS_AMOUNT;
 
             default:
@@ -53,7 +52,7 @@ public class TransferHandler implements RobotActuatorModule {
         return time - lastRoundStartTime >= SHOOT_DELAY;
     }
 
-    /// Resets the shooting stage and turns both buffers off.
+    /// Resets the shooting stage and the transfer off.
     public void shootReset() {
         lastRoundStartTime = 0.0;
         shootingStage = ShootingStage.IDLE;
@@ -68,23 +67,16 @@ public class TransferHandler implements RobotActuatorModule {
 
     @Override
     public void apply() {
-        buffer.apply();
+        transfer.apply();
     }
 
     @Override
     public HashMap<String, Object> getCurrentState() {
         HashMap<String, Object> state = new HashMap<>();
-        state.put("buffer", buffer.getCurrentState());
+        state.put("transfer", transfer.getCurrentState());
         state.put("shootingStage", shootingStage.name());
         state.put("lastRoundStartTime", lastRoundStartTime);
         return state;
-    }
-
-    @Override
-    public void setState(HashMap<String, String> state) {
-        throw new UnsupportedOperationException(
-            "Shooter buffers handler does not support state loading."
-        );
     }
 
     enum ShootingStage { IDLE, SHOOTING }

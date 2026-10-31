@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import config.HardwareConfig;
 import logic.Movement;
-import logic.ShotHandler;
+import logic.ShotCalculator;
 import logic.Team;
 import logic.position.RobotPosition;
 import opmodes.GroupConstants;
@@ -18,7 +18,7 @@ import utils.TelemetryHandler;
 public class DrivetrainOpMode extends LinearOpMode {
     private RobotPosition robotPosition;
 
-    private ShotHandler shotHandler;
+    private ShotCalculator shotCalculator;
     private Movement move;
 
     @Override
@@ -36,7 +36,7 @@ public class DrivetrainOpMode extends LinearOpMode {
         TelemetryHandler.instantiate(telemetry);
 
         robotPosition = RobotPosition.getInstance(hardwareMap, Team.RED, true, true);
-        shotHandler = new ShotHandler(robotPosition, Team.RED);
+        shotCalculator = new ShotCalculator(robotPosition, Team.RED);
 
         DcMotor moveFL = hardwareMap.get(DcMotor.class, HardwareConfig.FRONT_LEFT_MOTOR_ID);
         DcMotor moveFR = hardwareMap.get(DcMotor.class, HardwareConfig.FRONT_RIGHT_MOTOR_ID);
@@ -45,7 +45,7 @@ public class DrivetrainOpMode extends LinearOpMode {
 
         move = new Movement(
             robotPosition,
-            shotHandler,
+            shotCalculator,
             Team.RED,
             moveFL,
             moveFR,
@@ -57,7 +57,7 @@ public class DrivetrainOpMode extends LinearOpMode {
 
     private void runStep() {
         robotPosition.updatePose();
-        shotHandler.update();
+        shotCalculator.update();
         move.reloadPIDFCoefficients();
         TelemetryHandler.update();
 

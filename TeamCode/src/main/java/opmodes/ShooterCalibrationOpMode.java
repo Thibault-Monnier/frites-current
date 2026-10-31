@@ -1,6 +1,7 @@
 package opmodes;
 
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.Servo;
 import config.HardwareConfig;
 import config.ManualOpModeMappings;
 import logic.Team;
@@ -42,7 +43,7 @@ public class ShooterCalibrationOpMode extends OpModeBase {
         super.initialize();
         shooter = new ShooterCalibrator(
             hardwareMap.get(DcMotorEx.class, HardwareConfig.SHOOTER_MOTOR_ID),
-            hardwareMap.get(DcMotorEx.class, HardwareConfig.SHOOTER_MOTOR_ID)
+            hardwareMap.get(Servo.class, HardwareConfig.SHOOTER_HOOD_SERVO_ID)
         );
     }
 
@@ -107,7 +108,6 @@ public class ShooterCalibrationOpMode extends OpModeBase {
 
         if (gamepadController.isPressing(GamepadController.Button.TRIGGER_LEFT)) {
             intake.on();
-            transfer.reverse();
         } else {
             intake.off();
         }

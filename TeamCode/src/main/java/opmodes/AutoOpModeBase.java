@@ -138,10 +138,7 @@ public abstract class AutoOpModeBase extends OpModeBase {
         };
     }
 
-    protected void intake() {
-        transfer.reverse();
-        intake.on();
-    }
+    protected void intake() { intake.on(); }
 
     protected abstract static class PathsBase {
         private final Follower follower;
