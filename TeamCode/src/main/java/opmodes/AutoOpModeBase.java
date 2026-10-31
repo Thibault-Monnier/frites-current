@@ -73,7 +73,7 @@ public abstract class AutoOpModeBase extends OpModeBase {
     protected void update() {
         super.update();
         intake.off();
-        transfer.off();
+        shotHandler.off();
     }
 
     @Override
@@ -126,13 +126,13 @@ public abstract class AutoOpModeBase extends OpModeBase {
             intake.on();
 
             if (!shooter.isReadyToShoot()) {
-                transfer.shootDontContinue();
+                shotHandler.shootDontContinue();
                 return false;
             }
 
-            boolean done = transfer.shootContinue();
+            boolean done = shotHandler.shootContinue();
             if (done)
-                transfer.shootReset();
+                shotHandler.shootReset();
 
             return done;
         };

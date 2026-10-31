@@ -58,12 +58,16 @@ public class PlayingField {
         return switchColor(FieldConfig.RED_AUTO_MODE_LEAVE_POSE, color);
     }
 
-    public static Position2D shootingPosition(Team color) {
-        return switchColor(FieldConfig.RED_SHOOT_POS, color);
+    public static Position2D shootingPositionLeft(Team color) {
+        return switchColor(FieldConfig.RED_SHOOT_POS_LEFT, color);
+    }
+
+    public static Position2D shootingPositionRight(Team color) {
+        return switchColor(FieldConfig.RED_SHOOT_POS_RIGHT, color);
     }
 
     public static Pose2D parkingPose(Team color) {
-        return switchColor(FieldConfig.RED_PARKING_POSE, color);
+        return switchColor(FieldConfig.RED_PARK_POSE, color);
     }
 
     public static Pose2D rampPose(Team color) {

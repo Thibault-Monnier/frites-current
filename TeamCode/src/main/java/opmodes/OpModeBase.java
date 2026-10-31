@@ -37,7 +37,7 @@ public abstract class OpModeBase extends LinearOpMode {
     protected Movement move;
 
     protected Shooter shooter;
-    protected ShotHandler transfer;
+    protected ShotHandler shotHandler;
 
     protected Intake intake;
 
@@ -94,7 +94,7 @@ public abstract class OpModeBase extends LinearOpMode {
         DcMotorEx transferMotor =
             hardwareMap.get(DcMotorEx.class, HardwareConfig.TRANSFER_MOTOR_ID);
         Transfer transfer = new Transfer(transferMotor);
-        this.transfer = new ShotHandler(transfer);
+        this.shotHandler = new ShotHandler(transfer);
 
         DcMotorEx shooterMotor = hardwareMap.get(DcMotorEx.class, HardwareConfig.SHOOTER_MOTOR_ID);
         Servo hoodServo = hardwareMap.get(Servo.class, HardwareConfig.SHOOTER_HOOD_SERVO_ID);
@@ -137,7 +137,7 @@ public abstract class OpModeBase extends LinearOpMode {
         // Log state
         System.out.println("------- Robot State Log -------");
         System.out.println("Shooter State: " + shooter.getCurrentState().toString());
-        System.out.println("Transfer State: " + transfer.getCurrentState().toString());
+        System.out.println("Transfer State: " + shotHandler.getCurrentState().toString());
         System.out.println("Intake State: " + intake.getCurrentState().toString());
         System.out.println("Move State: " + move.getCurrentState().toString());
         System.out.println("Robot Position: " + robotPosition.getPose().toString());
@@ -151,9 +151,8 @@ public abstract class OpModeBase extends LinearOpMode {
             move.apply();
 
         intake.apply();
-
+        shotHandler.apply();
         shooter.apply();
-        transfer.apply();
     }
 
     protected void apply() { apply(false); }

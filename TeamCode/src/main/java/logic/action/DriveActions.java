@@ -24,7 +24,7 @@ public class DriveActions {
 
     public Action driveToGoalShootPosition() {
         return () -> {
-            Position2D goalShootPosition = PlayingField.shootingPosition(team);
+            Position2D goalShootPosition = PlayingField.shootingPositionLeft(team);
             return drive.translateToPosition(goalShootPosition)
                 && drive.turnTowards(PlayingField.goalPos(team));
         };

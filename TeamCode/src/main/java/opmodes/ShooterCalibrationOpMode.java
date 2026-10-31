@@ -76,15 +76,15 @@ public class ShooterCalibrationOpMode extends OpModeBase {
 
         if ((isPressActive(ManualOpModeMappings.SHOOT) && shooter.isReadyToShoot())
             || isPressActive(ManualOpModeMappings.FORCE_SHOOT)) {
-            transfer.shootContinue();
+            shotHandler.shootContinue();
             intake.on();
         } else {
-            transfer.shootDontContinue();
+            shotHandler.shootDontContinue();
 
             if (isPressActive(ManualOpModeMappings.SHOOT))
                 gamepadController.rumble(50); // Shooter isn't ready
             else
-                transfer.shootReset();
+                shotHandler.shootReset();
         }
 
         if (gamepadController.isPressed(GamepadController.Button.X))

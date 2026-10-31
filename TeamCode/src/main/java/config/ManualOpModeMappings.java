@@ -21,6 +21,8 @@ public class ManualOpModeMappings {
         new ButtonMapping(Button.BUMPER_LEFT, PressType.DOUBLE_PRESS);
     public static ButtonMapping DRIVE_MODE_TOGGLE =
         new ButtonMapping(Button.LEFT_STICK, PressType.DOUBLE_PRESS);
+    public static ButtonMapping SUPER_SLOW_MODE_TOGGLE =
+        new ButtonMapping(Button.B, PressType.DOUBLE_PRESS);
 
     // Intake and transfer
     public static ButtonMapping INTAKE_ON =
@@ -37,18 +39,14 @@ public class ManualOpModeMappings {
         new ButtonMapping(Button.BUMPER_RIGHT, PressType.CONTINUOUS_PRESS);
 
     // Macros
-    public static ButtonMapping MOVE_TO_SHOOTING_SPOT =
-        new ButtonMapping(Button.Y, PressType.SINGLE_PRESS);
-    public static ButtonMapping MOVE_TO_PARKING_SPOT =
-        new ButtonMapping(Button.B, PressType.DOUBLE_PRESS);
-    public static ButtonMapping MOVE_TO_RAMP_SPOT =
+    public static ButtonMapping MOVE_TO_LEFT_SHOOTING_SPOT =
         new ButtonMapping(Button.X, PressType.SINGLE_PRESS);
-    public static ButtonMapping MOVE_TO_RAMP_DEFENSE_SPOT =
-        new ButtonMapping(Button.A, PressType.SINGLE_PRESS);
+    public static ButtonMapping MOVE_TO_RIGHT_SHOOTING_SPOT =
+        new ButtonMapping(Button.B, PressType.SINGLE_PRESS);
+    public static ButtonMapping MOVE_TO_PARKING_SPOT =
+        new ButtonMapping(Button.Y, PressType.DOUBLE_PRESS);
 
-    // Misc
-    public static ButtonMapping SUPER_SLOW_MODE_TOGGLE =
-        new ButtonMapping(Button.B, PressType.DOUBLE_PRESS);
+    // Positioning
     public static ButtonMapping RESET_ROBOT_POSE =
-        new ButtonMapping(Button.DPAD_UP, PressType.LONG_PRESS);
+        new ButtonMapping(Button.DPAD_UP, PressType.DOUBLE_PRESS);
 }

@@ -28,6 +28,8 @@ public class Intake implements RobotActuatorModule {
         TelemetryHandler.addData("Intake Motor Power", motorTargetPower);
         motor1.setPower(motorTargetPower);
         motor2.setPower(motorTargetPower);
+
+        off();
     }
 
     /// Turn intake motor off.

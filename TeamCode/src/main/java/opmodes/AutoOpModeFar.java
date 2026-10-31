@@ -142,7 +142,7 @@ public class AutoOpModeFar extends OpModeBase {
                 break;
             case DONE:
                 intake.off();
-                transfer.off();
+                shotHandler.off();
                 break;
         }
     }
@@ -170,10 +170,10 @@ public class AutoOpModeFar extends OpModeBase {
 
         intake.on();
 
-        boolean stillShooting = transfer.shootContinue();
+        boolean stillShooting = shotHandler.shootContinue();
 
         if (!stillShooting) {
-            transfer.shootReset();
+            shotHandler.shootReset();
             nbShots++;
 
             if (nbShots == 1 || nbShots == 2 || nbShots == 3)

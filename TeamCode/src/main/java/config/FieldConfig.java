@@ -28,9 +28,11 @@ public class FieldConfig {
     public static Pose2D RED_AUTO_MODE_LEAVE_POSE =
         new Pose2D(TILE_SIZE, TILE_SIZE, Angle.fromDegrees(90));
 
-    public static Position2D RED_SHOOT_POS =
+    public static Position2D RED_SHOOT_POS_LEFT =
         new Position2D(TILE_SIZE.halve().negate(), TILE_SIZE.halve());
-    public static Pose2D RED_PARKING_POSE = new Pose2D(
+    public static Position2D RED_SHOOT_POS_RIGHT =
+        new Position2D(TILE_SIZE.halve().negate(), TILE_SIZE.halve());
+    public static Pose2D RED_PARK_POSE = new Pose2D(
         TILE_SIZE.multiply(2).subtract(HardwareConfig.ROBOT_SIZE.halve()),
         TILE_SIZE.negate().subtract(HardwareConfig.ROBOT_SIZE.halve()),
         Angle.fromDegrees(90)

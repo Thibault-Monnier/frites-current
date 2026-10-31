@@ -53,6 +53,26 @@ public class ManualOpMode extends OpModeBase {
     }
 
     private void executeActions() {
+        if (isPressActive(ManualOpModeMappings.RESET_ROBOT_POSE))
+            robotPosition.resetPose();
+
+        handleMovement();
+        handleMacros();
+
+        handleIntake();
+
+        // After intake handling: the driver should never be allowed to override the shooting
+        // behavior, to ensure consistency.
+        handleShooting();
+
+        // At the very end to ensure it uses the latest information, after modifications have
+        // occurred.
+        handleDriverIndicators();
+    }
+
+    private void handleMovement() {
+        if (isPressActive(ManualOpModeMappings.SUPER_SLOW_MODE_TOGGLE))
+            move.toggleSuperSlow();
         if (isPressActive(ManualOpModeMappings.DRIVE_MODE_TOGGLE))
             move.toggleMovementMode();
         if (isPressActive(ManualOpModeMappings.LOCK_TOWARDS_SHOOT_TOGGLE))
@@ -66,31 +86,26 @@ public class ManualOpMode extends OpModeBase {
             move.turnTowardsHeading(shotCalculator.getShotAngle());
         else
             move.rotate(gamepadController.gamepad, isPressActive(ManualOpModeMappings.SLOW_TURN));
+    }
 
-        if (isPressActive(ManualOpModeMappings.MOVE_TO_SHOOTING_SPOT))
-            move.initMacro(Macro.MOVE_TO_SHOOT);
-        else if (isPressActive(ManualOpModeMappings.MOVE_TO_RAMP_SPOT))
-            move.initMacro(Macro.MOVE_TO_RAMP);
-        else if (isPressActive(ManualOpModeMappings.MOVE_TO_RAMP_DEFENSE_SPOT))
-            move.initMacro(Macro.MOVE_TO_RAMP_DEFENSE);
+    private void handleMacros() {
+        if (isPressActive(ManualOpModeMappings.MOVE_TO_LEFT_SHOOTING_SPOT))
+            move.initMacro(Macro.MOVE_TO_SHOOT_LEFT);
+        else if (isPressActive(ManualOpModeMappings.MOVE_TO_RIGHT_SHOOTING_SPOT))
+            move.initMacro(Macro.MOVE_TO_SHOOT_RIGHT);
         else if (isPressActive(ManualOpModeMappings.MOVE_TO_PARKING_SPOT)) {
             move.initMacro(Macro.MOVE_TO_PARK);
             shooter.off();
         }
+
         if (move.isMoving())
             move.stopMacro();
-
         move.executeActiveMacro();
+    }
 
+    private void handleShooting() {
         if (isPressActive(ManualOpModeMappings.SHOOTER_ON_OFF_TOGGLE))
             shooter.toggle();
-
-        if (shooter.isReadyToShoot())
-            gamepadController.ledGreen(Gamepad.LED_DURATION_CONTINUOUS);
-        else
-            gamepadController.ledRed(Gamepad.LED_DURATION_CONTINUOUS);
-
-        intake.off();
 
         boolean allowedToShoot = true;
         if (isChildMode) {
@@ -105,29 +120,30 @@ public class ManualOpMode extends OpModeBase {
         if (allowedToShoot
             && ((isPressActive(ManualOpModeMappings.SHOOT) && shooter.isReadyToShoot())
                 || (isPressActive(ManualOpModeMappings.FORCE_SHOOT) && !isChildMode))) {
-            transfer.shootContinue();
+            shotHandler.shootContinue();
             intake.on();
         } else {
-            transfer.shootDontContinue();
+            shotHandler.shootDontContinue();
 
             if (isPressActive(ManualOpModeMappings.SHOOT))
                 gamepadController.rumble(50); // Shooter isn't ready
             else
-                transfer.shootReset();
+                shotHandler.shootReset();
         }
+    }
 
-        if (isPressActive(ManualOpModeMappings.INTAKE_ON)) {
+    private void handleIntake() {
+        if (isPressActive(ManualOpModeMappings.INTAKE_ON))
             intake.on();
-        }
-
-        if (isPressActive(ManualOpModeMappings.INTAKE_REVERSE)) {
+        if (isPressActive(ManualOpModeMappings.INTAKE_REVERSE))
             intake.reverse();
-        }
+    }
 
-        if (isPressActive(ManualOpModeMappings.SUPER_SLOW_MODE_TOGGLE))
-            move.toggleSuperSlow();
-        if (isPressActive(ManualOpModeMappings.RESET_ROBOT_POSE))
-            robotPosition.resetPose();
+    private void handleDriverIndicators() {
+        if (shooter.isReadyToShoot())
+            gamepadController.ledGreen(Gamepad.LED_DURATION_CONTINUOUS);
+        else
+            gamepadController.ledRed(Gamepad.LED_DURATION_CONTINUOUS);
     }
 
     /** Returns true if the button mapping is active based on its press type. */

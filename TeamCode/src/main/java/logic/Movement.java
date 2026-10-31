@@ -164,8 +164,13 @@ public class Movement implements RobotActuatorModule {
         Angle targetHeading;
 
         switch (activeMacro) {
-            case MOVE_TO_SHOOT: {
-                targetPos = PlayingField.shootingPosition(team());
+            case MOVE_TO_SHOOT_LEFT: {
+                targetPos = PlayingField.shootingPositionLeft(team());
+                targetHeading = shotHandler().getShotAngle();
+                break;
+            }
+            case MOVE_TO_SHOOT_RIGHT: {
+                targetPos = PlayingField.shootingPositionRight(team());
                 targetHeading = shotHandler().getShotAngle();
                 break;
             }
@@ -174,18 +179,6 @@ public class Movement implements RobotActuatorModule {
                 targetPos = targetPose.getPosition();
                 targetHeading = targetPose.getHeading();
                 isSuperSlow = true;
-                break;
-            }
-            case MOVE_TO_RAMP: {
-                Pose2D targetPose = PlayingField.rampPose(team());
-                targetPos = targetPose.getPosition();
-                targetHeading = targetPose.getHeading();
-                break;
-            }
-            case MOVE_TO_RAMP_DEFENSE: {
-                Pose2D targetPose = PlayingField.rampDefensePose(team());
-                targetPos = targetPose.getPosition();
-                targetHeading = targetPose.getHeading();
                 break;
             }
             default:
@@ -431,7 +424,7 @@ public class Movement implements RobotActuatorModule {
 
     public enum MovementMode { ROBOT_CENTRIC, FIELD_CENTRIC }
 
-    public enum Macro { MOVE_TO_SHOOT, MOVE_TO_PARK, MOVE_TO_RAMP, MOVE_TO_RAMP_DEFENSE, NONE }
+    public enum Macro { MOVE_TO_SHOOT_LEFT, MOVE_TO_SHOOT_RIGHT, MOVE_TO_PARK, NONE }
 
     private static class Translation {
         public double forward;
