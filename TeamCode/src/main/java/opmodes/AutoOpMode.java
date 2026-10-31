@@ -22,7 +22,7 @@ public class AutoOpMode extends AutoOpModeBase {
         paths = new Paths(follower, team.isBlue());
 
         sequence = new ActionSequence(
-            startCannon(),
+            startShooter(),
             startToShoot(),
             middleRowCycle(),
             rampCycle(),

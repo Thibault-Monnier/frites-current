@@ -2,7 +2,9 @@ package config;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.bylazar.configurables.annotations.Configurable;
-import modules.sensor.GamepadController.*;
+import modules.sensor.GamepadController.Button;
+import modules.sensor.GamepadController.ButtonMapping;
+import modules.sensor.GamepadController.PressType;
 
 @Config
 @Configurable
@@ -26,8 +28,8 @@ public class ManualOpModeMappings {
     public static ButtonMapping INTAKE_AND_TRANSFER_REVERSE =
         new ButtonMapping(Button.DPAD_DOWN, PressType.CONTINUOUS_PRESS);
 
-    // Cannon and shooting
-    public static ButtonMapping CANNON_ON_OFF_TOGGLE =
+    // Shooter and shooting
+    public static ButtonMapping SHOOTER_ON_OFF_TOGGLE =
         new ButtonMapping(Button.DPAD_LEFT, PressType.SINGLE_PRESS);
     public static ButtonMapping SHOOT =
         new ButtonMapping(Button.TRIGGER_RIGHT, PressType.CONTINUOUS_PRESS);

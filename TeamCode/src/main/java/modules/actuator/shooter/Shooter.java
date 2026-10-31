@@ -1,13 +1,13 @@
-package modules.actuator.cannon;
+package modules.actuator.shooter;
 
-import static config.CannonConfig.CANNON_PID;
-import static config.CannonConfig.ERROR_MARGIN;
-import static config.CannonConfig.STABLE_THRESHOLD;
+import static config.ShooterConfig.ERROR_MARGIN;
+import static config.ShooterConfig.SHOOTER_MAX_VELOCITY;
+import static config.ShooterConfig.SHOOTER_PID;
+import static config.ShooterConfig.STABLE_THRESHOLD;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import config.HardwareConfig;
 import java.util.HashMap;
 import modules.actuator.RobotActuatorModule;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
@@ -15,7 +15,7 @@ import utils.TelemetryHandler;
 import utils.geometry.Distance;
 import utils.pidfl.PIDFLControllerMotor;
 
-public class Cannon implements RobotActuatorModule {
+public class Shooter implements RobotActuatorModule {
     private final DcMotorEx motorLeft;
     private final DcMotorEx motorRight;
 
@@ -26,7 +26,7 @@ public class Cannon implements RobotActuatorModule {
 
     private boolean isRunning = false;
 
-    public Cannon(DcMotorEx motorLeft, DcMotorEx motorRight) {
+    public Shooter(DcMotorEx motorLeft, DcMotorEx motorRight) {
         this.motorLeft = motorLeft;
         this.motorRight = motorRight;
 
@@ -42,9 +42,9 @@ public class Cannon implements RobotActuatorModule {
         this.motorRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
         this.PIDFControllerLeft =
-            new PIDFLControllerMotor(motorLeft, HardwareConfig.SHOOTER_MAX_VELOCITY, CANNON_PID);
+            new PIDFLControllerMotor(motorLeft, SHOOTER_MAX_VELOCITY, SHOOTER_PID);
         this.PIDFControllerRight =
-            new PIDFLControllerMotor(motorRight, HardwareConfig.SHOOTER_MAX_VELOCITY, CANNON_PID);
+            new PIDFLControllerMotor(motorRight, SHOOTER_MAX_VELOCITY, SHOOTER_PID);
     }
 
     @Override
@@ -53,19 +53,19 @@ public class Cannon implements RobotActuatorModule {
         motorRight.setPower(PIDFControllerRight.get(motorTargetVelocity));
 
         TelemetryHandler.addData(
-            "Cannon Motor velocity/target", getAverageVelocity() + "/" + motorTargetVelocity
+            "Shooter Motor velocity/target", getAverageVelocity() + "/" + motorTargetVelocity
         );
-        TelemetryHandler.addData("Cannon MotorLeft velocity", motorLeft.getVelocity());
-        TelemetryHandler.addData("Cannon MotorRight velocity", motorRight.getVelocity());
+        TelemetryHandler.addData("Shooter MotorLeft velocity", motorLeft.getVelocity());
+        TelemetryHandler.addData("Shooter MotorRight velocity", motorRight.getVelocity());
     }
 
-    /// Toggle cannon motor on/off.
+    /// Toggle shooter motor on/off.
     public void toggle() { isRunning = !isRunning; }
 
-    /// Turn cannon motor on.
+    /// Turn shooter motor on.
     public void on() { isRunning = true; }
 
-    /// Turn cannon motor off.
+    /// Turn shooter motor off.
     public void off() { isRunning = false; }
 
     public void setTargetVelocity(double value) { motorTargetVelocity = value; }
@@ -89,7 +89,7 @@ public class Cannon implements RobotActuatorModule {
     }
 
     /**
-     * @return Whether the cannon is ready to shoot (at target velocity and
+     * @return Whether the shooter is ready to shoot (at target velocity and
      *     stable)
      */
     public boolean isReadyToShoot() {
@@ -123,6 +123,6 @@ public class Cannon implements RobotActuatorModule {
 
     @Override
     public void setState(HashMap<String, String> state) {
-        throw new UnsupportedOperationException("Cannon module does not support state loading.");
+        throw new UnsupportedOperationException("Shooter module does not support state loading.");
     }
 }

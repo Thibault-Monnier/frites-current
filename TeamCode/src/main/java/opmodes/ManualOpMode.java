@@ -75,17 +75,17 @@ public class ManualOpMode extends OpModeBase {
             move.initMacro(Macro.MOVE_TO_RAMP_DEFENSE);
         else if (isPressActive(ManualOpModeMappings.MOVE_TO_PARKING_SPOT)) {
             move.initMacro(Macro.MOVE_TO_PARK);
-            cannon.off();
+            shooter.off();
         }
         if (move.isMoving())
             move.stopMacro();
 
         move.executeActiveMacro();
 
-        if (isPressActive(ManualOpModeMappings.CANNON_ON_OFF_TOGGLE))
-            cannon.toggle();
+        if (isPressActive(ManualOpModeMappings.SHOOTER_ON_OFF_TOGGLE))
+            shooter.toggle();
 
-        if (cannon.isReadyToShoot())
+        if (shooter.isReadyToShoot())
             gamepadController.ledGreen(Gamepad.LED_DURATION_CONTINUOUS);
         else
             gamepadController.ledRed(Gamepad.LED_DURATION_CONTINUOUS);
@@ -101,29 +101,29 @@ public class ManualOpMode extends OpModeBase {
                 allowedToShoot = false;
         }
 
-        // Make sure the cannon reached its target velocity
+        // Make sure the shooter reached its target velocity
         if (allowedToShoot
-            && ((isPressActive(ManualOpModeMappings.SHOOT) && cannon.isReadyToShoot())
+            && ((isPressActive(ManualOpModeMappings.SHOOT) && shooter.isReadyToShoot())
                 || (isPressActive(ManualOpModeMappings.FORCE_SHOOT) && !isChildMode))) {
-            cannonBuffers.shootContinue();
+            transfer.shootContinue();
             intake.on();
         } else {
-            cannonBuffers.shootDontContinue();
+            transfer.shootDontContinue();
 
             if (isPressActive(ManualOpModeMappings.SHOOT))
-                gamepadController.rumble(50); // Cannon isn't ready
+                gamepadController.rumble(50); // Shooter isn't ready
             else
-                cannonBuffers.shootReset();
+                transfer.shootReset();
         }
 
         if (isPressActive(ManualOpModeMappings.INTAKE_ON)) {
             intake.on();
-            cannonBuffers.reverse();
+            transfer.reverse();
         }
 
         if (isPressActive(ManualOpModeMappings.INTAKE_AND_TRANSFER_REVERSE)) {
             intake.reverse();
-            cannonBuffers.reverse();
+            transfer.reverse();
         }
 
         if (isPressActive(ManualOpModeMappings.SUPER_SLOW_MODE_TOGGLE))

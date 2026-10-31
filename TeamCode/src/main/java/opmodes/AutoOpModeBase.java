@@ -9,7 +9,6 @@ import logic.Team;
 import logic.action.Action;
 import logic.action.DelayAction;
 import logic.action.SimpleAction;
-import logic.action.WaitForArtifactsAction;
 import logic.field.PlayingField;
 import utils.TelemetryHandler;
 
@@ -58,7 +57,7 @@ public abstract class AutoOpModeBase extends OpModeBase {
     @Override
     protected void runStart() {
         super.runStart();
-        cannon.on();
+        shooter.on();
     }
 
     private void runStep() {
@@ -74,7 +73,7 @@ public abstract class AutoOpModeBase extends OpModeBase {
     protected void update() {
         super.update();
         intake.off();
-        cannonBuffers.off();
+        transfer.off();
     }
 
     @Override
@@ -86,16 +85,17 @@ public abstract class AutoOpModeBase extends OpModeBase {
 
     protected abstract void execute();
 
-    protected Action startCannon() { return new SimpleAction(() -> cannon.on()); }
+    protected Action startShooter() { return new SimpleAction(() -> shooter.on()); }
 
-    protected Action stopCannon() { return new SimpleAction(() -> cannon.off()); }
+    protected Action stopShooter() { return new SimpleAction(() -> shooter.off()); }
 
     protected Action waitAction(double delay, Runnable doWhile) {
         return new DelayAction(delay, doWhile);
     }
 
     protected Action waitForArtifactsAction(double delay, Runnable doWhile) {
-        return new WaitForArtifactsAction(delay, doWhile, distanceSensorMonitor);
+        throw new UnsupportedOperationException("WaitForArtifactsAction is not yet implemented.");
+        //        return new WaitForArtifactsAction(delay, doWhile, distanceSensorMonitor);
     }
 
     protected Action pathAction(
@@ -125,21 +125,21 @@ public abstract class AutoOpModeBase extends OpModeBase {
         return () -> {
             intake.on();
 
-            if (!cannon.isReadyToShoot()) {
-                cannonBuffers.shootDontContinue();
+            if (!shooter.isReadyToShoot()) {
+                transfer.shootDontContinue();
                 return false;
             }
 
-            boolean done = cannonBuffers.shootContinue();
+            boolean done = transfer.shootContinue();
             if (done)
-                cannonBuffers.shootReset();
+                transfer.shootReset();
 
             return done;
         };
     }
 
     protected void intake() {
-        cannonBuffers.reverse();
+        transfer.reverse();
         intake.on();
     }
 

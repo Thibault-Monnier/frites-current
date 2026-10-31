@@ -1,18 +1,18 @@
-package modules.actuator.cannonBuffer;
+package modules.actuator.transfer;
 
-import static config.CannonConfig.MOVING_SPEED;
-import static config.CannonConfig.REVERSE_SPEED;
+import static config.ShooterConfig.MOVING_SPEED;
+import static config.ShooterConfig.REVERSE_SPEED;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import java.util.HashMap;
 import modules.actuator.RobotActuatorModule;
 
-public class CannonBuffer implements RobotActuatorModule {
+public class Transfer implements RobotActuatorModule {
     private final DcMotor motor;
     private MotorState motorState;
 
-    public CannonBuffer(DcMotor motor, DcMotorSimple.Direction direction) {
+    public Transfer(DcMotor motor, DcMotorSimple.Direction direction) {
         this.motor = motor;
         this.motor.setDirection(direction);
         this.motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -42,12 +42,12 @@ public class CannonBuffer implements RobotActuatorModule {
     @Override
     public HashMap<String, Object> getCurrentState() {
         HashMap<String, Object> state = new HashMap<>();
-        state.put("Cannon Buffer State", motorState);
+        state.put("Shooter Buffer State", motorState);
         return state;
     }
 
     @Override
     public void setState(HashMap<String, String> state) {
-        throw new UnsupportedOperationException("Cannon module does not support state loading.");
+        throw new UnsupportedOperationException("Shooter module does not support state loading.");
     }
 }

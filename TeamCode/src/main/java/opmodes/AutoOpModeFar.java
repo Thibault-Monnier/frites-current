@@ -71,7 +71,7 @@ public class AutoOpModeFar extends OpModeBase {
     @Override
     protected void runStart() {
         super.runStart();
-        cannon.on();
+        shooter.on();
     }
 
     private void runStep() {
@@ -142,7 +142,7 @@ public class AutoOpModeFar extends OpModeBase {
                 break;
             case DONE:
                 intake.off();
-                cannonBuffers.off();
+                transfer.off();
                 break;
         }
     }
@@ -165,15 +165,15 @@ public class AutoOpModeFar extends OpModeBase {
     }
 
     private void runShootCycle() {
-        if (!cannon.isReadyToShoot())
+        if (!shooter.isReadyToShoot())
             return;
 
         intake.on();
 
-        boolean stillShooting = cannonBuffers.shootContinue();
+        boolean stillShooting = transfer.shootContinue();
 
         if (!stillShooting) {
-            cannonBuffers.shootReset();
+            transfer.shootReset();
             nbShots++;
 
             if (nbShots == 1 || nbShots == 2 || nbShots == 3)
@@ -186,7 +186,7 @@ public class AutoOpModeFar extends OpModeBase {
     }
 
     private void intake() {
-        cannonBuffers.reverse();
+        transfer.reverse();
         intake.on();
     }
 

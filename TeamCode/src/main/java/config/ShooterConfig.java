@@ -9,15 +9,16 @@ import utils.pidfl.PIDFLCoefficients;
 
 @Config
 @Configurable
-public class CannonConfig {
+public class ShooterConfig {
     public static double MOVING_SPEED = 1.0;
     public static double REVERSE_SPEED = -1.0;
 
-    public static PIDFLCoefficients CANNON_PID = new PIDFLCoefficients(0.02, 0.0, 0.0, 0.5, 0.0);
+    public static PIDFLCoefficients SHOOTER_PID = new PIDFLCoefficients(0.02, 0.0, 0.0, 0.5, 0.0);
+    public static double SHOOTER_MAX_VELOCITY = 2450.0;
 
-    public static Angle CANNON_ANGLE = Angle.fromDegrees(61.0);
-    public static Distance CANNON_TOP_HEIGHT = Distance.fromCentimeters(40.8);
-    public static Vector2D CANNON_RELATIVE_POSITION =
+    public static Angle SHOOTER_ANGLE = Angle.fromDegrees(61.0);
+    public static Distance SHOOTER_TOP_HEIGHT = Distance.fromCentimeters(40.8);
+    public static Vector2D SHOOTER_RELATIVE_POSITION =
         new Vector2D(Distance.fromCentimeters(-15.0), Distance.fromCentimeters(0.0));
 
     public static double SHOOT_DELAY = 0.3;

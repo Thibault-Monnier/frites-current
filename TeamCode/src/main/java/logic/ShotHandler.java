@@ -1,7 +1,7 @@
 package logic;
 
-import config.CannonConfig;
 import config.FieldConfig;
+import config.ShooterConfig;
 import logic.field.PlayingField;
 import logic.position.RobotPosition;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -64,24 +64,24 @@ public class ShotHandler {
 
         final double g = 9.81; // gravitational acceleration in m/s^2
 
-        Vector2D cannonLinearVelocity = cannonVelocity().getLinearVelocity();
-        Angle velocityAngle = cannonLinearVelocity.direction();
+        Vector2D shooterLinearVelocity = shooterVelocity().getLinearVelocity();
+        Angle velocityAngle = shooterLinearVelocity.direction();
         Angle correctionAngle = velocityAngle.negate();
-        cannonLinearVelocity = cannonLinearVelocity.rotate(correctionAngle);
+        shooterLinearVelocity = shooterLinearVelocity.rotate(correctionAngle);
 
-        Angle theta = CannonConfig.CANNON_ANGLE;
-        Distance cannonTopHeight = CannonConfig.CANNON_TOP_HEIGHT;
+        Angle theta = ShooterConfig.SHOOTER_ANGLE;
+        Distance shooterTopHeight = ShooterConfig.SHOOTER_TOP_HEIGHT;
         Distance goalHeight = FieldConfig.GOAL_HEIGHT;
-        Position2D cannonPos = cannonPos().rotateAroundOrigin(correctionAngle);
+        Position2D shooterPos = shooterPos().rotateAroundOrigin(correctionAngle);
         Position2D goalPos = goalPos().rotateAroundOrigin(correctionAngle);
 
-        Angle phi = cannonPos.angleTo(goalPos);
-        Vector2D dHorizontal = cannonPos.subtract(goalPos);
+        Angle phi = shooterPos.angleTo(goalPos);
+        Vector2D dHorizontal = shooterPos.subtract(goalPos);
         double dx = dHorizontal.magnitude().toMeters();
-        double dy = goalHeight.subtract(cannonTopHeight).toMeters();
+        double dy = goalHeight.subtract(shooterTopHeight).toMeters();
 
         double ballSpeed = dx * Math.sqrt(g / (2 * (dx * theta.tan() - dy)));
-        double robotSpeed = cannonLinearVelocity.magnitude().toMeters();
+        double robotSpeed = shooterLinearVelocity.magnitude().toMeters();
 
         double shootSpeed = Math.sqrt(
             ballSpeed * ballSpeed - 2 * robotSpeed * ballSpeed * phi.cos() + robotSpeed * robotSpeed
@@ -97,16 +97,16 @@ public class ShotHandler {
 
     private Vector2D computeStationaryShotVector() {
         TelemetryHandler.addLine("Using stationary shot calculation");
-        return goalPos().subtract(cannonPos());
+        return goalPos().subtract(shooterPos());
     }
 
-    private Position2D cannonPos() {
+    private Position2D shooterPos() {
         Pose2D robotPose = robotPosition.getPose();
-        return robotPose.addRelative(CannonConfig.CANNON_RELATIVE_POSITION);
+        return robotPose.addRelative(ShooterConfig.SHOOTER_RELATIVE_POSITION);
     }
 
-    private Velocity2D cannonVelocity() {
-        return robotPosition.getPointVelocity(CannonConfig.CANNON_RELATIVE_POSITION);
+    private Velocity2D shooterVelocity() {
+        return robotPosition.getPointVelocity(ShooterConfig.SHOOTER_RELATIVE_POSITION);
     }
 
     private Position2D goalPos() { return PlayingField.goalPos(team); }

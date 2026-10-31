@@ -18,9 +18,10 @@ public class WaitForArtifactsAction implements Action {
     public WaitForArtifactsAction(
         double delaySec, Runnable doWhile, DistanceSensorMonitor monitor
     ) {
-        this.delay = delaySec;
-        this.doWhile = doWhile;
-        this.distanceSensorMonitor = monitor;
+        throw new UnsupportedOperationException("WaitForArtifactsAction is not yet implemented.");
+        //        this.delay = delaySec;
+        //        this.doWhile = doWhile;
+        //        this.distanceSensorMonitor = monitor;
     }
 
     @Override

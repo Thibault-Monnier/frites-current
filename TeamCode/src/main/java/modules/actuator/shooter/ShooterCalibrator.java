@@ -1,6 +1,6 @@
-package modules.actuator.cannon;
+package modules.actuator.shooter;
 
-import static config.CannonConfig.CALIBRATION_SPEED_CHANGE_OFFSET;
+import static config.ShooterConfig.CALIBRATION_SPEED_CHANGE_OFFSET;
 
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import java.util.HashMap;
@@ -8,11 +8,11 @@ import java.util.Map;
 import utils.TelemetryHandler;
 import utils.geometry.Distance;
 
-public class CannonCalibrator extends Cannon {
+public class ShooterCalibrator extends Shooter {
     private final Map<Distance, Double> savedCalibrationData = new HashMap<>();
     private Distance lastCalibratedDistance = null;
 
-    public CannonCalibrator(DcMotorEx motorLeft, DcMotorEx motorRight) {
+    public ShooterCalibrator(DcMotorEx motorLeft, DcMotorEx motorRight) {
         super(motorLeft, motorRight);
     }
 

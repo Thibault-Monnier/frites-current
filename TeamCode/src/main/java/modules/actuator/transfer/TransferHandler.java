@@ -1,20 +1,20 @@
-package modules.actuator.cannonBuffer;
+package modules.actuator.transfer;
 
-import static config.CannonConfig.SHOOT_BALLS_AMOUNT;
-import static config.CannonConfig.SHOOT_DELAY;
+import static config.ShooterConfig.SHOOT_BALLS_AMOUNT;
+import static config.ShooterConfig.SHOOT_DELAY;
 
 import java.util.HashMap;
 import modules.actuator.RobotActuatorModule;
 import utils.TimeHelpers;
 
-public class CannonBufferHandler implements RobotActuatorModule {
-    private final CannonBuffer buffer;
+public class TransferHandler implements RobotActuatorModule {
+    private final Transfer buffer;
 
     private ShootingStage shootingStage = ShootingStage.IDLE;
     private double lastRoundStartTime = 0.0;
     private int shotsFired = 0;
 
-    public CannonBufferHandler(CannonBuffer buffer) { this.buffer = buffer; }
+    public TransferHandler(Transfer buffer) { this.buffer = buffer; }
 
     public void on() { buffer.on(); }
 
@@ -83,7 +83,7 @@ public class CannonBufferHandler implements RobotActuatorModule {
     @Override
     public void setState(HashMap<String, String> state) {
         throw new UnsupportedOperationException(
-            "Cannon buffers handler does not support state loading."
+            "Shooter buffers handler does not support state loading."
         );
     }
 

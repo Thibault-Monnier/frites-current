@@ -1,13 +1,5 @@
 package modules.sensor;
 
-import static config.HardwareConfig.DISTANCE_SENSOR_INTAKE_LEFT1_ID;
-import static config.HardwareConfig.DISTANCE_SENSOR_INTAKE_LEFT2_ID;
-import static config.HardwareConfig.DISTANCE_SENSOR_INTAKE_RIGHT1_ID;
-import static config.HardwareConfig.DISTANCE_SENSOR_INTAKE_RIGHT2_ID;
-import static config.HardwareConfig.DISTANCE_SENSOR_LEFT_ID;
-import static config.HardwareConfig.DISTANCE_SENSOR_RIGHT_ID;
-import static config.HardwareConfig.RGB_LIGHT_ID;
-
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -24,13 +16,14 @@ public class DistanceSensorMonitor {
     public Servo led;
 
     public DistanceSensorMonitor(HardwareMap hardwareMap) {
-        left = hardwareMap.get(DistanceSensor.class, DISTANCE_SENSOR_LEFT_ID);
+        throw new UnsupportedOperationException("DistanceSensorMonitor is not yet implemented");
+        /*left = hardwareMap.get(DistanceSensor.class, DISTANCE_SENSOR_LEFT_ID);
         right = hardwareMap.get(DistanceSensor.class, DISTANCE_SENSOR_RIGHT_ID);
         intake_left1 = hardwareMap.get(DistanceSensor.class, DISTANCE_SENSOR_INTAKE_LEFT1_ID);
         intake_left2 = hardwareMap.get(DistanceSensor.class, DISTANCE_SENSOR_INTAKE_LEFT2_ID);
         intake_right1 = hardwareMap.get(DistanceSensor.class, DISTANCE_SENSOR_INTAKE_RIGHT1_ID);
         intake_right2 = hardwareMap.get(DistanceSensor.class, DISTANCE_SENSOR_INTAKE_RIGHT2_ID);
-        led = hardwareMap.get(Servo.class, RGB_LIGHT_ID);
+        led = hardwareMap.get(Servo.class, RGB_LIGHT_ID);*/
     }
 
     public int getNumberOfArtifactsInRobot() {

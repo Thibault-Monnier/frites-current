@@ -5,7 +5,7 @@ public class ArtifactMonitor implements Runnable {
     private volatile boolean running = true;
 
     public ArtifactMonitor(DistanceSensorMonitor distanceSensorMonitor) {
-        this.distanceSensorMonitor = distanceSensorMonitor;
+        throw new UnsupportedOperationException("ArtifactMonitor is not yet implemented");
     }
 
     public void stop() { running = false; }

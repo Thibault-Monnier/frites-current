@@ -5,13 +5,13 @@ import config.HardwareConfig;
 import config.ManualOpModeMappings;
 import logic.Team;
 import logic.field.PlayingField;
-import modules.actuator.cannon.CannonCalibrator;
+import modules.actuator.shooter.ShooterCalibrator;
 import modules.sensor.GamepadController;
 import utils.TelemetryHandler;
 import utils.geometry.Distance;
 
-public class CannonCalibrationOpMode extends OpModeBase {
-    public CannonCalibrationOpMode(Team team) { super(team, false, true); }
+public class ShooterCalibrationOpMode extends OpModeBase {
+    public ShooterCalibrationOpMode(Team team) { super(team, false, true); }
 
     @Override
     public void runOpMode() {
@@ -40,9 +40,9 @@ public class CannonCalibrationOpMode extends OpModeBase {
     @Override
     protected void initialize() {
         super.initialize();
-        cannon = new CannonCalibrator(
-            hardwareMap.get(DcMotorEx.class, HardwareConfig.CANNON_MOTOR_LEFT_ID),
-            hardwareMap.get(DcMotorEx.class, HardwareConfig.CANNON_MOTOR_RIGHT_ID)
+        shooter = new ShooterCalibrator(
+            hardwareMap.get(DcMotorEx.class, HardwareConfig.SHOOTER_MOTOR_ID),
+            hardwareMap.get(DcMotorEx.class, HardwareConfig.SHOOTER_MOTOR_ID)
         );
     }
 
@@ -53,7 +53,7 @@ public class CannonCalibrationOpMode extends OpModeBase {
 
         apply();
         log();
-        cannon().printCalibrationData();
+        shooter().printCalibrationData();
     }
 
     public void executeActions() {
@@ -73,47 +73,47 @@ public class CannonCalibrationOpMode extends OpModeBase {
             );
         }
 
-        if ((isPressActive(ManualOpModeMappings.SHOOT) && cannon.isReadyToShoot())
+        if ((isPressActive(ManualOpModeMappings.SHOOT) && shooter.isReadyToShoot())
             || isPressActive(ManualOpModeMappings.FORCE_SHOOT)) {
-            cannonBuffers.shootContinue();
+            transfer.shootContinue();
             intake.on();
         } else {
-            cannonBuffers.shootDontContinue();
+            transfer.shootDontContinue();
 
             if (isPressActive(ManualOpModeMappings.SHOOT))
-                gamepadController.rumble(50); // Cannon isn't ready
+                gamepadController.rumble(50); // Shooter isn't ready
             else
-                cannonBuffers.shootReset();
+                transfer.shootReset();
         }
 
         if (gamepadController.isPressed(GamepadController.Button.X))
-            cannon.toggle();
+            shooter.toggle();
         if (gamepadController.isPressed(GamepadController.Button.Y))
-            cannon().speedup();
+            shooter().speedup();
         if (gamepadController.isLongPressed(GamepadController.Button.Y))
-            cannon().fastSpeedup();
+            shooter().fastSpeedup();
         if (gamepadController.isPressed(GamepadController.Button.A))
-            cannon().slowdown();
+            shooter().slowdown();
         if (gamepadController.isLongPressed(GamepadController.Button.A))
-            cannon().fastSlowdown();
+            shooter().fastSlowdown();
         if (gamepadController.isPressed(GamepadController.Button.B)) {
             Distance targetDistance =
                 PlayingField.distanceToGoal(robotPosition.getPosition(), team);
-            cannon().saveCurrentCalibrationData(targetDistance);
+            shooter().saveCurrentCalibrationData(targetDistance);
         }
         if (gamepadController.isLongPressed(GamepadController.Button.B)) {
-            cannon().clearLastCalibrationData();
+            shooter().clearLastCalibrationData();
         }
 
         if (gamepadController.isPressing(GamepadController.Button.TRIGGER_LEFT)) {
             intake.on();
-            cannonBuffers.reverse();
+            transfer.reverse();
         } else {
             intake.off();
         }
     }
 
-    private CannonCalibrator cannon() { return (CannonCalibrator) cannon; }
+    private ShooterCalibrator shooter() { return (ShooterCalibrator) shooter; }
 
     private boolean isPressActive(GamepadController.ButtonMapping mapping) {
         return gamepadController.isPressActive(mapping);
@@ -122,7 +122,7 @@ public class CannonCalibrationOpMode extends OpModeBase {
     @Override
     public void runStop() {
         super.runStop();
-        cannon().printCalibrationData();
+        shooter().printCalibrationData();
         TelemetryHandler.update();
     }
 }
