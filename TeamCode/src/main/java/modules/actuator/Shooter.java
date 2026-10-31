@@ -47,13 +47,19 @@ public class Shooter implements RobotActuatorModule {
 
     @Override
     public void apply() {
-        motor.setPower(motorPIDController.get(motorTargetVelocity));
-        hoodServo.setPosition(hoodTargetPosition);
+        double motorVel = 0.0;
+        double hoodPos = 0.0;
+
+        if (isRunning) {
+            motorVel = motorTargetVelocity;
+            hoodPos = hoodTargetPosition;
+        }
+
+        motor.setPower(motorPIDController.get(motorVel));
+        hoodServo.setPosition(hoodPos);
+        TelemetryHandler.addData("Shooter motor velocity/target", velocity() + "/" + motorVel);
         TelemetryHandler.addData(
-            "Shooter motor velocity/target", velocity() + "/" + motorTargetVelocity
-        );
-        TelemetryHandler.addData(
-            "Shooter hood position/target", hoodServo.getPosition() + "/" + hoodTargetPosition
+            "Shooter hood position/target", hoodServo.getPosition() + "/" + hoodPos
         );
     }
 
@@ -73,13 +79,8 @@ public class Shooter implements RobotActuatorModule {
 
     /// Update motor power using a value interpolated from target distance.
     public void update(Distance horizontalShootingDistance) {
-        if (isRunning) {
-            setTargetVelocity(computeVelocity(horizontalShootingDistance));
-            setHoodTargetPosition(0.1);
-        } else {
-            setTargetVelocity(0);
-            setHoodTargetPosition(0.0);
-        }
+        setTargetVelocity(computeVelocity(horizontalShootingDistance));
+        setHoodTargetPosition(0.1);
     }
 
     protected double velocity() { return motor.getVelocity(); }
