@@ -22,7 +22,7 @@ public class ManualOpModeMappings {
     public static ButtonMapping DRIVE_MODE_TOGGLE =
         new ButtonMapping(Button.LEFT_STICK, PressType.DOUBLE_PRESS);
     public static ButtonMapping SUPER_SLOW_MODE_TOGGLE =
-        new ButtonMapping(Button.B, PressType.DOUBLE_PRESS);
+        new ButtonMapping(Button.DPAD_RIGHT, PressType.DOUBLE_PRESS);
 
     // Intake and transfer
     public static ButtonMapping INTAKE_ON =
@@ -32,7 +32,7 @@ public class ManualOpModeMappings {
 
     // Shooter and shooting
     public static ButtonMapping SHOOTER_ON_OFF_TOGGLE =
-        new ButtonMapping(Button.DPAD_LEFT, PressType.SINGLE_PRESS);
+        new ButtonMapping(Button.DPAD_LEFT, PressType.DOUBLE_PRESS);
     public static ButtonMapping SHOOT =
         new ButtonMapping(Button.TRIGGER_RIGHT, PressType.CONTINUOUS_PRESS);
     public static ButtonMapping FORCE_SHOOT =
