@@ -24,7 +24,6 @@ import logic.field.PlayingField;
 import logic.position.RobotPosition;
 import modules.actuator.MecanumDrive;
 import modules.actuator.RobotActuatorModule;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import utils.TelemetryHandler;
 import utils.geometry.Angle;
@@ -391,17 +390,16 @@ public class Movement implements RobotActuatorModule {
             // We use a PID controller which is added onto the input power to try to maintain the
             // target velocity.
 
-            Angle scaledTurn =
-                new Angle(AngleUnit.RADIANS, turnSpeed).multiply(MAX_TURN_SPEED.toRadians());
+            Angle scaledTurn = Angle.fromRadians(turnSpeed).multiply(MAX_TURN_SPEED.toRadians());
             Velocity2D targetVelocity = new Velocity2D(new Vector2D(), scaledTurn, 1);
 
             double error = targetVelocity.subtract(robotPosition().getPoseVelocity())
                                .getAngularVelocity()
-                               .toRadians();
+                               .toUnnormalizedRadians();
             fieldCentricTurnController.setError(error, "Field centric TURN error (rad)");
 
             if (!fieldCentricTurnController.isAtTarget(
-                    FIELD_CENTRIC_TURN_PIDF_THRESHOLD.toRadians()
+                    FIELD_CENTRIC_TURN_PIDF_THRESHOLD.toUnnormalizedRadians()
                 ))
                 turnSpeed += fieldCentricTurnController.get(true);
         }

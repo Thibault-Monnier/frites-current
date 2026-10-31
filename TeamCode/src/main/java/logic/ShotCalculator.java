@@ -4,8 +4,6 @@ import config.FieldConfig;
 import config.ShooterConfig;
 import logic.field.PlayingField;
 import logic.position.RobotPosition;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import utils.TelemetryHandler;
 import utils.geometry.Angle;
 import utils.geometry.Distance;
@@ -92,8 +90,8 @@ public class ShotCalculator {
         double shootDistance = shootSpeed * dx / ballSpeed;
         double shootAngle = Math.atan2(ballSpeed * phi.sin(), ballSpeed * phi.cos() - robotSpeed);
 
-        Distance norm = new Distance(DistanceUnit.METER, shootDistance);
-        Angle argument = new Angle(AngleUnit.RADIANS, shootAngle);
+        Distance norm = Distance.fromMeters(shootDistance);
+        Angle argument = Angle.fromRadians(shootAngle);
 
         return new Vector2D(norm, argument).rotate(velocityAngle);
     }

@@ -26,7 +26,7 @@ public class Pose2D {
             x.getValue(DistanceUnit.MM),
             y.getValue(DistanceUnit.MM),
             AngleUnit.RADIANS,
-            heading.getValue(AngleUnit.RADIANS)
+            heading.get(AngleUnit.RADIANS)
         );
     }
 
@@ -51,7 +51,7 @@ public class Pose2D {
     public Distance getY() { return position.getY(); }
 
     /// The heading converted to the desired angle unit
-    public double getHeading(AngleUnit unit) { return heading.getValue(unit); }
+    public double getHeading(AngleUnit unit) { return heading.get(unit); }
 
     /// The heading as an Angle object
     public Angle getHeading() { return heading; }
