@@ -228,14 +228,7 @@ public class Movement implements RobotActuatorModule {
     public void lockedJoystickMove(Gamepad gamepad, boolean slow, Position2D targetPos) {
         requireMatchContext();
 
-        Translation velocity = getTranslationVelocity(gamepad, slow);
-        if (movementMode == MovementMode.FIELD_CENTRIC) {
-            applyTeamRotationFieldCentric(velocity);
-            translateFieldCentric(velocity);
-        } else {
-            translate(velocity);
-        }
-
+        joystickTranslate(gamepad, slow);
         turnTowards(targetPos);
     }
 
@@ -339,13 +332,11 @@ public class Movement implements RobotActuatorModule {
         return slow ? SLOW_SPEED_MULTIPLIER : SPEED_MULTIPLIER;
     }
 
-    /// Applies 90-degree rotation to the translation vector based on the team color.
+    /// Applies a rotation to the translation vector based on the team color.
     private void applyTeamRotationFieldCentric(Translation translation) {
-        Angle delta = Angle.fromDegrees(90);
-        if (team().isRed())
-            translation.rotate(delta);
+        Angle delta = Angle.fromDegrees(180);
         if (team().isBlue())
-            translation.rotate(delta.negate());
+            translation.rotate(delta);
     }
 
     /// Field centric mode includes a PID controller: joystick input does not determine power, but
@@ -435,6 +426,7 @@ public class Movement implements RobotActuatorModule {
 
         public Translation() { this(0, 0); }
 
+        /// Rotates in-place.
         public void rotate(Angle angle) {
             DistanceUnit unit = DistanceUnit.MM;
 

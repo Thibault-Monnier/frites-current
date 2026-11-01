@@ -29,9 +29,9 @@ to [Coordinate systems](#coordinate-systems) for details on each coordinate syst
 
 #### Absolute
 
-- Origin: Center of the field
-- X axis: Positive X points toward the audience side
-- Y axis: Positive Y points toward the blue alliance side
+- Origin: Front left corner of the field
+- X axis: Positive X points toward the blue alliance side
+- Y axis: Positive Y points away from the audience side
 - Zero rotation: Direction of the +X axis
 - Rotation direction: Positive rotation is counter-clockwise
 - Units: Any units, used through auto-converting classes (e.g. `Pose2D`, `Distance`, etc.)
@@ -74,7 +74,7 @@ The relative mode is defined as follows:
 
 ### Pedro Pathing coordinate system
 
-- Origin: Red alliance corner
+- Origin: Front left corner of the field
 - X axis: Positive X points toward the blue alliance side
 - Y axis: Positive Y points away from the audience side
 - Zero rotation: Direction of the +X axis

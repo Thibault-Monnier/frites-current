@@ -1,8 +1,6 @@
 package utils.geometry;
 
 import androidx.annotation.NonNull;
-import com.pedropathing.ftc.FTCCoordinates;
-import com.pedropathing.geometry.PedroCoordinates;
 import com.pedropathing.geometry.Pose;
 import config.FieldConfig;
 import java.util.Locale;
@@ -81,57 +79,42 @@ public class Pose2D {
         return position.add(rotatedOther);
     }
 
-    /// Converts this Pose2D to an FTC navigation Pose2D object.
-    public org.firstinspires.ftc.robotcore.external.navigation.Pose2D toNavigationPose2D() {
-        return new org.firstinspires.ftc.robotcore.external.navigation.Pose2D(
-            DistanceUnit.MM,
-            getX(DistanceUnit.MM),
-            getY(DistanceUnit.MM),
-            AngleUnit.RADIANS,
-            getHeading(AngleUnit.RADIANS)
+    /// Converts a PedroCoordinates Pose to a Pose2D.
+    public static Pose2D fromPedropathingPose(Pose pose) {
+        return new Pose2D(
+            DistanceUnit.INCH, pose.getX(), pose.getY(), AngleUnit.RADIANS, pose.getHeading()
         );
     }
 
-    /// Converts this Pose2D to a PedroCoordinates Pose, changing the coordinate
-    /// system accordingly.
+    /// Converts this Pose2D to a PedroCoordinates Pose.
     public Pose toPedropathingPose() {
-        Pose pose = new Pose(
-            getX(DistanceUnit.INCH),
-            getY(DistanceUnit.INCH),
-            getHeading(AngleUnit.RADIANS),
-            FTCCoordinates.INSTANCE
+        return new Pose(
+            getX(DistanceUnit.INCH), getY(DistanceUnit.INCH), getHeading(AngleUnit.RADIANS)
         );
-        return pose.getAsCoordinateSystem(PedroCoordinates.INSTANCE);
     }
 
-    /// Converts an FTC navigation Pose2D object to a Pose2D object.
+    /// Converts an FTC navigation Pose2D object to a Pose2D object, changing the coordinate system
+    /// accordingly
     public static Pose2D fromNavigationPose2D(
         org.firstinspires.ftc.robotcore.external.navigation.Pose2D navPose
     ) {
-        return new Pose2D(
-            DistanceUnit.MM,
-            navPose.getX(DistanceUnit.MM),
-            navPose.getY(DistanceUnit.MM),
-            AngleUnit.RADIANS,
-            navPose.getHeading(AngleUnit.RADIANS)
-        );
-    }
-
-    /// Converts a PedroCoordinates Pose to a Pose2D, changing the coordinate
-    /// system accordingly.
-    public static Pose2D fromPedropathingPose(Pose pose) {
-        double x = pose.getX();
-        double y = pose.getY();
-        double heading = pose.getHeading();
-
-        x -= FieldConfig.FIELD_SIZE.toInches() / 2;
-        y -= FieldConfig.FIELD_SIZE.toInches() / 2;
-
-        double newX = -y;
-        double newY = x;
-        double newHeading = heading + Math.PI / 2;
+        double newX = navPose.getY(DistanceUnit.INCH) + FieldConfig.FIELD_SIZE.toInches() / 2;
+        double newY = -navPose.getX(DistanceUnit.INCH) + FieldConfig.FIELD_SIZE.toInches() / 2;
+        double newHeading = navPose.getHeading(AngleUnit.RADIANS) - Math.PI / 2;
 
         return new Pose2D(DistanceUnit.INCH, newX, newY, AngleUnit.RADIANS, newHeading);
+    }
+
+    /// Converts this Pose2D to an FTC navigation Pose2D object, changing the coordinate system
+    /// accordingly.
+    public org.firstinspires.ftc.robotcore.external.navigation.Pose2D toNavigationPose2D() {
+        double newX = -getY().toInches() + FieldConfig.FIELD_SIZE.toInches() / 2;
+        double newY = getX().toInches() - FieldConfig.FIELD_SIZE.toInches() / 2;
+        double newHeading = getHeading().toRadians() + Math.PI / 2;
+
+        return new org.firstinspires.ftc.robotcore.external.navigation.Pose2D(
+            DistanceUnit.INCH, newX, newY, AngleUnit.RADIANS, newHeading
+        );
     }
 
     @NonNull
