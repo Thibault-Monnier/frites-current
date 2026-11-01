@@ -63,7 +63,7 @@ public class ShooterCalibrationOpMode extends OpModeBase {
             move.lockedJoystickMove(
                 gamepad1,
                 gamepadController.isPressing(GamepadController.Button.LEFT_STICK),
-                PlayingField.goalPos(team)
+                PlayingField.frontGoalPos(team)
             );
         } else {
             move.joystickTranslate(

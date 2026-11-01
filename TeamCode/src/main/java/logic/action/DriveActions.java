@@ -1,14 +1,8 @@
 package logic.action;
 
-import config.FieldConfig;
 import logic.Movement;
 import logic.Team;
-import logic.field.Artifact;
-import logic.field.PlayingField;
 import logic.position.RobotPosition;
-import utils.geometry.Pose2D;
-import utils.geometry.Position2D;
-import utils.geometry.Vector2D;
 
 public class DriveActions {
     private final Movement drive;
@@ -22,11 +16,12 @@ public class DriveActions {
         this.team = team;
     }
 
+    /*
     public Action driveToGoalShootPosition() {
         return () -> {
             Position2D goalShootPosition = PlayingField.shootingPositionLeft(team);
             return drive.translateToPosition(goalShootPosition)
-                && drive.turnTowards(PlayingField.goalPos(team));
+                && drive.turnTowards(PlayingField.frontGoalPos(team));
         };
     }
 
@@ -64,4 +59,5 @@ public class DriveActions {
             return drive.translateToPosition(entryPose.getPosition());
         };
     }
+    */
 }

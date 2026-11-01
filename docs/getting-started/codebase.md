@@ -60,9 +60,9 @@ apply to writing core code; some might be irrelevant when writing a debugging op
   `TelemetryHandler.instantiate(telemetry)`. This is usually already done at the initialization
   phase.
 - Do not use `gamepad1.a` etc. to make gamepad interactions. Instead, you should use
-  `ButtonMapping` in combination with `GamepadController`. This allows one to use complex behavior (
-  long press, double press, debouncing, etc.) with simple to configure code (the button mappings can
-  be centralized in a `config` class).
+  `ButtonMapping` in combination with `GamepadController`. This allows one to use complex behavior
+  (long press, double press, debouncing, etc.) with simple to configure code (the button mappings
+  can be centralized in a `config` class).
 
 ## Libraries
 
@@ -82,7 +82,8 @@ in [build.dependencies.gradle](../../build.dependencies.gradle). The most import
 - `Panels` (`bylazar:fullpanels`). An alternate, more extensive dashboard. Accessed
   through http://192.168.43.1:8001/.
 - `PedroPathing`. A navigation / pathing library that helps build complex trajectories for auto. A
-  more modern and powerful alternative to RoadRunner.
+  more modern and powerful alternative to RoadRunner. Tune trajectories
+  with https://visualizer.pedropathing.com/.
 
 ### Internal Libraries
 
@@ -90,7 +91,7 @@ in [build.dependencies.gradle](../../build.dependencies.gradle). The most import
 
 This custom library is located in the `utils/geometry` package. It contains geometric primitive
 classes, inspired by ROS 2's `geometry_msgs`. It also handles units to avoid conversion mistakes,
-because different libraries use different units :-(.
+because different libraries use different units :- (.
 
 Many of these primitives hold the same underlying data, but have different names for semantic
 purposes.
@@ -122,7 +123,7 @@ A PIDFL controller may use either `PIDFLController` or `PIDFLControllerMotor`. T
 superset of the first that calculates the error automatically based on the motor encoder; it is
 preferred when the controller is directly linked to a single motor.
 
-A PIDFL (**P**roportional-**I**ntegral-**D**erivative-**F**eedforward-**L**ift) controller is an
+A PIDFL (**P**roportional- **I**ntegral- **D**erivative- **F**eedforward- **L**ift) controller is an
 extended version of the
 classic [PID](https://en.wikipedia.org/wiki/PID_controller) algorithm.
 

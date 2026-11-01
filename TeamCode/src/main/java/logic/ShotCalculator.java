@@ -111,5 +111,5 @@ public class ShotCalculator {
         return robotPosition.getPointVelocity(ShooterConfig.SHOOTER_RELATIVE_POSITION);
     }
 
-    private Position2D goalPos() { return PlayingField.goalPos(team); }
+    private Position2D goalPos() { return PlayingField.frontGoalPos(team); }
 }

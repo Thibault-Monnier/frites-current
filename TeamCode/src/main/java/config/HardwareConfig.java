@@ -2,8 +2,8 @@ package config;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.bylazar.configurables.annotations.Configurable;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import utils.geometry.Distance;
+import utils.geometry.Vector2D;
 
 @Config
 @Configurable
@@ -24,5 +24,7 @@ public class HardwareConfig {
     public static final String LIMELIGHT_CAMERA_ID = "limelight";
     public static final String ODOMETRY_POD_ID = "pinpoint";
 
-    public static Distance ROBOT_SIZE = new Distance(DistanceUnit.INCH, 18.0);
+    /// Relative coordinates
+    public static Vector2D ROBOT_SIZE =
+        new Vector2D(Distance.fromMillimeters(393), Distance.fromMillimeters(396));
 }
