@@ -122,7 +122,6 @@ public class RobotPosition {
 
     /// Gets the current robot velocity
     public Velocity2D getPoseVelocity() {
-        // TODO: angular velocity is normalized, making it nonsensical
         double time = poseTimeSec - previousPoseTimeSec;
         return new Velocity2D(previousPose, pose, time);
     }

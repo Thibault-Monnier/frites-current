@@ -8,6 +8,7 @@ import modules.actuator.RobotActuatorModule;
 import modules.actuator.Transfer;
 import utils.TimeHelpers;
 
+/// Owns the transfer to handle the shooting sequence.
 public class ShotHandler implements RobotActuatorModule {
     private final Transfer transfer;
 

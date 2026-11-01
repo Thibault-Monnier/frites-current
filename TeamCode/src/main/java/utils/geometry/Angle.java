@@ -88,7 +88,18 @@ public class Angle {
     }
 
     @NonNull
+    public String toString(boolean normalized) {
+        String format = "%.2f %s";
+        if (normalized)
+            return String.format(Locale.ENGLISH, format, toDegrees(), AngleUnit.DEGREES);
+        else
+            return String.format(
+                Locale.ENGLISH, format, toUnnormalizedDegrees(), UnnormalizedAngleUnit.DEGREES
+            );
+    }
+
+    @NonNull
     public String toString() {
-        return String.format(Locale.ENGLISH, "%.2f %s", get(AngleUnit.DEGREES), AngleUnit.DEGREES);
+        return toString(true);
     }
 }

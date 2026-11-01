@@ -1,6 +1,5 @@
 package logic;
 
-import config.FieldConfig;
 import config.ShooterConfig;
 import logic.field.PlayingField;
 import logic.position.RobotPosition;
@@ -22,7 +21,7 @@ public class ShotCalculator {
 
     private Vector2D computedShotVector;
 
-    boolean usingMovingShot = true;
+    boolean usingMovingShot = false;
 
     public ShotCalculator(RobotPosition robotPosition, Team team) {
         this.robotPosition = robotPosition;
@@ -61,7 +60,9 @@ public class ShotCalculator {
     public void toggleUsingMovingShot() { usingMovingShot = !usingMovingShot; }
 
     private Vector2D computeMovingShotVector() {
-        TelemetryHandler.addLine("Using moving shot calculation");
+        throw new IllegalStateException("computeMovingShotVector is not yet implemented.");
+
+        /*TelemetryHandler.addLine("Using moving shot calculation");
 
         final double g = 9.81; // gravitational acceleration in m/s^2
 
@@ -93,7 +94,7 @@ public class ShotCalculator {
         Distance norm = Distance.fromMeters(shootDistance);
         Angle argument = Angle.fromRadians(shootAngle);
 
-        return new Vector2D(norm, argument).rotate(velocityAngle);
+        return new Vector2D(norm, argument).rotate(velocityAngle);*/
     }
 
     private Vector2D computeStationaryShotVector() {

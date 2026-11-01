@@ -20,7 +20,10 @@ public class Transform2D {
     @NonNull
     public String toString() {
         return String.format(
-            Locale.ENGLISH, "(Transform2D) translation=%s, rotation=%s", translation, rotation
+            Locale.ENGLISH,
+            "(Transform2D) translation=%s, rotation=%s",
+            translation,
+            rotation.toString(false)
         );
     }
 }
