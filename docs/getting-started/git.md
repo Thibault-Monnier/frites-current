@@ -1,4 +1,4 @@
-_This document is a short tutorial about the Git tool._
+_This document is a short (not that short actually) tutorial about the Git tool. It is aimed towards Unix (Linux & MacOS) environments: if you are using Windows, the fundamental concepts still apply but the commands (probably) will not work._
 
 # Preface
 
@@ -6,11 +6,11 @@ Git is a [version control system (VCS)](https://en.wikipedia.org/wiki/Version_co
 
 # Overview
 
-_NOTE: the following is a simplified view which does not perfectly model Git's inner workings, but is sufficient to get started. You can find more in-depth guides online (yes, Git is a very complex topic, and this guide only scratches the surface. However, understanding it fully will already give you a better comprehension than many developers have)._
+_NOTE: the following is a simplified view which does not perfectly model Git's inner workings, but is sufficient to get started. You can find more in-depth guides online (yes, Git is a very complex topic, and this guide barely scratches the surface. However, understanding it fully will already give you good comprehension of it)._
 
 ## Commits
 
-Git keeps track of a sequence of _commits_, which encode a _diff_: the code changes between before and after the commit. Thus, Git does __not__ store the full code as-is, it can only rebuild it by looking at the history of all commits.
+Git keeps track of a sequence of _commits_, which encode a _diff_: the line-by-line code changes between before and after the commit. The point of a commit is both to act as a version, and to group related changes under a common, descriptive name (useful whenever you look back at the Git _history_).
 
 Here's an example of diff:
 
@@ -46,6 +46,10 @@ index bdebfe6..6806c1f 100644
 
 The interesting part is the lines highlighted in red (indicating a line got deleted) and in green (indicating a line got added). If a line gets modified, Git interprets it as if the previous line got removed and the new (modified) line got inserted in the same place.
 
+To save the changes to Git (of course, they are already saved to your filesystem), you can create a commit:
+
+> TODO: add a preview with git add and git commit
+
 The `git log` command allows us to view the history of all commits (which you can also view by clicking "Commits" or "History" in GitHub/GitLab).
 
 ```yaml
@@ -64,7 +68,7 @@ Date:   Tue Oct 13 14:24:05 2026 +0200
 ~/dev/git-test $
 ```
 
-Here, "Add hello world print" and "First commit" are called the _commit message_, which act as a title to each commit. Moreover, "6a5474f733c9e128ab5d0b8b1dc4fe22057601ff" and "5e4fd274b084026df19a87024213e1cb4abc8fac" are called the _commit hash_, which are unique identifiers associated with each commit.
+Here, "Add hello world print" and "First commit" are called the _commit message_, which acts as a title to each commit. Moreover, `6a5474f733c9e128ab5d0b8b1dc4fe22057601ff` and `5e4fd274b084026df19a87024213e1cb4abc8fac` are called the _commit hash_, which are unique identifiers associated with each commit.
 
 ## Remotes
 
@@ -86,18 +90,10 @@ Your branch is behind 'origin/main' by 2 commits, and can be fast-forwarded.
   (use "git pull" to update your local branch)
 
 nothing to commit, working tree clean
-~/dev/frites-2027 $ git pull
-Updating 4c24407..6b2b06b
-Fast-forward
- docs/getting-started/README.md          |  4 +++-
- docs/getting-started/ftc-programming.md | 79 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++---------
- docs/getting-started/git.md             | 45 +++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 118 insertions(+), 10 deletions(-)
- create mode 100644 docs/getting-started/git.md
 ~/dev/frites-2027 $
 ```
 
-Here, `git status` informs us that the remote repository (GitLab) has the same commit history as our local clone, but with 2 additional commits at the end. Note that this command does not do any request to the remote over the Internet, so it may not know if commits have been added. Thus, you might have to run `git fetch` to allow Git to know the local clone is behind:
+Here, `git status` informs us that the remote repository (GitLab) has the same commit history as our local clone, but with 2 additional commits at the end. Note that this command does not make any request to the remote over the Internet, so it may not know if commits have been added. Thus, you might have to run `git fetch` to allow Git to know the local clone is behind:
 
 ```console
 ~/dev/frites-2027 $ git status
@@ -122,7 +118,21 @@ nothing to commit, working tree clean
 ~/dev/frites-2027 $
 ```
 
-The `git pull` command allows us to update the local repository: Git simply takes the diffs of the additional commits from the remote and applies them to the local repository in order.
+The `git pull` command allows us to update the local repository: Git simply takes the diffs of the additional commits from the remote and applies them to the local repository in order:
+
+```console
+~/dev/frites-2027 $ git pull
+Updating 4c24407..6b2b06b
+Fast-forward
+ docs/getting-started/README.md          |  4 +++-
+ docs/getting-started/ftc-programming.md | 79 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++---------
+ docs/getting-started/git.md             | 45 +++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 118 insertions(+), 10 deletions(-)
+ create mode 100644 docs/getting-started/git.md
+~/dev/frites-2027 $
+```
+
+> TODO: add information about `git stash && git pull && git pop`.
 
 If, instead, your local repository is _ahead_ (that is, it has commits that the remote does not yet have), you can run `git push` to sync the remote to your local changes (so, this is the same as `git pull` but the other way around).
 
@@ -130,10 +140,10 @@ If, instead, your local repository is _ahead_ (that is, it has commits that the 
 
 _Let's be clear. This is the worst nightmare for anyone getting started with Git. If you get a merge conflict, don't cry: just close your code editor and never open it again._
 
-A merge conflict occurs when your local repository is both ahead and behind the remote: we call this a _divergence_.
+Sometimes, your local repository is both ahead and behind the remote: we call this a _divergence_.
 
 ```console
-~/dev/frites-2027 $ git log origin main --graph --oneline -n 5
+~/dev/frites-2027 $ git log main origin/main --graph --oneline -n 5
 * 10f4667 (HEAD -> main) Divergent commit
 | * bad6969 (origin/main, origin/HEAD) Implement PID velocity control for field centric movement
 | * 4d644c7 Extend git guide in doc/
@@ -143,14 +153,14 @@ A merge conflict occurs when your local repository is both ahead and behind the 
 ~/dev/frites-2027 $
 ```
 
-In this scenario, the local repository is ahead (indicated by the "HEAD" annotation) one commit: 4effc4a, and behind (indicated by the "origin/HEAD" annotation) two commits: 4d644c7 then bad6969.
+In this scenario, the local repository is ahead (indicated by the "HEAD" annotation) one commit: `10f4667`, and behind (indicated by the "origin/HEAD" annotation) two commits: `4d644c7` then `bad6969`.
 
 ### Merging with no conflicts
 
 There are several ways to fix this divergence. In many cases, it will require a single command and you will be done.
 
 ```console
-~/dev/frites-2027 $ git log origin main --graph --oneline -n 5
+~/dev/frites-2027 $ git log main origin/main --graph --oneline -n 5
 * 5eaf4fc (HEAD -> main) Divergent commit without conflicts
 | * bad6969 (origin/main, origin/HEAD) Implement PID velocity control for field centric movement
 | * 4d644c7 Extend git guide in doc/
@@ -186,7 +196,7 @@ nothing to commit, working tree clean
 ~/dev/frites-2027 $
 ```
 
-And the divergence is solved!
+And the divergence is solved! Note that the commit hash for "Divergent commit without conflicts" changed (from `5eaf4fc` to `0a992ed`). The reason for this is that when rebasing, Git deletes the old commits and re-creates them with the same diff and description, but not the same hash.
 
 ### Merging with conflicts
 
