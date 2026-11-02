@@ -30,7 +30,7 @@ print(text)
 Git would generate the following diff:
 
 ```diff
-~/dev/git-test $ git diff
+~/dev/git-test $ git diff master
 diff --git a/a.py b/a.py
 index bdebfe6..6806c1f 100644
 --- a/a.py
@@ -48,9 +48,33 @@ The interesting part is the lines highlighted in red (indicating a line got dele
 
 To save the changes to Git (of course, they are already saved to your filesystem), you can create a commit:
 
-> TODO: add a preview with git add and git commit
+```console
+~/dev/git-test $ git status
+On branch master
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   a.py
 
-The `git log` command allows us to view the history of all commits (which you can also view by clicking "Commits" or "History" in GitHub/GitLab).
+no changes added to commit (use "git add" and/or "git commit -a")
+~/dev/git-test $ git add .
+~/dev/git-test $ git status
+On branch master
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        modified:   a.py
+
+~/dev/git-test $ git commit -m "Add hello world print"
+[master 6a5474f] Add hello world print
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+~/dev/git-test $
+```
+
+The `git add .` command allows us to _stage_ all changes, which represents the changes that will be part of the commit. Notice from the `git status` output that it added the `a.py` file to the staged files; you can also select individual files or even individual changes within a file to stage instead of everything (this is easiest to do from your code editor's Git interface).
+
+The `git commit` command is what actually creates the commit, taking as a parameter `-m` the _commit message_ (see below).
+
+The `git log` command allows us to view the history of all commits (which you can also view by clicking "Commits" or "History" in GitHub/GitLab):
 
 ```yaml
 ~/dev/git-test $ git log
@@ -68,7 +92,7 @@ Date:   Tue Oct 13 14:24:05 2026 +0200
 ~/dev/git-test $
 ```
 
-Here, "Add hello world print" and "First commit" are called the _commit message_, which acts as a title to each commit. Moreover, `6a5474f733c9e128ab5d0b8b1dc4fe22057601ff` and `5e4fd274b084026df19a87024213e1cb4abc8fac` are called the _commit hash_, which are unique identifiers associated with each commit.
+Here, "Add hello world print" and "First commit" are called the _commit message_, which acts as a title to each commit. Moreover, `6a5474f733c9e128ab5d0b8b1dc4fe22057601ff` and `5e4fd274b084026df19a87024213e1cb4abc8fac` are called the _commit hash_, which are unique identifiers associated with each commit. Git also stores additional information such as the author, the date (including a timezone, here UTC+02:00), and a few other things that are hidden by default.
 
 ## Remotes
 
@@ -118,7 +142,7 @@ nothing to commit, working tree clean
 ~/dev/frites-2027 $
 ```
 
-The `git pull` command allows us to update the local repository: Git simply takes the diffs of the additional commits from the remote and applies them to the local repository in order:
+The `git pull` command allows us to update the local repository (if you have local unsaved changes, you might have to run `git stash && git pull && git pop` instead). Git simply takes the diffs of the additional commits from the remote and applies them to the local repository in order:
 
 ```console
 ~/dev/frites-2027 $ git pull
@@ -131,8 +155,6 @@ Fast-forward
  create mode 100644 docs/getting-started/git.md
 ~/dev/frites-2027 $
 ```
-
-> TODO: add information about `git stash && git pull && git pop`.
 
 If, instead, your local repository is _ahead_ (that is, it has commits that the remote does not yet have), you can run `git push` to sync the remote to your local changes (so, this is the same as `git pull` but the other way around).
 
@@ -202,8 +224,6 @@ And the divergence is solved! Note that the commit hash for "Divergent commit wi
 
 In other cases, when your local commits and the remote commits modified the same part of the code, Git does not know how to proceed and asks you to _resolve conflicts_. Now _this_ is the somewhat scary part.
 
-> TODO: finish this section.
-
-### Rebase vs Merge
+There are two ways to proceed: merge and rebase. While merges are very useful in many scenarios, they create a non-linear history and create a _merge commit_ (even though nobody wants to know that you merged your local changes into the remote).
 
 > TODO: finish this section.
