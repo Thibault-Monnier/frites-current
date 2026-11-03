@@ -94,6 +94,10 @@ Date:   Tue Oct 13 14:24:05 2026 +0200
 
 Here, "Add hello world print" and "First commit" are called the _commit message_, which acts as a title to each commit. Moreover, `6a5474f733c9e128ab5d0b8b1dc4fe22057601ff` and `5e4fd274b084026df19a87024213e1cb4abc8fac` are called the _commit hash_, which are unique identifiers associated with each commit. Git also stores additional information such as the author, the date (including a timezone, here UTC+02:00), and a few other things that are hidden by default.
 
+## Branches
+
+> TODO: finish this section.
+
 ## Remotes
 
 Git assigns a list of _remotes_ to each repository.
@@ -158,9 +162,7 @@ Fast-forward
 
 If, instead, your local repository is _ahead_ (that is, it has commits that the remote does not yet have), you can run `git push` to sync the remote to your local changes (so, this is the same as `git pull` but the other way around).
 
-## Merge conflicts
-
-_Let's be clear. This is the worst nightmare for anyone getting started with Git. If you get a merge conflict, don't cry: just close your code editor and never open it again._
+## Divergence
 
 Sometimes, your local repository is both ahead and behind the remote: we call this a _divergence_.
 
@@ -177,7 +179,7 @@ Sometimes, your local repository is both ahead and behind the remote: we call th
 
 In this scenario, the local repository is ahead (indicated by the "HEAD" annotation) one commit: `10f4667`, and behind (indicated by the "origin/HEAD" annotation) two commits: `4d644c7` then `bad6969`.
 
-### Merging with no conflicts
+### Clean rebase
 
 There are several ways to fix this divergence. In many cases, it will require a single command and you will be done.
 
@@ -220,10 +222,12 @@ nothing to commit, working tree clean
 
 And the divergence is solved! Note that the commit hash for "Divergent commit without conflicts" changed (from `5eaf4fc` to `0a992ed`). The reason for this is that when rebasing, Git deletes the old commits and re-creates them with the same diff and description, but not the same hash.
 
-### Merging with conflicts
+### Merge conflicts
 
-In other cases, when your local commits and the remote commits modified the same part of the code, Git does not know how to proceed and asks you to _resolve conflicts_. Now _this_ is the somewhat scary part.
+_Let's be clear. This is the worst nightmare for anyone getting started with Git. If you get a merge conflict, don't cry: just close your code editor and never open it again._
 
-There are two ways to proceed: merge and rebase. While merges are very useful in many scenarios, they create a non-linear history and create a _merge commit_ (even though nobody wants to know that you merged your local changes into the remote).
+In other cases, when your local commits and the remote commits modified the same part of the code, Git does not know how to proceed and asks you to _resolve conflicts_.
+
+There are two ways to proceed: merge and rebase. While merges are very useful in many scenarios, they create a non-linear history and create a _merge commit_ (even though nobody wants to know that you had to merge your local changes into the remote).
 
 > TODO: finish this section.
