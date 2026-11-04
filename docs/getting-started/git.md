@@ -96,6 +96,18 @@ Here, "Add hello world print" and "First commit" are called the _commit message_
 
 ## Branches
 
+A branch is a way to organize commits before _merging_ them back. A commit is always tied to a specific branch. Usually, the central branch (informally, the _default branch_) of a repository is called `main` or `master` - in our example, it is `master` (this central branch does not exist from Git's perspective, it is simply a convention):
+
+```console
+~/dev/git-test $ git status
+On branch master
+
+nothing to commit, working tree clean
+~/dev/git-test $
+```
+
+There are several cases when you might want to create a branch. For example, imagine you want 
+
 > TODO: finish this section.
 
 ## Remotes
@@ -121,7 +133,9 @@ nothing to commit, working tree clean
 ~/dev/frites-2027 $
 ```
 
-Here, `git status` informs us that the remote repository (GitLab) has the same commit history as our local clone, but with 2 additional commits at the end. Note that this command does not make any request to the remote over the Internet, so it may not know if commits have been added. Thus, you might have to run `git fetch` to allow Git to know the local clone is behind:
+Here, `git status` informs us that the remote repository (GitLab) has the same commit history as our local clone, but with 2 additional commits at the end. Notice `origin/main` is actually a branch, which is _tracked_ by your local `main` branch.
+
+The `git status` command does not make any request to the remote over the Internet, so it may not know if commits have been added. Thus, you might have to run `git fetch` to allow Git to know the local clone is behind:
 
 ```console
 ~/dev/frites-2027 $ git status
