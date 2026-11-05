@@ -106,9 +106,110 @@ nothing to commit, working tree clean
 ~/dev/git-test $
 ```
 
-There are several cases when you might want to create a branch. For example, imagine you want 
+There are several cases when you might want to create a branch. For example, imagine you want add a new complex feature to your program.
 
-> TODO: finish this section.
+```console
+~/dev/git-test $ git branch my-feature
+~/dev/git-test $ git branch
+* master
+  my-feature
+~/dev/git-test $
+```
+
+The `git branch my-feature` created a branch named "my-feature". The `git branch` command lists all branches; the `*` symbol tells us that the `master` branch is currently active (also visible through `git status`), meaning any commit made will go to the `master` branch... which is unfortunate.
+
+```console
+~/dev/git-test $ git switch my-feature
+M       a.py
+Switched to branch 'my-feature'
+~/dev/git-test $ git log --graph --oneline
+* 6a5474f (HEAD -> my-feature, master) Add hello world print
+* 5e4fd27 First commit
+~/dev/git-test $
+```
+
+Thankfully, the `git switch` command allows us to change the active branch. But what does `git switch` do, really? The answer lies in the following line. Note the `HEAD -> my-feature`. This signifies that the `HEAD` pointer points to the `my-feature` branch. When a Git commit is made, it is added to the location pointed to by `HEAD`; here, it would resolve to `my-feature`.
+
+Now, let's add our feature.
+
+```diff
+~/dev/git-test $ git diff HEAD
+diff --git a/a.py b/a.py
+index 6806c1f..d3ea35e 100644
+--- a/a.py
++++ b/a.py
+@@ -1,4 +1,5 @@
+ # After
+-text = "I am a sausage."
++text = "I am NOT a sausage."
+ print("Hello, World!")
+ print(text)
++print("Awesome feature!")
+~/dev/git-test $ git add .
+~/dev/git-test $ git commit -m "Added an awesome feature"
+[my-feature 80dff64] Added an awesome feature
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+~/dev/git-test $
+```
+
+We added our feature, here's how that looks:
+
+```mermaid
+%%{init: { 'gitGraph': {'mainBranchName': 'master'} } }%%
+gitGraph
+    commit id: "5e4fd27 -- 'First commit'"
+    commit id: "6a5474f -- 'Add hello world print'"
+    branch my-feature
+    commit id: "80dff64 -- 'Added an awesome feature'" tag: "HEAD"
+```
+
+Now, imagine we want to add an unrelated fix to the program, that we have to push to production. We could just commit it the `my-feature` branch and push that branch... but it contains a bug! The program now prints the nonsensical "I am NOT a sausage" phrase. We can now be glad we used a branch to implement the new feature, because we can simply go back to the stable `master` branch whenever we need.
+
+```diff
+~/dev/git-test $ git switch master
+Switched to branch 'master'
+~/dev/git-test $ nano a.py
+~/dev/git-test $ git diff HEAD
+diff --git a/a.py b/a.py
+index 6806c1f..ba4b842 100644
+--- a/a.py
++++ b/a.py
+@@ -1,4 +1,3 @@
+ # After
+ text = "I am a sausage."
+-print("Hello, World!")
+ print(text)
+~/dev/git-test $ git add .
+~/dev/git-test $ git commit -m "Urgent fix"
+[master e3138ec] Urgent fix
+ 1 file changed, 1 deletion(-)
+~/dev/git-test $
+```
+
+Which yields the following commit graph:
+
+```console
+~/dev/git-test $ git log --graph --oneline --all
+* e3138ec (HEAD -> master) Urgent fix
+| * 80dff64 (my-feature) Added an awesome feature
+|/
+* 6a5474f Add hello world print
+* 5e4fd27 First commit
+~/dev/git-test $
+```
+
+```mermaid
+%%{init: { 'gitGraph': {'mainBranchName': 'master'} } }%%
+gitGraph
+    commit id: "5e4fd27 -- 'First commit'"
+    commit id: "6a5474f -- 'Add hello world print'"
+    branch my-feature
+    commit id: "80dff64 -- 'Added an awesome feature'"
+    checkout master
+    commit id: "e3138ec -- 'Urgent fix'" tag: "HEAD"
+```
+
+
 
 ## Remotes
 
