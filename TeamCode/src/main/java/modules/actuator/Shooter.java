@@ -81,6 +81,7 @@ public class Shooter implements RobotActuatorModule {
     public void update(Distance horizontalShootingDistance) {
         setTargetVelocity(computeVelocity(horizontalShootingDistance));
         setHoodTargetPosition(0.1);
+        TelemetryHandler.addData("Shooting target distance", horizontalShootingDistance);
     }
 
     protected double velocity() { return motor.getVelocity(); }

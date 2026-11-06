@@ -20,6 +20,7 @@ import modules.sensor.BatteryMonitor;
 import modules.sensor.GamepadController;
 import pedropathing.Constants;
 import utils.TelemetryHandler;
+import utils.geometry.Distance;
 
 public abstract class OpModeBase extends LinearOpMode {
     protected ElapsedTime runtime;
@@ -84,7 +85,7 @@ public abstract class OpModeBase extends LinearOpMode {
             moveFR,
             moveBL,
             moveBR,
-            Movement.MovementMode.FIELD_CENTRIC
+            Movement.MovementMode.ROBOT_CENTRIC
         );
 
         DcMotorEx intakeMotor1 = hardwareMap.get(DcMotorEx.class, HardwareConfig.INTAKE_MOTOR_1_ID);
@@ -120,13 +121,15 @@ public abstract class OpModeBase extends LinearOpMode {
         robotPosition.updatePose();
 
         shotCalculator.update();
-        shooter.update(shotCalculator.getShotMagnitude());
+        // shooter.update(shotCalculator.getShotMagnitude());
+        shooter.update(Distance.fromCentimeters(200));
 
         System.out.println("Robot Pose: " + robotPosition.getPose().toString());
-        TelemetryHandler.addData(
-            "Shooting target distance", shotCalculator.getShotMagnitude().toString()
-        );
-        TelemetryHandler.addData("Shooting target angle", shotCalculator.getShotAngle().toString());
+        /*        TelemetryHandler.addData(
+                    "Shooting target distance", shotCalculator.getShotMagnitude().toString()
+                );
+                TelemetryHandler.addData("Shooting target angle",
+           shotCalculator.getShotAngle().toString());*/
     }
 
     protected void log() {
