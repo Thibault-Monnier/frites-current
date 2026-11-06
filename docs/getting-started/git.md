@@ -116,11 +116,10 @@ There are several cases when you might want to create a branch. For example, ima
 ~/dev/git-test $
 ```
 
-The `git branch my-feature` created a branch named "my-feature". The `git branch` command lists all branches; the `*` symbol tells us that the `master` branch is currently active (also visible through `git status`), meaning any commit made will go to the `master` branch... which is unfortunate.
+The `git branch my-feature` command created a branch named "my-feature". The `git branch` command lists all branches; the `*` symbol tells us that the `master` branch is currently active (also visible through `git status`), meaning any commit made will go to the `master` branch... which is unfortunate.
 
 ```console
 ~/dev/git-test $ git switch my-feature
-M       a.py
 Switched to branch 'my-feature'
 ~/dev/git-test $ git log --graph --oneline
 * 6a5474f (HEAD -> my-feature, master) Add hello world print
@@ -128,7 +127,7 @@ Switched to branch 'my-feature'
 ~/dev/git-test $
 ```
 
-Thankfully, the `git switch` command allows us to change the active branch. But what does `git switch` do, really? The answer lies in the following line. Note the `HEAD -> my-feature`. This signifies that the `HEAD` pointer points to the `my-feature` branch. When a Git commit is made, it is added to the location pointed to by `HEAD`; here, it would resolve to `my-feature`.
+Thankfully, the `git switch` command allows us to change the active branch. But what does `git switch` do, really? The answer lies in the following command. Notice the `HEAD -> my-feature`. This signifies that the `HEAD` pointer points to the `my-feature` branch. When a Git commit is made, it is added to the location pointed to by `HEAD`; here, it would resolve to `my-feature`. Furthermore, when changing the `HEAD` pointer, Git **modifies your files on disk** to match the newly active branch (if you had unsaved changes, Git will safely transfer them over, so this operation isn't risky).
 
 Now, let's add our feature.
 
@@ -163,7 +162,7 @@ gitGraph
     commit id: "80dff64 -- 'Added an awesome feature'" tag: "HEAD"
 ```
 
-Now, imagine we want to add an unrelated fix to the program, that we have to push to production. We could just commit it the `my-feature` branch and push that branch... but it contains a bug! The program now prints the nonsensical "I am NOT a sausage" phrase. We can now be glad we used a branch to implement the new feature, because we can simply go back to the stable `master` branch whenever we need.
+Now, imagine we want to add an unrelated fix to the program, that we have to push to production. We could just commit it the `my-feature` branch and push that branch... but it contains a bug! The program now prints the nonsensical "I am NOT a sausage" phrase. We can thus be glad we used a branch to implement the new feature, because we can simply go back to the stable `master` branch whenever we need.
 
 ```diff
 ~/dev/git-test $ git switch master
@@ -209,7 +208,7 @@ gitGraph
     commit id: "e3138ec -- 'Urgent fix'" tag: "HEAD"
 ```
 
-
+This is great, but we would like to be able to combine the changes from several branches when they are ready. This is described in the [Divergence section](#divergence).
 
 ## Remotes
 
