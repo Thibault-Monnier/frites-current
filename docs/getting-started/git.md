@@ -30,7 +30,7 @@ print(text)
 Git would generate the following diff:
 
 ```diff
-~/dev/git-test $ git diff master
+~/dev/git-test $ git diff main
 diff --git a/a.py b/a.py
 index bdebfe6..6806c1f 100644
 --- a/a.py
@@ -50,7 +50,7 @@ To save the changes to Git (of course, they are already saved to your filesystem
 
 ```console
 ~/dev/git-test $ git status
-On branch master
+On branch main
 Changes not staged for commit:
   (use "git add <file>..." to update what will be committed)
   (use "git restore <file>..." to discard changes in working directory)
@@ -59,13 +59,13 @@ Changes not staged for commit:
 no changes added to commit (use "git add" and/or "git commit -a")
 ~/dev/git-test $ git add .
 ~/dev/git-test $ git status
-On branch master
+On branch main
 Changes to be committed:
   (use "git restore --staged <file>..." to unstage)
         modified:   a.py
 
 ~/dev/git-test $ git commit -m "Add hello world print"
-[master 6a5474f] Add hello world print
+[main 6a5474f] Add hello world print
  1 file changed, 2 insertions(+), 1 deletion(-)
 ~/dev/git-test $
 ```
@@ -78,7 +78,7 @@ The `git log` command allows us to view the history of all commits (which you ca
 
 ```yaml
 ~/dev/git-test $ git log
-commit 6a5474f733c9e128ab5d0b8b1dc4fe22057601ff (HEAD -> master)
+commit 6a5474f733c9e128ab5d0b8b1dc4fe22057601ff (HEAD -> main)
 Author: Thibault M <thibaultmonni@gmail.com>
 Date:   Tue Oct 13 15:19:10 2026 +0200
 
@@ -96,11 +96,11 @@ Here, "Add hello world print" and "First commit" are called the _commit message_
 
 ## Branches
 
-A branch is a way to organize commits before _merging_ them back. A commit is always tied to a specific branch. Usually, the central branch (informally, the _default branch_) of a repository is called `main` or `master` - in our example, it is `master` (this central branch does not exist from Git's perspective, it is simply a convention):
+A branch is a way to organize commits before _merging_ them back. A commit is always tied to a specific branch. Usually, the central branch (which Git hosting platforms often call the _default branch_) of a repository is called `main` or `master` - in our example, it is `main` (this "central branch" does not exist from Git's perspective, it is simply a convention):
 
 ```console
 ~/dev/git-test $ git status
-On branch master
+On branch main
 
 nothing to commit, working tree clean
 ~/dev/git-test $
@@ -111,18 +111,18 @@ There are several cases when you might want to create a branch. For example, ima
 ```console
 ~/dev/git-test $ git branch my-feature
 ~/dev/git-test $ git branch
-* master
+* main
   my-feature
 ~/dev/git-test $
 ```
 
-The `git branch my-feature` command created a branch named "my-feature". The `git branch` command lists all branches; the `*` symbol tells us that the `master` branch is currently active (also visible through `git status`), meaning any commit made will go to the `master` branch... which is unfortunate.
+The `git branch my-feature` command created a branch named "my-feature". The `git branch` command lists all branches; the `*` symbol tells us that the `main` branch is currently active (also visible through `git status`), meaning any commit made will go to the `main` branch... which is unfortunate.
 
 ```console
 ~/dev/git-test $ git switch my-feature
 Switched to branch 'my-feature'
 ~/dev/git-test $ git log --graph --oneline
-* 6a5474f (HEAD -> my-feature, master) Add hello world print
+* 6a5474f (HEAD -> my-feature, main) Add hello world print
 * 5e4fd27 First commit
 ~/dev/git-test $
 ```
@@ -154,7 +154,7 @@ index 6806c1f..d3ea35e 100644
 We added our feature, here's how that looks:
 
 ```mermaid
-%%{init: { 'gitGraph': {'mainBranchName': 'master'} } }%%
+%%{init: { 'gitGraph': {'mainBranchName': 'main'} } }%%
 gitGraph
     commit id: "5e4fd27 -- 'First commit'"
     commit id: "6a5474f -- 'Add hello world print'"
@@ -162,11 +162,11 @@ gitGraph
     commit id: "80dff64 -- 'Added an awesome feature'" tag: "HEAD"
 ```
 
-Now, imagine we want to add an unrelated fix to the program, that we have to push to production. We could just commit it the `my-feature` branch and push that branch... but it contains a bug! The program now prints the nonsensical "I am NOT a sausage" phrase. We can thus be glad we used a branch to implement the new feature, because we can simply go back to the stable `master` branch whenever we need.
+Now, imagine we want to add an unrelated fix to the program, that we have to push to production. We could just commit it the `my-feature` branch and push that branch... but it contains a bug! The program now prints the nonsensical "I am NOT a sausage" phrase. We can thus be glad we used a branch to implement the new feature, because we can simply go back to the stable `main` branch whenever we need.
 
 ```diff
-~/dev/git-test $ git switch master
-Switched to branch 'master'
+~/dev/git-test $ git switch main
+Switched to branch 'main'
 ~/dev/git-test $ nano a.py
 ~/dev/git-test $ git diff HEAD
 diff --git a/a.py b/a.py
@@ -180,7 +180,7 @@ index 6806c1f..ba4b842 100644
  print(text)
 ~/dev/git-test $ git add .
 ~/dev/git-test $ git commit -m "Urgent fix"
-[master e3138ec] Urgent fix
+[main e3138ec] Urgent fix
  1 file changed, 1 deletion(-)
 ~/dev/git-test $
 ```
@@ -189,7 +189,7 @@ Which yields the following commit graph:
 
 ```console
 ~/dev/git-test $ git log --graph --oneline --all
-* e3138ec (HEAD -> master) Urgent fix
+* e3138ec (HEAD -> main) Urgent fix
 | * 80dff64 (my-feature) Added an awesome feature
 |/
 * 6a5474f Add hello world print
@@ -198,13 +198,13 @@ Which yields the following commit graph:
 ```
 
 ```mermaid
-%%{init: { 'gitGraph': {'mainBranchName': 'master'} } }%%
+%%{init: { 'gitGraph': {'mainBranchName': 'main'} } }%%
 gitGraph
     commit id: "5e4fd27 -- 'First commit'"
     commit id: "6a5474f -- 'Add hello world print'"
     branch my-feature
     commit id: "80dff64 -- 'Added an awesome feature'"
-    checkout master
+    checkout main
     commit id: "e3138ec -- 'Urgent fix'" tag: "HEAD"
 ```
 
@@ -260,7 +260,7 @@ nothing to commit, working tree clean
 ~/dev/frites-2027 $
 ```
 
-The `git pull` command allows us to update the local repository (if you have local unsaved changes, you might have to run `git stash && git pull && git pop` instead). Git simply takes the diffs of the additional commits from the remote and applies them to the local repository in order:
+The `git pull` command allows us to update the local repository (if you have local unsaved changes, you might have to run `git stash && git pull && git pop` instead). Git simply updates your current branch (here, `main`) to match its _remote tracking branch_ (here, `origin/main`), taking the diffs of the additional commits from the remote and applying them in order:
 
 ```console
 ~/dev/frites-2027 $ git pull
@@ -342,6 +342,24 @@ _Let's be clear. This is the worst nightmare for anyone getting started with Git
 
 In other cases, when your local commits and the remote commits modified the same part of the code, Git does not know how to proceed and asks you to _resolve conflicts_.
 
-There are two ways to proceed: merge and rebase. While merges are very useful in many scenarios, they create a non-linear history and create a _merge commit_ (even though nobody wants to know that you had to merge your local changes into the remote).
+There are two ways to proceed: merge and rebase. While merges are very useful in many scenarios, they create a non-linear history and create a _merge commit_ (even though nobody wants to know that you had to merge your local changes into the remote). Thus, a rebase, even though it can require more work, is often the preferred solution.
+
+#### Rebase
+
+Take the following divergence, where we wish to merge `my-branch` into `main`.
+
+```
+          A---B---C my-branch
+         /
+    D---E---F---G main
+```
+
+The `git rebase` command allows us to merge both with a linear history: the commits `A`, `B`, `C` get deleted then are recreated on the top of the `main` branch:
+
+```
+                  A--B--C my-branch
+                 /
+    D---E---F---G master
+```
 
 > TODO: finish this section.
