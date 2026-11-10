@@ -342,9 +342,7 @@ _Let's be clear. This is the worst nightmare for anyone getting started with Git
 
 In other cases, when your local commits and the remote commits modified the same part of the code, Git does not know how to proceed and asks you to _resolve conflicts_.
 
-There are two ways to proceed: merge and rebase. While merges are very useful in many scenarios, they create a non-linear history and create a _merge commit_ (even though nobody wants to know that you had to merge your local changes into the remote). Thus, a rebase, even though it can require more work, is often the preferred solution.
-
-#### Rebase
+There are two ways to proceed: merge (more precisely, _true merge_) and rebase. While merges are very useful in many scenarios, they create a non-linear history and create a _merge commit_ (even though nobody wants to know that you had to merge your local changes into the remote). Thus, a rebase, even though it can require more work, is often the preferred solution; it is described below.
 
 Take the following divergence, where we wish to merge `my-branch` into `main`.
 
@@ -354,12 +352,24 @@ Take the following divergence, where we wish to merge `my-branch` into `main`.
     D---E---F---G main
 ```
 
-The `git rebase` command allows us to merge both with a linear history: the commits `A`, `B`, `C` get deleted then are recreated on the top of the `main` branch:
+The `git rebase` command helps us do this by transforming a divergence into a situation where `my-branch` is simply ahead of `main`: the commits `A`, `B`, `C` get deleted and are recreated starting from `G`.
 
 ```
-                  A--B--C my-branch
+                  A'---B'---C' my-branch
                  /
     D---E---F---G master
 ```
+
+This behavior is exactly what happened in the previous section about [rebasing with no conflicts](#clean-rebase). We can then complete the merge by _fast-forwarding_ `my-branch` into `main`, by running the `git merge` command (a fast-forward is how git merges branches when there is no divergence, for example, when running `git pull` in many cases).
+
+```
+                  A'---B'---C' my-branch
+                 /
+    D---E---F---G---A'---B'---C' master
+```
+
+However, remember why we're here: there were conflicts. In other words, there are lines of code that were modified by both `my-branch` (in `A`, `B`, or `C`) and by `main` (in `F` or `G`) after the point of divergence (`E`, which one might call the lastest common ancestor). 
+
+Thus, Git tries to be nice and doesn't forcefully overwrite changes. As it is recreating the commits one by one, in order (so `A`, then `B`, then `C`), it will ask you to _resolve conflicts_ manually each time one arises. Now, this is probably easiest to do from your code editor, so commands will not be included here. But the principle is simple: you can choose for each conflict whether to keep the change from `main`, from `my-branch`, or even from both by rewriting what needs to be rewritten (note that since Git is recreating the commits, it is free to modify them slightly in order to satisfy the conflicts).
 
 > TODO: finish this section.
