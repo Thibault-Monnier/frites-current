@@ -1,4 +1,4 @@
-_This document is a short (not that short actually) tutorial about the Git tool. It is aimed towards Unix (Linux & MacOS) environments: if you are using Windows, the fundamental concepts still apply but the commands (probably) will not work._
+_This document is a short (not that short actually) tutorial about the Git tool. It is aimed towards Unix (Linux & MacOS) environments: if you are using Windows, the fundamental concepts still apply but there is no guarantee everything will work perfectly._
 
 # Preface
 
@@ -6,7 +6,7 @@ Git is a [version control system (VCS)](https://en.wikipedia.org/wiki/Version_co
 
 # Overview
 
-_NOTE: the following is a simplified view which does not perfectly model Git's inner workings, but is sufficient to get started. You can find more in-depth guides online (yes, Git is a very complex topic, and this guide barely scratches the surface. However, understanding it fully will already give you good comprehension of it)._
+_NOTE: the following is a simplified view which does not perfectly model Git's inner workings, but is sufficient to get started. You can find more in-depth guides online (yes, Git is a very complex topic, and this guide barely scratches the surface. However, understanding it fully will already give you better grasp of the tool than many developers have)._
 
 ## Commits
 
@@ -30,7 +30,7 @@ print(text)
 Git would generate the following diff:
 
 ```diff
-~/dev/git-test $ git diff master
+~/dev/git-test $ git diff main
 diff --git a/a.py b/a.py
 index bdebfe6..6806c1f 100644
 --- a/a.py
@@ -50,7 +50,7 @@ To save the changes to Git (of course, they are already saved to your filesystem
 
 ```console
 ~/dev/git-test $ git status
-On branch master
+On branch main
 Changes not staged for commit:
   (use "git add <file>..." to update what will be committed)
   (use "git restore <file>..." to discard changes in working directory)
@@ -59,13 +59,13 @@ Changes not staged for commit:
 no changes added to commit (use "git add" and/or "git commit -a")
 ~/dev/git-test $ git add .
 ~/dev/git-test $ git status
-On branch master
+On branch main
 Changes to be committed:
   (use "git restore --staged <file>..." to unstage)
         modified:   a.py
 
 ~/dev/git-test $ git commit -m "Add hello world print"
-[master 6a5474f] Add hello world print
+[main 6a5474f] Add hello world print
  1 file changed, 2 insertions(+), 1 deletion(-)
 ~/dev/git-test $
 ```
@@ -78,7 +78,7 @@ The `git log` command allows us to view the history of all commits (which you ca
 
 ```yaml
 ~/dev/git-test $ git log
-commit 6a5474f733c9e128ab5d0b8b1dc4fe22057601ff (HEAD -> master)
+commit 6a5474f733c9e128ab5d0b8b1dc4fe22057601ff (HEAD -> main)
 Author: Thibault M <thibaultmonni@gmail.com>
 Date:   Tue Oct 13 15:19:10 2026 +0200
 
@@ -92,23 +92,123 @@ Date:   Tue Oct 13 14:24:05 2026 +0200
 ~/dev/git-test $
 ```
 
-Here, "Add hello world print" and "First commit" are called the _commit message_, which acts as a title to each commit. Moreover, `6a5474f733c9e128ab5d0b8b1dc4fe22057601ff` and `5e4fd274b084026df19a87024213e1cb4abc8fac` are called the _commit hash_, which are unique identifiers associated with each commit. Git also stores additional information such as the author, the date (including a timezone, here UTC+02:00), and a few other things that are hidden by default.
+Here, "Add hello world print" and "First commit" are called the _commit message_, which acts as a title to each commit. Moreover, `6a5474f733c9e128ab5d0b8b1dc4fe22057601ff` and `5e4fd274b084026df19a87024213e1cb4abc8fac` are called the _commit hash_, which are unique identifiers associated with each commit. Git also stores additional information such as the author, the date (including a timezone, here UTC+02:00), and the _parent(s)_ of the commit (representing the previous commit).
 
 ## Branches
 
-A branch is a way to organize commits before _merging_ them back. A commit is always tied to a specific branch. Usually, the central branch (informally, the _default branch_) of a repository is called `main` or `master` - in our example, it is `master` (this central branch does not exist from Git's perspective, it is simply a convention):
+A branch is a way to organize commits before _merging_ them back. A commit is always tied to a specific branch. Usually, the central branch (which Git hosting platforms often call the _default branch_) of a repository is called `main` or `master` - in our example, it is `main` (this "central branch" does not exist from Git's perspective, it is simply a convention):
 
 ```console
 ~/dev/git-test $ git status
-On branch master
+On branch main
 
 nothing to commit, working tree clean
 ~/dev/git-test $
 ```
 
-There are several cases when you might want to create a branch. For example, imagine you want 
+There are several cases when you might want to create a branch. For example, imagine you want add a new complex feature to your program.
 
-> TODO: finish this section.
+```console
+~/dev/git-test $ git branch my-feature
+~/dev/git-test $ git branch
+* main
+  my-feature
+~/dev/git-test $
+```
+
+The `git branch my-feature` command created a branch named "my-feature". The `git branch` command lists all branches; the `*` symbol tells us that the `main` branch is currently active (also visible through `git status`), meaning any commit made will go to the `main` branch... which is unfortunate.
+
+```console
+~/dev/git-test $ git switch my-feature
+Switched to branch 'my-feature'
+~/dev/git-test $ git log --graph --oneline
+* 6a5474f (HEAD -> my-feature, main) Add hello world print
+* 5e4fd27 First commit
+~/dev/git-test $
+```
+
+Thankfully, the `git switch` command allows us to change the active branch. But what does `git switch` do, really? The answer lies in the following command. Notice the `HEAD -> my-feature`. This signifies that the `HEAD` pointer has been set to point to the `my-feature` branch. When a Git commit is made, it is added to the location pointed to by `HEAD`; here, it would resolve to `my-feature` (yay!). Furthermore, when changing the `HEAD` pointer, Git **modifies your files on disk** to match the newly active branch (if you had unsaved changes, Git will safely transfer them over, so this operation isn't risky).
+
+Now, let's add our feature.
+
+```diff
+~/dev/git-test $ git diff HEAD
+diff --git a/a.py b/a.py
+index 6806c1f..d3ea35e 100644
+--- a/a.py
++++ b/a.py
+@@ -1,4 +1,5 @@
+ # After
+-text = "I am a sausage."
++text = "I am NOT a sausage."
+ print("Hello, World!")
+ print(text)
++print("Awesome feature!")
+~/dev/git-test $ git add .
+~/dev/git-test $ git commit -m "Added an awesome feature"
+[my-feature 80dff64] Added an awesome feature
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+~/dev/git-test $
+```
+
+We added our feature, here's how that looks:
+
+```mermaid
+%%{init: { 'gitGraph': {'mainBranchName': 'main'} } }%%
+gitGraph
+    commit id: "5e4fd27 -- 'First commit'"
+    commit id: "6a5474f -- 'Add hello world print'"
+    branch my-feature
+    commit id: "80dff64 -- 'Added an awesome feature'" tag: "HEAD"
+```
+
+Now, imagine we want to add an unrelated fix to the program, that we have to push to production. We could just commit it to the `my-feature` branch and push that branch... but it contains a bug! The program now prints the nonsensical "I am NOT a sausage" phrase. We can thus be glad we used a branch to implement the new feature, because we can simply go back to the stable `main` branch whenever we need.
+
+```diff
+~/dev/git-test $ git switch main
+Switched to branch 'main'
+~/dev/git-test $ nano a.py
+~/dev/git-test $ git diff HEAD
+diff --git a/a.py b/a.py
+index 6806c1f..ba4b842 100644
+--- a/a.py
++++ b/a.py
+@@ -1,4 +1,3 @@
+ # After
+ text = "I am a sausage."
+-print("Hello, World!")
+ print(text)
+~/dev/git-test $ git add .
+~/dev/git-test $ git commit -m "Urgent fix"
+[main e3138ec] Urgent fix
+ 1 file changed, 1 deletion(-)
+~/dev/git-test $
+```
+
+Which yields the following commit graph:
+
+```console
+~/dev/git-test $ git log --graph --oneline --all
+* e3138ec (HEAD -> main) Urgent fix
+| * 80dff64 (my-feature) Added an awesome feature
+|/
+* 6a5474f Add hello world print
+* 5e4fd27 First commit
+~/dev/git-test $
+```
+
+```mermaid
+%%{init: { 'gitGraph': {'mainBranchName': 'main'} } }%%
+gitGraph
+    commit id: "5e4fd27 -- 'First commit'"
+    commit id: "6a5474f -- 'Add hello world print'"
+    branch my-feature
+    commit id: "80dff64 -- 'Added an awesome feature'"
+    checkout main
+    commit id: "e3138ec -- 'Urgent fix'" tag: "HEAD"
+```
+
+This is great, but we would like to be able to combine the changes from several branches when they are ready. This is described in the [Divergence section](#divergence).
 
 ## Remotes
 
@@ -160,7 +260,7 @@ nothing to commit, working tree clean
 ~/dev/frites-2027 $
 ```
 
-The `git pull` command allows us to update the local repository (if you have local unsaved changes, you might have to run `git stash && git pull && git pop` instead). Git simply takes the diffs of the additional commits from the remote and applies them to the local repository in order:
+The `git pull` command allows us to update the local repository (if you have local unsaved changes, you might have to run `git stash && git pull && git stash pop` instead). Git simply updates your current branch (here, `main`) to match its _remote tracking branch_ (here, `origin/main`), taking the diffs of the additional commits from the remote and applying them in order:
 
 ```console
 ~/dev/frites-2027 $ git pull
@@ -242,6 +342,30 @@ _Let's be clear. This is the worst nightmare for anyone getting started with Git
 
 In other cases, when your local commits and the remote commits modified the same part of the code, Git does not know how to proceed and asks you to _resolve conflicts_.
 
-There are two ways to proceed: merge and rebase. While merges are very useful in many scenarios, they create a non-linear history and create a _merge commit_ (even though nobody wants to know that you had to merge your local changes into the remote).
+There are two ways to proceed: merge (more precisely, _true merge_) and rebase. While merges are very useful in many scenarios, they create a non-linear history and create a _merge commit_ (even though nobody wants to know that you had to merge your local changes into the remote). Thus, a rebase, even though it can require more work, is often the preferred solution; it is described below.
 
-> TODO: finish this section.
+Take the following divergence, where we wish to merge `my-branch` into `main`.
+
+```
+          A---B---C (my-branch)
+         /
+    D---E---F---G (main)
+```
+
+The `git rebase` command helps us do this by transforming a divergence into a situation where `my-branch` is simply ahead of `main`: the commits `A`, `B`, `C` get deleted and are recreated starting from `G`.
+
+```
+                  A'---B'---C' (my-branch)
+                 /
+    D---E---F---G (main)
+```
+
+This behavior is exactly what happened in the previous section about [rebasing with no conflicts](#clean-rebase). We can then complete the merge by _fast-forwarding_ `my-branch` into `main`, by running the `git merge` command (a fast-forward is how git merges branches when there is no divergence, for example, when running `git pull` in many cases).
+
+```
+    D---E---F---G---A'---B'---C' (main, my-branch)
+```
+
+However, remember why we're here: there were conflicts. In other words, there are lines of code that were modified by both `my-branch` (in `A`, `B`, or `C`) and `main` (in `F` or `G`) after the point of divergence (`E`, which one might call the last common ancestor). 
+
+Thus, Git tries to be nice and doesn't forcefully overwrite changes. As it is recreating the commits one by one in order (so `A`, then `B`, then `C`), it will ask you to _resolve conflicts_ manually each time one arises. Now, this is probably easiest to do from your code editor, so commands will not be included here. But the principle is simple: you can choose for each conflict whether to keep the change from `main`, from `my-branch`, or even from both by rewriting what needs to be rewritten (note that since Git is recreating the commits, it is free to modify them slightly in order to satisfy the conflicts).
