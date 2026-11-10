@@ -1,4 +1,4 @@
-_This document is a short (not that short actually) tutorial about the Git tool. It is aimed towards Unix (Linux & MacOS) environments: if you are using Windows, the fundamental concepts still apply but the commands (probably) will not work._
+_This document is a short (not that short actually) tutorial about the Git tool. It is aimed towards Unix (Linux & MacOS) environments: if you are using Windows, the fundamental concepts still apply but there is no guarantee everything will work perfectly._
 
 # Preface
 
@@ -6,7 +6,7 @@ Git is a [version control system (VCS)](https://en.wikipedia.org/wiki/Version_co
 
 # Overview
 
-_NOTE: the following is a simplified view which does not perfectly model Git's inner workings, but is sufficient to get started. You can find more in-depth guides online (yes, Git is a very complex topic, and this guide barely scratches the surface. However, understanding it fully will already give you good comprehension of it)._
+_NOTE: the following is a simplified view which does not perfectly model Git's inner workings, but is sufficient to get started. You can find more in-depth guides online (yes, Git is a very complex topic, and this guide barely scratches the surface. However, understanding it fully will already give you better grasp of the tool than many developers have)._
 
 ## Commits
 
@@ -92,7 +92,7 @@ Date:   Tue Oct 13 14:24:05 2026 +0200
 ~/dev/git-test $
 ```
 
-Here, "Add hello world print" and "First commit" are called the _commit message_, which acts as a title to each commit. Moreover, `6a5474f733c9e128ab5d0b8b1dc4fe22057601ff` and `5e4fd274b084026df19a87024213e1cb4abc8fac` are called the _commit hash_, which are unique identifiers associated with each commit. Git also stores additional information such as the author, the date (including a timezone, here UTC+02:00), and a few other things that are hidden by default.
+Here, "Add hello world print" and "First commit" are called the _commit message_, which acts as a title to each commit. Moreover, `6a5474f733c9e128ab5d0b8b1dc4fe22057601ff` and `5e4fd274b084026df19a87024213e1cb4abc8fac` are called the _commit hash_, which are unique identifiers associated with each commit. Git also stores additional information such as the author, the date (including a timezone, here UTC+02:00), and the _parent(s)_ of the commit (representing the previous commit).
 
 ## Branches
 
@@ -127,7 +127,7 @@ Switched to branch 'my-feature'
 ~/dev/git-test $
 ```
 
-Thankfully, the `git switch` command allows us to change the active branch. But what does `git switch` do, really? The answer lies in the following command. Notice the `HEAD -> my-feature`. This signifies that the `HEAD` pointer points to the `my-feature` branch. When a Git commit is made, it is added to the location pointed to by `HEAD`; here, it would resolve to `my-feature`. Furthermore, when changing the `HEAD` pointer, Git **modifies your files on disk** to match the newly active branch (if you had unsaved changes, Git will safely transfer them over, so this operation isn't risky).
+Thankfully, the `git switch` command allows us to change the active branch. But what does `git switch` do, really? The answer lies in the following command. Notice the `HEAD -> my-feature`. This signifies that the `HEAD` pointer has been set to point to the `my-feature` branch. When a Git commit is made, it is added to the location pointed to by `HEAD`; here, it would resolve to `my-feature` (yay!). Furthermore, when changing the `HEAD` pointer, Git **modifies your files on disk** to match the newly active branch (if you had unsaved changes, Git will safely transfer them over, so this operation isn't risky).
 
 Now, let's add our feature.
 
@@ -162,7 +162,7 @@ gitGraph
     commit id: "80dff64 -- 'Added an awesome feature'" tag: "HEAD"
 ```
 
-Now, imagine we want to add an unrelated fix to the program, that we have to push to production. We could just commit it the `my-feature` branch and push that branch... but it contains a bug! The program now prints the nonsensical "I am NOT a sausage" phrase. We can thus be glad we used a branch to implement the new feature, because we can simply go back to the stable `main` branch whenever we need.
+Now, imagine we want to add an unrelated fix to the program, that we have to push to production. We could just commit it to the `my-feature` branch and push that branch... but it contains a bug! The program now prints the nonsensical "I am NOT a sausage" phrase. We can thus be glad we used a branch to implement the new feature, because we can simply go back to the stable `main` branch whenever we need.
 
 ```diff
 ~/dev/git-test $ git switch main
@@ -260,7 +260,7 @@ nothing to commit, working tree clean
 ~/dev/frites-2027 $
 ```
 
-The `git pull` command allows us to update the local repository (if you have local unsaved changes, you might have to run `git stash && git pull && git pop` instead). Git simply updates your current branch (here, `main`) to match its _remote tracking branch_ (here, `origin/main`), taking the diffs of the additional commits from the remote and applying them in order:
+The `git pull` command allows us to update the local repository (if you have local unsaved changes, you might have to run `git stash && git pull && git stash pop` instead). Git simply updates your current branch (here, `main`) to match its _remote tracking branch_ (here, `origin/main`), taking the diffs of the additional commits from the remote and applying them in order:
 
 ```console
 ~/dev/frites-2027 $ git pull
@@ -347,29 +347,25 @@ There are two ways to proceed: merge (more precisely, _true merge_) and rebase. 
 Take the following divergence, where we wish to merge `my-branch` into `main`.
 
 ```
-          A---B---C my-branch
+          A---B---C (my-branch)
          /
-    D---E---F---G main
+    D---E---F---G (main)
 ```
 
 The `git rebase` command helps us do this by transforming a divergence into a situation where `my-branch` is simply ahead of `main`: the commits `A`, `B`, `C` get deleted and are recreated starting from `G`.
 
 ```
-                  A'---B'---C' my-branch
+                  A'---B'---C' (my-branch)
                  /
-    D---E---F---G master
+    D---E---F---G (main)
 ```
 
 This behavior is exactly what happened in the previous section about [rebasing with no conflicts](#clean-rebase). We can then complete the merge by _fast-forwarding_ `my-branch` into `main`, by running the `git merge` command (a fast-forward is how git merges branches when there is no divergence, for example, when running `git pull` in many cases).
 
 ```
-                  A'---B'---C' my-branch
-                 /
-    D---E---F---G---A'---B'---C' master
+    D---E---F---G---A'---B'---C' (main, my-branch)
 ```
 
-However, remember why we're here: there were conflicts. In other words, there are lines of code that were modified by both `my-branch` (in `A`, `B`, or `C`) and by `main` (in `F` or `G`) after the point of divergence (`E`, which one might call the lastest common ancestor). 
+However, remember why we're here: there were conflicts. In other words, there are lines of code that were modified by both `my-branch` (in `A`, `B`, or `C`) and `main` (in `F` or `G`) after the point of divergence (`E`, which one might call the last common ancestor). 
 
-Thus, Git tries to be nice and doesn't forcefully overwrite changes. As it is recreating the commits one by one, in order (so `A`, then `B`, then `C`), it will ask you to _resolve conflicts_ manually each time one arises. Now, this is probably easiest to do from your code editor, so commands will not be included here. But the principle is simple: you can choose for each conflict whether to keep the change from `main`, from `my-branch`, or even from both by rewriting what needs to be rewritten (note that since Git is recreating the commits, it is free to modify them slightly in order to satisfy the conflicts).
-
-> TODO: finish this section.
+Thus, Git tries to be nice and doesn't forcefully overwrite changes. As it is recreating the commits one by one in order (so `A`, then `B`, then `C`), it will ask you to _resolve conflicts_ manually each time one arises. Now, this is probably easiest to do from your code editor, so commands will not be included here. But the principle is simple: you can choose for each conflict whether to keep the change from `main`, from `my-branch`, or even from both by rewriting what needs to be rewritten (note that since Git is recreating the commits, it is free to modify them slightly in order to satisfy the conflicts).
