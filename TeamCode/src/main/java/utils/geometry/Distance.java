@@ -62,10 +62,7 @@ public class Distance {
     }
 
     /// Divides this Distance by a scalar
-    public Distance divide(double scalar) {
-        double quotientInMM = toMillimeters() / scalar;
-        return Distance.fromMillimeters(quotientInMM);
-    }
+    public Distance divide(double scalar) { return multiply(1.0 / scalar); }
 
     public Distance divide(Distance other) {
         double quotient = toMillimeters() / other.toMillimeters();

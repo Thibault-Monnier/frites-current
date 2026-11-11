@@ -113,7 +113,7 @@ public class ManualOpMode extends OpModeBase {
             Angle angle =
                 robotPosition.getPose().getPosition().angleTo(PlayingField.frontGoalPos(team));
             Angle angleDiff = angle.subtract(robotPosition.getHeading());
-            if (!angleDiff.abs().leq(threshold))
+            if (!angleDiff.abs().leq(threshold)) // TODO: broken logic
                 allowedToShoot = false;
         }
 

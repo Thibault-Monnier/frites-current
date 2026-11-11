@@ -62,6 +62,9 @@ public class Angle {
         return Angle.fromRadians(productInRadians);
     }
 
+    /// Divides this Angle by a scalar
+    public Angle divide(double scalar) { return multiply(1.0 / scalar); }
+
     /// Divides this Angle by another Angle and returns the result as a unitless
     /// ratio
     public double ratio(Angle other) {
@@ -80,12 +83,35 @@ public class Angle {
     /// The absolute value of this Angle
     public Angle abs() { return fromRadians(Math.abs(toUnnormalizedRadians())); }
 
-    /// Whether this Angle is less than or equal to another Angle. NOTE: this might produce
-    /// unexpected results because of wrapping.
-    public boolean leq(Angle other) {
-        // Careful to use normalized radians here
-        return toRadians() <= other.toRadians();
+    /// Normalizes this Angle to the range [min, max)
+    public Angle normalize(Angle min, Angle max) {
+        double minimum = min.toUnnormalizedRadians();
+        double maximum = max.toUnnormalizedRadians();
+        double range = maximum - minimum;
+
+        if (range <= 0.0) {
+            throw new IllegalArgumentException(
+                "The maximum angle must be greater than the minimum angle"
+            );
+        }
+
+        double normalized = toUnnormalizedRadians() - minimum;
+        normalized -= Math.floor(normalized / range) * range;
+        return fromRadians(minimum + normalized);
     }
+
+    /// Normalizes this Angle to the range [-180, 180)
+    public Angle normalize() { return normalize(Angle.fromDegrees(-180), Angle.fromDegrees(180)); }
+
+    /// Whether this Angle is less than or equal to another Angle. NOTE: this operates without
+    /// normalizing the angle, so might produce unexpected results.
+    public boolean leq(Angle other) {
+        return toUnnormalizedRadians() <= other.toUnnormalizedRadians();
+    }
+
+    /// Whether this Angle is greater than or equal to another Angle. NOTE: this operates without
+    /// normalizing the angle, so might produce unexpected results.
+    public boolean geq(Angle other) { return other.leq(this); }
 
     @NonNull
     public String toString(boolean normalized) {

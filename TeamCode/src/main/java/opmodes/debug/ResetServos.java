@@ -3,6 +3,9 @@ package opmodes.debug;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
+import config.HardwareConfig;
+import config.ShooterConfig;
+import config.TurretConfig;
 import opmodes.GroupConstants;
 import utils.TelemetryHandler;
 
@@ -30,7 +33,12 @@ public class ResetServos extends OpMode {
 
     @Override
     public void start() {
-        hardwareMap.get(Servo.class, "hood").setPosition(1.0);
+        hardwareMap.get(Servo.class, HardwareConfig.SHOOTER_HOOD_SERVO_ID)
+            .setPosition(ShooterConfig.HOOD_RESET_POSITION);
+        hardwareMap.get(Servo.class, HardwareConfig.TURRET_SERVO_1_ID)
+            .setPosition(TurretConfig.DEFAULT_SERVO_POS);
+        hardwareMap.get(Servo.class, HardwareConfig.TURRET_SERVO_2_ID)
+            .setPosition(TurretConfig.DEFAULT_SERVO_POS);
     }
 
     @Override
