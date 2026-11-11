@@ -8,7 +8,7 @@ import java.util.HashMap;
 
 public class Transfer implements RobotActuatorModule {
     private final DcMotor motor;
-    private MotorState motorState;
+    private MotorState motorState = MotorState.OFF;
 
     public Transfer(DcMotor motor) {
         this.motor = motor;

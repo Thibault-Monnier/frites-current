@@ -9,7 +9,7 @@ import utils.TelemetryHandler;
 public class Intake implements RobotActuatorModule {
     private final DcMotor motor1;
     private final DcMotor motor2;
-    private MotorState state;
+    private MotorState state = MotorState.OFF;
 
     public Intake(DcMotor motor1, DcMotor motor2) {
         this.motor1 = motor1;
