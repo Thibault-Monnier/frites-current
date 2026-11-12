@@ -89,7 +89,9 @@ public class Shooter implements RobotActuatorModule {
     protected double targetHoodPosition() { return hoodTargetPosition; }
 
     public boolean isReadyToShoot() {
-        double hoodError = Math.abs(hoodServo.getPosition() - hoodTargetPosition);
+        double hoodError = Math.abs(
+            hoodServo.getPosition() - hoodTargetPosition
+        ); // TODO: hoodServo.getPosition() is probably meaningless
         return motorPIDController.isStableAtTarget(FLYWHEEL_ERROR_MARGIN, FLYWHEEL_STABLE_THRESHOLD)
             && Math.abs(velocity()) >= 100 // Not stopped
             && hoodError <= HOOD_ERROR_MARGIN;

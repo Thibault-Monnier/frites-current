@@ -62,16 +62,12 @@ public class ShooterCalibrationOpMode extends OpModeBase {
             // Lock towards the goal
             move.lockedJoystickMove(
                 gamepad1,
-                gamepadController.isPressing(GamepadController.Button.LEFT_STICK),
+                isPressActive(ManualOpModeMappings.SLOW_MOVE),
                 PlayingField.frontGoalPos(team)
             );
         } else {
-            move.joystickTranslate(
-                gamepad1, gamepadController.isPressing(GamepadController.Button.LEFT_STICK)
-            );
-            move.rotate(
-                gamepad1, gamepadController.isPressing(GamepadController.Button.RIGHT_STICK)
-            );
+            move.joystickTranslate(gamepad1, isPressActive(ManualOpModeMappings.SLOW_MOVE));
+            move.rotate(gamepad1, isPressActive(ManualOpModeMappings.SLOW_TURN));
         }
 
         if ((isPressActive(ManualOpModeMappings.SHOOT) && shooter.isReadyToShoot())
@@ -89,6 +85,7 @@ public class ShooterCalibrationOpMode extends OpModeBase {
 
         if (gamepadController.isPressed(GamepadController.Button.X))
             shooter.toggle();
+
         if (gamepadController.isPressed(GamepadController.Button.Y))
             shooter().speedup();
         if (gamepadController.isLongPressed(GamepadController.Button.Y))
@@ -97,6 +94,11 @@ public class ShooterCalibrationOpMode extends OpModeBase {
             shooter().slowdown();
         if (gamepadController.isLongPressed(GamepadController.Button.A))
             shooter().fastSlowdown();
+        if (gamepadController.isPressed(GamepadController.Button.DPAD_UP))
+            shooter().hoodUp();
+        if (gamepadController.isPressed(GamepadController.Button.DPAD_DOWN))
+            shooter().hoodDown();
+
         if (gamepadController.isPressed(GamepadController.Button.B)) {
             Distance targetDistance =
                 PlayingField.distanceToGoal(robotPosition.getPosition(), team);
@@ -108,8 +110,6 @@ public class ShooterCalibrationOpMode extends OpModeBase {
 
         if (gamepadController.isPressing(GamepadController.Button.TRIGGER_LEFT)) {
             intake.on();
-        } else {
-            intake.off();
         }
     }
 

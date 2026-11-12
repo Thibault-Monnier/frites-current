@@ -23,7 +23,9 @@ public class FieldConfig {
     );
 
     public static Pose2D RED_START_POSE = new Pose2D(
-        TILE_SIZE.multiply(2.5), HardwareConfig.ROBOT_SIZE.getX().halve(), Angle.fromDegrees(90)
+        TILE_SIZE.multiply(2).add(HardwareConfig.ROBOT_SIZE.getY().halve()),
+        HardwareConfig.ROBOT_SIZE.getX().halve(),
+        Angle.fromDegrees(90)
     );
     public static Pose2D RED_FAR_START_POSE = new Pose2D(); // TODO: NYI
 
