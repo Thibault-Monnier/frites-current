@@ -33,12 +33,18 @@ public class ResetServos extends OpMode {
 
     @Override
     public void start() {
-        hardwareMap.get(Servo.class, HardwareConfig.SHOOTER_HOOD_SERVO_ID)
-            .setPosition(ShooterConfig.HOOD_RESET_POSITION);
-        hardwareMap.get(Servo.class, HardwareConfig.TURRET_SERVO_1_ID)
-            .setPosition(TurretConfig.DEFAULT_SERVO_POS);
-        hardwareMap.get(Servo.class, HardwareConfig.TURRET_SERVO_2_ID)
-            .setPosition(TurretConfig.DEFAULT_SERVO_POS);
+        resetServo(HardwareConfig.SHOOTER_HOOD_SERVO_ID, ShooterConfig.HOOD_RESET_POSITION);
+
+        resetServo(HardwareConfig.TURRET_SERVO_1_ID, TurretConfig.DEFAULT_SERVO_POS);
+        resetServo(HardwareConfig.TURRET_SERVO_2_ID, TurretConfig.DEFAULT_SERVO_POS);
+    }
+
+    private void resetServo(String id, double position) {
+        try {
+            hardwareMap.get(Servo.class, id).setPosition(position);
+        } catch (IllegalArgumentException e) {
+            TelemetryHandler.addLine("Servo `" + id + "` was not found and could not be reset");
+        }
     }
 
     @Override

@@ -6,6 +6,7 @@ import com.bylazar.configurables.annotations.Configurable;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 import opmodes.GroupConstants;
 import utils.TelemetryHandler;
@@ -22,7 +23,7 @@ public class IndependentActuatorTest extends OpMode {
     public static double TEST_MOTOR_POWER = 1.0;
     public static double TEST_SERVO_POS = 0.0;
 
-    @Nullable private DcMotor testMotor;
+    @Nullable private DcMotorEx testMotor;
     @Nullable private Servo testServo;
 
     private void resetMotor(DcMotor motor) {
@@ -35,7 +36,7 @@ public class IndependentActuatorTest extends OpMode {
         TelemetryHandler.instantiate(telemetry);
 
         try {
-            testMotor = hardwareMap.get(DcMotor.class, TEST_MOTOR_ID);
+            testMotor = hardwareMap.get(DcMotorEx.class, TEST_MOTOR_ID);
             resetMotor(testMotor);
         } catch (IllegalArgumentException ignored) {
             // Ignore if doesn't exist
@@ -60,6 +61,8 @@ public class IndependentActuatorTest extends OpMode {
             testServo.setPosition(TEST_SERVO_POS);
 
         TelemetryHandler.addData("Motor power", TEST_MOTOR_POWER);
+        if (testMotor != null)
+            TelemetryHandler.addData("Motor speed", testMotor.getVelocity());
         TelemetryHandler.addData("Servo position", TEST_SERVO_POS);
         TelemetryHandler.update();
     }
