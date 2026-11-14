@@ -12,6 +12,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
+import config.ShooterConfig;
 import java.util.HashMap;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import utils.TelemetryHandler;
@@ -79,8 +80,8 @@ public class Shooter implements RobotActuatorModule {
 
     /// Update motor power using a value interpolated from target distance.
     public void update(Distance horizontalShootingDistance) {
-        setTargetVelocity(computeVelocity(horizontalShootingDistance));
-        setHoodTargetPosition(0.1);
+        setTargetVelocity(ShooterConfig.SPEED);
+        setHoodTargetPosition(ShooterConfig.HOOD);
     }
 
     protected double velocity() { return motor.getVelocity(); }

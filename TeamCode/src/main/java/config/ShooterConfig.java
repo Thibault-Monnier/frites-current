@@ -15,6 +15,9 @@ public class ShooterConfig {
     public static double FLYWHEEL_STABLE_THRESHOLD = 20.0;
     public static double FLYWHEEL_MAX_VELOCITY = 2450.0;
 
+    public static double SPEED = 1000;
+    public static double HOOD = 0.1;
+
     public static double HOOD_RESET_POSITION = 0.0;
     public static double HOOD_MIN_POSITION = 0.0;
     public static double HOOD_MAX_POSITION = 0.5;
