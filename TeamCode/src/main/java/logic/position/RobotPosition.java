@@ -6,7 +6,6 @@ import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import logic.Team;
 import logic.field.PlayingField;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import utils.TelemetryHandler;
 import utils.TimeHelpers;
 import utils.geometry.Angle;
@@ -151,10 +150,11 @@ public class RobotPosition {
     private void renderFieldOverlayInDashboard() {
         TelemetryPacket packet = new TelemetryPacket();
 
-        Angle heading = pose.getHeading();
+        packet.fieldOverlay().drawImage("/images/field.png", 0, 0, 144, 144);
 
-        double robotXInches = pose.getX(DistanceUnit.INCH);
-        double robotYInches = pose.getY(DistanceUnit.INCH);
+        Angle heading = pose.getHeading().subtract(Angle.fromDegrees(90));
+        double robotXInches = pose.getY().toInches() - 72;
+        double robotYInches = 72 - pose.getX().toInches();
 
         double lineLength = 8;
         double endXInches = robotXInches + lineLength * heading.cos();

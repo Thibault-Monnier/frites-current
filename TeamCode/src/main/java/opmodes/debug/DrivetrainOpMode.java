@@ -35,7 +35,7 @@ public class DrivetrainOpMode extends LinearOpMode {
     private void initialize() {
         TelemetryHandler.instantiate(telemetry);
 
-        robotPosition = RobotPosition.getInstance(hardwareMap, Team.RED, true, true);
+        robotPosition = RobotPosition.getInstance(hardwareMap, Team.RED, false, true);
         shotCalculator = new ShotCalculator(robotPosition, Team.RED);
 
         DcMotor moveFL = hardwareMap.get(DcMotor.class, HardwareConfig.FRONT_LEFT_MOTOR_ID);
