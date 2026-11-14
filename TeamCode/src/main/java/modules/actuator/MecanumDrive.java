@@ -42,7 +42,9 @@ public class MecanumDrive implements RobotActuatorModule {
     }
 
     public static double smooth(double input) {
-        if (Math.abs(input) < 0.7) {
+        if (Math.abs(input) < 0.001) {
+            return 0;
+        } else if (Math.abs(input) < 0.7) {
             return 0.83 * input + 0.02;
         } else if (Math.abs(input) >= 0.7 && Math.abs(input) < 0.9) {
             return 2 * input - 0.8;
