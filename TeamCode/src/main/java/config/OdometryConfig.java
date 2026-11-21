@@ -8,8 +8,8 @@ import utils.geometry.Distance;
 @Config
 @Configurable
 public class OdometryConfig {
-    public static Distance ENCODER_X_Y_OFFSET = Distance.fromMillimeters(-90);
-    public static Distance ENCODER_Y_X_OFFSET = Distance.fromMillimeters(-2);
+    public static Distance ENCODER_X_Y_OFFSET = Distance.fromMillimeters(-110.4);
+    public static Distance ENCODER_Y_X_OFFSET = Distance.fromMillimeters(87.1);
 
     public static GoBildaPinpointDriver.EncoderDirection ENCODER_X_DIRECTION =
         GoBildaPinpointDriver.EncoderDirection.REVERSED;

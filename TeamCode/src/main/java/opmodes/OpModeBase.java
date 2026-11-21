@@ -84,7 +84,7 @@ public abstract class OpModeBase extends LinearOpMode {
             moveFR,
             moveBL,
             moveBR,
-            Movement.MovementMode.FIELD_CENTRIC
+            Movement.MovementMode.ROBOT_CENTRIC
         );
 
         DcMotorEx intakeMotor1 = hardwareMap.get(DcMotorEx.class, HardwareConfig.INTAKE_MOTOR_1_ID);
