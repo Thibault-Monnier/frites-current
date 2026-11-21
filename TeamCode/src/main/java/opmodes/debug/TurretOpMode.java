@@ -65,9 +65,10 @@ public class TurretOpMode extends LinearOpMode {
         gamepadController.update();
 
         double delta = gamepadController.gamepad.left_stick_x * REVOLUTIONS_PER_SECOND * deltaTime;
-        turretAngle = turretAngle.add(Angle.fromDegrees(delta));
+        turretAngle = turretAngle.add(Angle.fromDegrees(delta * 360));
         TelemetryHandler.addData("Turret physical target angle", turretAngle);
 
+        turret.setTargetDir(turretAngle);
         turret.apply();
 
         TelemetryHandler.update();
