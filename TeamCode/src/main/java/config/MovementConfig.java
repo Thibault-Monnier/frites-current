@@ -41,7 +41,7 @@ public class MovementConfig {
     public static Distance FIELD_CENTRIC_TRANSLATION_PIDF_THRESHOLD =
         Distance.fromMillimeters(50); // per second
     public static PIDFLCoefficients FIELD_CENTRIC_TURN_PIDF_COEFFICIENTS =
-        new PIDFLCoefficients(0.3, 0.0, 0.0, 0.0, 0.0);
+        new PIDFLCoefficients(0.3, 0.0, 0.0, 0.0, 0.03);
     public static PIDFLCoefficients FIELD_CENTRIC_TRANSLATION_PIDF_COEFFICIENTS =
-        new PIDFLCoefficients(0.002, 0.0, 0.0, 0.0, 0.0);
+        new PIDFLCoefficients(0.003, 0.0, 0.0, 0.0, 0.03);
 }
