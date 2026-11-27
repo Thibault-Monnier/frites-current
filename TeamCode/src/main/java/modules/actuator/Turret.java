@@ -36,6 +36,7 @@ public class Turret implements RobotActuatorModule {
         double pos = TurretConfig.DEFAULT_SERVO_POS + targetAngle.ratio(totalRange());
         servo1.setPosition(pos);
         servo2.setPosition(pos);
+        TelemetryHandler.addData("Set pos", pos);
         TelemetryHandler.addData("Turret target angle", targetAngle.toString(false));
         TelemetryHandler.addData("Turret current angle", getTurretCurrentAngle().toString(false));
     }
@@ -51,17 +52,21 @@ public class Turret implements RobotActuatorModule {
     private Angle getTurretCurrentAngle() {
         Angle servo1Angle = getServoAngle(servo1Encoder);
         Angle servo2Angle = getServoAngle(servo2Encoder);
-        if (servo2Angle.subtract(servo1Angle).abs().toUnnormalizedDegrees() > 5.0)
+        /*if (servo2Angle.subtract(servo1Angle).abs().toUnnormalizedDegrees() > 5.0)
             throw new RuntimeException(
                 "Turret servo positions do not match: servo1 at " + servo1Angle + ", servo2 at + "
                 + servo2Angle
-            );
+            );*/
+        TelemetryHandler.addData("servo1Angle", servo1Angle);
+        TelemetryHandler.addData("servo2Angle", servo2Angle);
         return servo1Angle.add(servo2Angle).divide(2.0);
     }
 
     private Angle getServoAngle(AnalogInput encoder) {
         double pos = encoder.getVoltage() / encoder.getMaxVoltage();
-        return totalRange().multiply(pos - TurretConfig.DEFAULT_SERVO_POS);
+        return Angle.fromDegrees(360)
+            .multiply(pos - TurretConfig.DEFAULT_SERVO_POS)
+            .multiply(TurretConfig.SERVO_TO_TURRET_RATIO);
     }
 
     @Override
